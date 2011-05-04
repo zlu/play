@@ -1,10 +1,13 @@
 %w[
   rubygems
-  blather/client
+  blather/client/dsl
   awesome_print
 
-  client
-  credentials
+  connfu/commands
+  connfu/offer
+  connfu/server
+  connfu/credentials
+  connfu/utils
 ].each {|file| require file }
 
 module Connfu
