@@ -6,8 +6,7 @@ describe Connfu::Offer do
   end
 
   it "should be an iq stanza" do
-    #TODO should_be_kind_of
-    @offer.class.superclass.should eq Blather::Stanza::Iq
+    @offer.should be_a_kind_of Blather::Stanza::Iq
     @offer.registered_name.should eq "iq"
   end
 
