@@ -13,7 +13,7 @@ describe Connfu::Commands do
 
     it "should contain an namespaced answer node" do
       @answer.child.name.should eq "answer"
-      p @answer.child.namespace
+      @answer.children.first.namespace.href.should eq "urn:xmpp:ozone:1"
     end
   end
 end
