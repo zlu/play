@@ -1,3 +1,11 @@
+PATH
+  remote: .
+  specs:
+    connfu (0.0.1)
+      awesome_print (= 0.3.2)
+      blather (= 0.4.16)
+      extensions (= 0.6.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -23,9 +31,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  awesome_print (= 0.3.2)
-  blather (= 0.4.16)
   bundler (= 1.0.13)
-  extensions (= 0.6.0)
+  connfu!
   rake (= 0.8.7)
   rspec (= 2.5.0)
