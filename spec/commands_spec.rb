@@ -1,20 +1,19 @@
 require 'spec_helper'
 
 describe Connfu::Commands do
-
   describe "#answer" do
     before do
-      @client = Blather::Client.new
-      p @client
-      @stanza = Blather::Stanza::Iq.new
-      response = mock()
-      response.stub(:call)
-      @client.register_handler(:iq) { |_| response.call }
+      @answer = Connfu::Commands.answer
     end
 
-    it "should be able to answer an offer with a successful result" do
-      @client.should_receive(:answer)
-      @client.receive_data(@stanza)
+    it "should be an iq of type set" do
+      @answer.should be_a_kind_of Blather::Stanza::Iq
+      @answer.type.should eq :set
+    end
+
+    it "should contain an namespaced answer node" do
+      @answer.child.name.should eq "answer"
+      p @answer.child.namespace
     end
   end
 end
