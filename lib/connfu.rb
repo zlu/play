@@ -1,5 +1,6 @@
 %w[
   rubygems
+  blather/client
   blather/client/dsl
   awesome_print
 

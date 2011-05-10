@@ -8,7 +8,7 @@ module Connfu
       Nokogiri::XML::Builder.with(iq) do |xml|
         xml.answer("xmlns" => "urn:xmpp:ozone:1")
       end
-
+ap iq
       iq
     end
 
