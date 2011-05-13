@@ -17,8 +17,3 @@ module Connfu
     connection
   end
 end
-#
-#@stream = mock()
-#@stream.stubs(:send)
-#@jid = Blather::JID.new('n@d/r')
-#@client.post_init @stream, @jid

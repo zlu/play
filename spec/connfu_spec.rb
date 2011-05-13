@@ -14,8 +14,7 @@ describe Connfu do
     end
 
     it "should setup the stream" do
-      pending
-      @connection.register_handler(:ready)
+      @connection.post_init(mock('stream'), Blather::JID.new('me.com'))
       @connection.send(:stream).should_not be_nil
     end
   end
