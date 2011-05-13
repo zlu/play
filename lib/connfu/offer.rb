@@ -7,4 +7,3 @@ module Connfu
     end
   end
 end
-
