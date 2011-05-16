@@ -19,8 +19,10 @@ module Connfu
     connection.register_handler(:iq) do |abc|
       p abc
     end
-    EM.run{connection.run}
     connection
   end
 
+  def self.start
+    EM.run{connection.run}
+  end
 end
