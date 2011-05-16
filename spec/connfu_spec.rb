@@ -39,7 +39,7 @@ describe Connfu do
   describe "#start" do
     it "should start the EventMachine" do
       EM.should_receive(:run)
-      Connfu.start
+      Connfu.start(mock('connection'))
     end
   end
 end

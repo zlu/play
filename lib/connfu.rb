@@ -6,7 +6,6 @@
 
   connfu/commands
   connfu/offer
-  connfu/server
   connfu/credentials
   connfu/utils
 ].each {|file| require file }
@@ -18,11 +17,18 @@ module Connfu
     connection.register_handler(:ready, lambda{ p 'Established connection to Connfu Server'})
     connection.register_handler(:iq) do |abc|
       p abc
+      abc
     end
     connection
   end
 
-  def self.start
+  def self.start(connection)
     EM.run{connection.run}
   end
+
+  def self.on(event)
+    p event
+    yield self
+  end
+
 end
