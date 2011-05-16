@@ -14,8 +14,13 @@ describe Connfu do
     end
 
     it "should setup the stream" do
+      pending "Need to figure out how to post_init stream correctly"
       @connection.post_init(mock('stream'), Blather::JID.new('me.com'))
       @connection.send(:stream).should_not be_nil
+    end
+
+    it "should register ready handler" do
+      pending
     end
   end
 end

@@ -1,6 +1,7 @@
 %w[
   rubygems
   blather/client/client
+  blather/client/dsl
   awesome_print
 
   connfu/commands
@@ -11,9 +12,11 @@
 ].each {|file| require file }
 
 module Connfu
+
   def self.setup(host, password)
-    connection = Blather::Client.new
-    connection.setup(host, password)
+    connection = Blather::Client.new.setup(host, password)
+    p connection
     connection
   end
+
 end

@@ -137,8 +137,10 @@ when_ready {
 
 # Filters for all <iq/> messages and executes the block
 iq do |m|
+  ap 'inside of iq handler'
   ap 'Received from Server' + '<====='
   ap m
+  ap m.class.name
   ap '<====='
   if m.attributes['id'].value != @ozone.request_id
     # Naive script for now, simply does a serial execution of a callflow
@@ -150,7 +152,7 @@ iq do |m|
       m.reply!
 
       write_to_stream @ozone.answer
-    when :answered  
+    when :answered
       #write_to_stream @ozone.say_audio("http://dl.dropbox.com/u/25511/Voxeo/troporocks.mp3")
       write_to_stream @ozone.say_text("Tropo Rocks!")
     when :saying_text
