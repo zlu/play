@@ -16,6 +16,7 @@ module Connfu
   def self.setup(host, password)
     connection = Blather::Client.new.setup(host, password)
     p connection
+    connection.register_handler(:ready, lambda{ p 'Established connection to Connfu Server'})
     connection
   end
 
