@@ -12,6 +12,7 @@ module Connfu
     end
 
     def self.answer(client, to)
+      p 'inside of answer'
       client.write answer_iq(to)
     end
 
