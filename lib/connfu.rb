@@ -7,7 +7,6 @@
 
   connfu/verbs
   connfu/offer
-  connfu/credentials
   connfu/utils
   connfu/logger
 ].each { |file| require file }
