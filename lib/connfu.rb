@@ -1,13 +1,15 @@
 %w[
   rubygems
+  blather
   blather/client/client
   blather/client/dsl
   awesome_print
 
-  connfu/commands
+  connfu/verbs
   connfu/offer
   connfu/credentials
   connfu/utils
+  connfu/logger
 ].each { |file| require file }
 
 module Connfu
@@ -29,31 +31,27 @@ module Connfu
 
   def self.included(base)
     base.extend ClassMethods
+    base.extend Connfu::Verbs
   end
 
   def self.setup(host, password)
     connection = Blather::Client.new.setup(host, password)
     connection.register_handler(:ready, lambda { p 'Established connection to Connfu Server' })
     connection.register_handler(:iq) do |offer_iq|
-      p 'inside of register iq handler'
-      p offer_iq
-      p offer_iq.children
-      p offer_iq.children[0]
+      l.info 'inside of register iq handler'
+      l.info offer_iq
+      l.info offer_iq.children[0]
       if offer_iq.children.length > 0 && offer_iq.children[0].name == 'offer'
-        p 'inside offer iq'
+        l.info 'inside offer iq'
         self.context = offer_iq
 
-        p ClassMethods.saved.object_id
         ClassMethods.saved.each do |k, v|
-          p k
-          p v
           v.call(connection)
         end
       end
 
       if offer_iq.children.length > 0 && offer_iq.children[0].name == 'offer'
-        p 'inside answer result iq'
-        
+        l.info 'inside answer result iq'
       end
     end
     @connection = connection
@@ -68,59 +66,22 @@ module Connfu
     @@saved = {}
 
     #TODO initialized twice, why?
-    p "saved initialized...#{@@saved.object_id}"
+    l.info "saved initialized...#{@@saved.object_id}"
 
     def self.saved
-      p self
-      p @@saved.object_id
+      l.info @@saved.object_id
       @@saved
     end
 
     def save_me(context, &block)
-      p "inside of save_me #{context}"
-      p self
-      @@saved = {context => block}
+      l.info "inside of save_me #{context}"
       p @@saved.object_id
-      p @@saved.inspect
+      @@saved = {context => block}
     end
 
     def on(context, &block)
-      p self
+      "inside of on method #{@@saved.object_id}"
       save_me(context, &block)
-      p "inside of on method #{@@saved.object_id}"
     end
-
-    def answer_iq(to)
-      iq = Blather::Stanza::Iq.new(:set, to)
-      Nokogiri::XML::Builder.with(iq) do |xml|
-        xml.answer("xmlns" => "urn:xmpp:ozone:1")
-      end
-      iq
-    end
-
-    def answer
-      p 'inside of answer'
-      p "answer to #{Connfu.context.from.to_s}"
-      Connfu.connection.write answer_iq(Connfu.context.from.to_s)
-    end
-
-    def say_iq(to, text)
-      iq = Blather::Stanza::Iq.new(:set, to)
-      Nokogiri::XML::Builder.with(iq) do |xml|
-        xml.say_("xmlns" => "urn:xmpp:ozone:say:1") {
-          xml.speak text
-        }
-      end
-      iq
-    end
-
-    def say(text)
-      p 'inside of say'
-      p Connfu.context
-      p Connfu.context.from
-      Connfu.connection.write say_iq(Connfu.context.from.to_s, text)
-    end
-
   end
-
 end

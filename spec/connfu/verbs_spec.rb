@@ -1,9 +1,13 @@
 require 'spec_helper'
 
-describe Connfu::Commands do
+describe Connfu::Verbs do
+  include Connfu::Verbs
+  
   before do
+    Blather::Client.stub(:write)
     @offer = create_offer
-    @answer = Connfu::Commands.answer_iq(@offer.from.to_s)
+    Connfu.context = @offer
+    @answer = answer_iq(@offer.from.to_s)
   end
 
   describe "#answer_iq" do
@@ -30,7 +34,7 @@ describe Connfu::Commands do
 
     it "should send answer iq to server" do
       @client.should_receive(:write)
-      Connfu::Commands.answer(@client, @offer.from.to_s)
+      answer
     end
 
     it "should only respond to ringing event" do
