@@ -73,14 +73,9 @@ module Connfu
       @@saved
     end
 
-    def save_me(context, &block)
-      l.info "save_me"
-      @@saved = {context => block}
-    end
-
     def on(context, &block)
       l.info "on"
-      save_me(context, &block)
+      @@saved = {context => block}
     end
   end
 end
