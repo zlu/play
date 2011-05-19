@@ -12,9 +12,6 @@
 
 module Connfu
 
-  @context
-  @connection
-
   def self.context=(offer_iq)
     @context = offer_iq
   end
