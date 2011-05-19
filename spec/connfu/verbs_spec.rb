@@ -3,7 +3,6 @@ require 'spec_helper'
 describe Connfu::Verbs do
   include Connfu::Verbs
 
-
   before do
     @client = mock('client')
     @client.stub(:write)
@@ -46,6 +45,10 @@ describe Connfu::Verbs do
     it "should only respond to ringing event" do
       pending
     end
+
+    it "should change state from ringing to answered" do
+      pending
+    end
   end
 
   describe "#say_iq" do
@@ -78,7 +81,11 @@ describe Connfu::Verbs do
       say(@text_to_say)
     end
 
-    it "should only respond to ringing event" do
+    it "should ont respond to ringing event" do
+      pending
+    end
+
+    it "should respond to answered event" do
       pending
     end
   end
