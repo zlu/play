@@ -35,20 +35,15 @@ module Connfu
     @connection = Blather::Client.new.setup(host, password)
     @connection.register_handler(:ready, lambda { p 'Established @connection to Connfu Server' })
     @connection.register_handler(:iq) do |offer_iq|
-      l.info 'inside of register iq handler'
+      l.info 'Connfu#setup - register_handler(iq)'
       l.info offer_iq
-      l.info offer_iq.children[0]
-      if offer_iq.children.length > 0 && offer_iq.children[0].name == 'offer'
+      if offer_iq && offer_iq.children.length > 0 && offer_iq.children[0].name == 'offer'
         l.info 'inside offer iq'
         self.context = offer_iq
 
         ClassMethods.saved.each do |k, v|
           v.call(@connection)
         end
-      end
-
-      if offer_iq.children.length > 0 && offer_iq.children[0].name == 'offer'
-        l.info 'inside answer result iq'
       end
     end
   end
