@@ -22,6 +22,10 @@ module Connfu
     @context
   end
 
+  def self.connection=(connection)
+    @connection = connection
+  end
+
   def self.connection
     @connection
   end

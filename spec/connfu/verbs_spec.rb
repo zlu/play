@@ -4,7 +4,6 @@ describe Connfu::Verbs do
   include Connfu::Verbs
   
   before do
-    Blather::Client.stub(:write)
     @offer = create_offer
     Connfu.context = @offer
     @answer = answer_iq(@offer.from.to_s)
@@ -29,7 +28,9 @@ describe Connfu::Verbs do
 
   describe "#answer" do
     before do
-      @client = Blather::Client.new
+      @client = mock('client')
+      @client.stub(:write)
+      Connfu.connection = @client
     end
 
     it "should send answer iq to server" do
