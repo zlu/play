@@ -1,5 +1,3 @@
-require 'connfu'
-
 module Connfu
   class Offer < Blather::Stanza::Iq
     def self.new

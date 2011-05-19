@@ -1,5 +1,3 @@
-require 'connfu'
-
 module Connfu
   module Verbs
     def answer_iq(to)
