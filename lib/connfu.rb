@@ -66,21 +66,20 @@ module Connfu
     @@saved = {}
 
     #TODO initialized twice, why?
-    l.info "saved initialized...#{@@saved.object_id}"
+    l.info "@@saved initialized...#{@@saved.object_id}"
 
     def self.saved
-      l.info @@saved.object_id
+      l.info "self.saved"
       @@saved
     end
 
     def save_me(context, &block)
-      l.info "inside of save_me #{context}"
-      p @@saved.object_id
+      l.info "save_me"
       @@saved = {context => block}
     end
 
     def on(context, &block)
-      "inside of on method #{@@saved.object_id}"
+      l.info "on"
       save_me(context, &block)
     end
   end

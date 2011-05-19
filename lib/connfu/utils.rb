@@ -12,9 +12,9 @@ module Connfu
     end
 
     def self.di_helper(di_stanza)
-      ap 'Sending to server'
-      ap di_stanza
-      ap '==============>'
+      l.info 'Sending to server'
+      l.info di_stanza
+      l.info '==============>'
       write_to_stream(di_stanza)
     end
 

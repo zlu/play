@@ -11,7 +11,7 @@ module Connfu
     end
 
     def answer
-      l.info 'inside of answer'
+      l.info 'answer'
       Connfu.connection.write answer_iq(Connfu.context.from.to_s)
     end
 
@@ -26,7 +26,7 @@ module Connfu
     end
 
     def say(text)
-      l.info 'inside of say'
+      l.info 'say'
       Connfu.connection.write say_iq(Connfu.context.from.to_s, text)
     end
   end
