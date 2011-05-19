@@ -33,9 +33,9 @@ module Connfu
   end
 
   def self.setup(host, password)
-    connection = Blather::Client.new.setup(host, password)
-    connection.register_handler(:ready, lambda { p 'Established connection to Connfu Server' })
-    connection.register_handler(:iq) do |offer_iq|
+    @connection = Blather::Client.new.setup(host, password)
+    @connection.register_handler(:ready, lambda { p 'Established @connection to Connfu Server' })
+    @connection.register_handler(:iq) do |offer_iq|
       l.info 'inside of register iq handler'
       l.info offer_iq
       l.info offer_iq.children[0]
@@ -44,7 +44,7 @@ module Connfu
         self.context = offer_iq
 
         ClassMethods.saved.each do |k, v|
-          v.call(connection)
+          v.call(@connection)
         end
       end
 
@@ -52,8 +52,7 @@ module Connfu
         l.info 'inside answer result iq'
       end
     end
-    @connection = connection
-    connection
+    @connection
   end
 
   def self.start(connection)
@@ -61,11 +60,9 @@ module Connfu
   end
 
   module ClassMethods
-    @@saved = {}
-
     #TODO initialized twice, why?
-    l.info "@@saved initialized...#{@@saved.object_id}"
-
+    l.info 'Connfu::ClassMethods'
+    
     def self.saved
       l.info "self.saved"
       @@saved
