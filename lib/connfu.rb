@@ -2,7 +2,6 @@
   rubygems
   blather
   blather/client/client
-  blather/client/dsl
   awesome_print
 
   connfu/verbs
