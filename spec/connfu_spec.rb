@@ -5,7 +5,8 @@ describe Connfu do
     before do
       @host = 'foo@bar.com'
       @password = 'password'
-      @connection = Connfu.setup(@host, @password)
+      Connfu.setup(@host, @password)
+      @connection = Connfu.connection
     end
 
     it "should create a connection to server" do
@@ -24,7 +25,7 @@ describe Connfu do
       ready_handler[0][0].should_not be_nil
       ready_proc = ready_handler[0][0][0]
       ready_proc.should be_instance_of(Proc)
-      Connfu.should_receive(:p).with('Established connection to Connfu Server')
+      Connfu.should_receive(:p).with('Established @connection to Connfu Server')
       ready_proc.call
     end
 
@@ -39,7 +40,7 @@ describe Connfu do
   describe "#start" do
     it "should start the EventMachine" do
       EM.should_receive(:run)
-      Connfu.start(mock('connection'))
+      Connfu.start
     end
   end
 end

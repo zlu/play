@@ -11,6 +11,8 @@
 ].each { |file| require file }
 
 module Connfu
+  #TODO initialized twice, why?
+  l.info 'Connfu'
 
   def self.context=(offer_iq)
     @context = offer_iq
@@ -49,17 +51,13 @@ module Connfu
         l.info 'inside answer result iq'
       end
     end
-    @connection
   end
 
-  def self.start(connection)
-    EM.run { connection.run }
+  def self.start
+    EM.run { @connection.run }
   end
 
   module ClassMethods
-    #TODO initialized twice, why?
-    l.info 'Connfu::ClassMethods'
-    
     def self.saved
       l.info "self.saved"
       @@saved

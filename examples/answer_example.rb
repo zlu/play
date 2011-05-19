@@ -5,7 +5,7 @@ $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require 'rubygems'
 require File.join(File.expand_path('../../lib', __FILE__), 'connfu')
 
-connection = Connfu.setup "usera@localhost", "1"
+Connfu.setup "usera@localhost", "1"
 
 class AnswerExample
   include Connfu
@@ -17,4 +17,4 @@ class AnswerExample
 end
 
 AnswerExample.new
-Connfu.start(connection)
+Connfu.start

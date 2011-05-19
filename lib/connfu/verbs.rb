@@ -2,8 +2,6 @@ require 'connfu'
 
 module Connfu
   module Verbs
-    l.info 'in Connfu::Verbs'
-    
     def answer_iq(to)
       iq = Blather::Stanza::Iq.new(:set, to)
       Nokogiri::XML::Builder.with(iq) do |xml|
