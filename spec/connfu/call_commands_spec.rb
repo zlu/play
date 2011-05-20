@@ -13,7 +13,7 @@ describe Connfu::CallCommands do
     @offer = create_offer
     Connfu.context = @offer
 
-    @call_commands = ['accept', 'answer', 'hangup', 'reject']
+    @call_commands = ['accept', 'answer', 'hangup', 'reject', 'redirect']
   end
 
   describe "call_commands" do
@@ -51,6 +51,11 @@ describe Connfu::CallCommands do
         cc_iq = MyClass.send :"#{call_command}_iq", @offer.from.to_s
         cc_iq.children.first.namespace.href.should eq "urn:xmpp:ozone:1"
       end
+    end
+
+    it "should contain a to attribute for redirect iq" do
+      redirect_iq = redirect_iq(@offer.from.to_s)
+      redirect_iq.children.first.attributes["to"].value.should eq @offer.from.to_s
     end
   end
 
