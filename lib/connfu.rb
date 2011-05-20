@@ -5,6 +5,7 @@
   awesome_print
 
   connfu/verbs
+  connfu/call_commands
   connfu/offer
   connfu/utils
   connfu/logger
@@ -33,6 +34,7 @@ module Connfu
   def self.included(base)
     base.extend ClassMethods
     base.extend Connfu::Verbs
+    base.extend Connfu::CallCommands
   end
 
   def self.setup(host, password)
