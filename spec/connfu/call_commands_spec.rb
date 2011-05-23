@@ -6,9 +6,7 @@ describe Connfu::CallCommands do
   class MyClass; include Connfu; end
 
   before do
-    @client = mock('client')
-    @client.stub(:write)
-    Connfu.connection = @client
+    Connfu.connection = mock('connection')
 
     @offer = create_offer
     Connfu.context = @offer
@@ -16,8 +14,8 @@ describe Connfu::CallCommands do
     @call_commands = ['accept', 'answer', 'hangup', 'reject', 'redirect']
   end
 
-  describe "call_commands" do
-    it "should create a iq method for each call command" do
+  describe "call_commands_iq" do
+    it "should create an iq method for each call command" do
       @call_commands.each do |call_command|
         MyClass.should respond_to :"#{call_command}_iq"
       end
@@ -59,12 +57,27 @@ describe Connfu::CallCommands do
     end
   end
 
-  describe "#answer" do
-    it "should send answer iq to server" do
-      @client.should_receive(:write)
-      answer
+  describe "call_command" do
+    before do
+      @call_commands.delete_if{|item| item == 'redirect'}
     end
 
+    it "should create a method for each call_command" do
+      @call_commands.each do |call_command|
+        MyClass.should respond_to :"#{call_command}"
+      end
+    end
+
+    it "should send call command iq to server" do
+      @call_commands.each do |call_command|
+        l.debug Connfu.connection.object_id
+        Connfu.connection.should_receive(:write)#.with(/#{call_command}/)
+        eval "#{call_command}"
+      end
+    end
+  end
+
+  describe "#answer" do
     it "should only respond to ringing event" do
       pending
     end
