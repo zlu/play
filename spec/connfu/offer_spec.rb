@@ -11,8 +11,11 @@ describe Connfu::Offer do
     end
 
     it "should be an instance of Offer" do
-      pending
       @offer.should be_instance_of(Connfu::Offer)
+    end
+
+    it "should create a ringing event" do
+      
     end
   end
 end
