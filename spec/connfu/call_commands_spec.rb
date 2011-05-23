@@ -3,7 +3,9 @@ require 'spec_helper'
 describe Connfu::CallCommands do
   include Connfu::CallCommands
 
-  class MyClass; include Connfu; end
+  class MyClass;
+    include Connfu;
+  end
 
   before do
     Connfu.connection = mock('connection')
@@ -59,7 +61,7 @@ describe Connfu::CallCommands do
 
   describe "call_command" do
     before do
-      @call_commands.delete_if{|item| item == 'redirect'}
+      @call_commands.delete_if { |item| item == 'redirect' }
     end
 
     it "should create a method for each call_command" do
@@ -70,10 +72,21 @@ describe Connfu::CallCommands do
 
     it "should send call command iq to server" do
       @call_commands.each do |call_command|
-        l.debug Connfu.connection.object_id
         Connfu.connection.should_receive(:write)#.with(/#{call_command}/)
         eval "#{call_command}"
       end
+    end
+  end
+
+  describe "redirect" do
+    it "should respond to redirect" do
+      MyClass.should respond_to :redirect
+    end
+
+    it "should include to attribute in the redirect command iq" do
+      to = "14151112222"
+      Connfu.connection.should_receive(:write)#.with(/#{to}/)
+      eval "redirect(#{to})"
     end
   end
 

@@ -11,7 +11,7 @@ module Connfu
     end
 
     def redirect(to)
-      
+      Connfu.connection.write redirect_iq(to)
     end
 
     @call_commands.each do |call_command|
@@ -26,8 +26,6 @@ module Connfu
       define_method :"#{call_command}" do
         l.info "#{call_command}"
         cc_iq = eval "#{call_command}_iq(\"#{Connfu.context.from.to_s}\")"
-        l.debug cc_iq
-        l.debug Connfu.connection.object_id
         Connfu.connection.write(cc_iq)
       end
     end
