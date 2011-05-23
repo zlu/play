@@ -43,4 +43,10 @@ describe Connfu do
       Connfu.start
     end
   end
+
+  describe "ClassMethods" do
+    describe "#on" do
+      it "should store "
+    end
+  end
 end

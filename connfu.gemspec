@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency("blather", ["0.4.16"])
   s.add_dependency("awesome_print", ["0.3.2"])
   s.add_dependency("extensions", ["0.6.0"])
+  s.add_dependency("ParseTree", ["3.0.7"])
 
   s.add_development_dependency("bundler", ["1.0.13"])
   s.add_development_dependency("rake", ["0.8.7"])

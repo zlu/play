@@ -42,7 +42,7 @@ describe Connfu::Verbs do
       say(@text_to_say)
     end
 
-    it "should ont respond to ringing event" do
+    it "should not respond to ringing event" do
       pending
     end
 

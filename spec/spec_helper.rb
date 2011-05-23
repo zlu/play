@@ -10,7 +10,7 @@ end
 def create_offer
   xml = offer_iq
   doc = Nokogiri::XML.parse xml
-  Blather::XMPPNode.import(doc.root)
+  Connfu::Offer.import(doc.root)
 end
 
 def offer_iq
@@ -30,4 +30,22 @@ def offer_iq
         <header name='From' value='LocalTesting &lt;sip:foobar@localhost&gt;;tag=3kJ52w8ZiE7tdUTxtnoWM8MXcOb-deNj'/>
       </offer>
     </iq>"
+end
+
+def error_iq_for_answer
+  "<iq type='error' id='blather0009' from='1942e51e-61f2-47b1-97bf-8cccbc6d4683@localhost' to='usera@localhost/voxeo'>
+    <answer xmlns='urn:xmpp:ozone:1'/>
+    <error type='cancel'>
+      <internal-server-error xmlns='urn:ietf:params:xml:ns:xmpp-stanzas'/>
+    </error>
+    <detail>Failed to join to media server [call=com.tropo.server.CallActor@89183d]</detail>
+  </iq>"
+end
+
+def error_iq
+  "<iq type='set' id='1c291bf2-db31-4b0f-bd95-dea4b58c3496' from='1942e51e-61f2-47b1-97bf-8cccbc6d4683@localhost' to='usera@localhost/voxeo'>
+    <end xmlns='urn:xmpp:ozone:1'>
+      <error/>
+    </end>
+  </iq>"
 end

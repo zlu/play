@@ -3,9 +3,12 @@
   blather
   blather/client/client
   awesome_print
+  parse_tree
 
   connfu/verbs
   connfu/call_commands
+  connfu/iq_parser
+  connfu/error
   connfu/offer
   connfu/utils
   connfu/logger
@@ -44,7 +47,7 @@ module Connfu
       l.info 'Connfu#setup - register_handler(iq)'
       l.info offer_iq
       if offer_iq && offer_iq.children.length > 0 && offer_iq.children[0].name == 'offer'
-        l.info 'inside offer iq'
+        l.info 'offer iq'
         self.context = offer_iq
 
         ClassMethods.saved.each do |k, v|
@@ -60,12 +63,12 @@ module Connfu
 
   module ClassMethods
     def self.saved
-      l.info "self.saved"
       @@saved
     end
 
     def on(context, &block)
       l.info "on"
+      
       @@saved = {context => block}
     end
   end

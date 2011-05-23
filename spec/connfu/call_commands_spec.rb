@@ -71,6 +71,7 @@ describe Connfu::CallCommands do
     end
 
     it "should send call command iq to server" do
+      #TODO enable with regex
       @call_commands.each do |call_command|
         Connfu.connection.should_receive(:write)#.with(/#{call_command}/)
         eval "#{call_command}"
@@ -84,6 +85,7 @@ describe Connfu::CallCommands do
     end
 
     it "should include to attribute in the redirect command iq" do
+      #TODO enable with regex
       to = "14151112222"
       Connfu.connection.should_receive(:write)#.with(/#{to}/)
       eval "redirect(#{to})"

@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     connfu (0.0.1)
+      ParseTree (= 3.0.7)
       awesome_print (= 0.3.2)
       blather (= 0.4.16)
       extensions (= 0.6.0)
@@ -9,6 +10,12 @@ PATH
 GEM
   remote: http://rubygems.org/
   specs:
+    ParseTree (3.0.7)
+      RubyInline (>= 3.7.0)
+      sexp_processor (>= 3.0.0)
+    RubyInline (3.9.0)
+      ZenTest (~> 4.3)
+    ZenTest (4.5.0)
     awesome_print (0.3.2)
     blather (0.4.16)
       eventmachine (~> 0.12.6)
@@ -26,6 +33,7 @@ GEM
     rspec-expectations (2.5.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.5.0)
+    sexp_processor (3.0.5)
 
 PLATFORMS
   ruby
