@@ -9,12 +9,12 @@ pwd = '1'
 setup jid, pwd
 
 when_ready {
-  ap "Connected to Prism as #{jid}"
+  l.info "Connected to Prism as #{jid}"
   Connfu::Utils.disco_items
 }
 
 iq do |di|
-  ap 'Received from Server'
-  ap di
-  ap '<==================='
+  l.info 'Received from Server'
+  l.info di
+  l.info '<==================='
 end

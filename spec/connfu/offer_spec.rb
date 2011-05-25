@@ -19,4 +19,3 @@ describe Connfu::Offer do
     end
   end
 end
-

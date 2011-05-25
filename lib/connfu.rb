@@ -2,12 +2,14 @@
   rubygems
   blather
   blather/client/client
-  awesome_print
   parse_tree
+  sexp_processor
+  ruby_parser
 
   connfu/verbs
   connfu/call_commands
   connfu/iq_parser
+  connfu/dsl_processor
   connfu/error
   connfu/offer
   connfu/utils

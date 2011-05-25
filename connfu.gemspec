@@ -21,11 +21,16 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = %w{README.md}
 
   s.add_dependency("blather", ["0.4.16"])
-  s.add_dependency("awesome_print", ["0.3.2"])
   s.add_dependency("extensions", ["0.6.0"])
   s.add_dependency("ParseTree", ["3.0.7"])
+  s.add_dependency("sexp_processor", ["3.0.5"])
 
   s.add_development_dependency("bundler", ["1.0.13"])
   s.add_development_dependency("rake", ["0.8.7"])
   s.add_development_dependency("rspec", ["2.5.0"])
+  s.add_development_dependency("flog", ["2.5.1"])
+  s.add_development_dependency("flay", ["1.4.2"])
+  s.add_development_dependency("roodi", ["2.1.0"])
+  s.add_development_dependency("reek", ["1.2.8"])
+  s.add_development_dependency("Saikuro", ["1.1.0"])
 end

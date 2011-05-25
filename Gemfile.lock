@@ -3,9 +3,9 @@ PATH
   specs:
     connfu (0.0.1)
       ParseTree (= 3.0.7)
-      awesome_print (= 0.3.2)
       blather (= 0.4.16)
       extensions (= 0.6.0)
+      sexp_processor (= 3.0.5)
 
 GEM
   remote: http://rubygems.org/
@@ -15,16 +15,28 @@ GEM
       sexp_processor (>= 3.0.0)
     RubyInline (3.9.0)
       ZenTest (~> 4.3)
+    Saikuro (1.1.0)
     ZenTest (4.5.0)
-    awesome_print (0.3.2)
     blather (0.4.16)
       eventmachine (~> 0.12.6)
       nokogiri (~> 1.4.0)
     diff-lcs (1.1.2)
     eventmachine (0.12.10)
     extensions (0.6.0)
+    flay (1.4.2)
+      ruby_parser (~> 2.0)
+      sexp_processor (~> 3.0)
+    flog (2.5.1)
+      ruby_parser (~> 2.0)
+      sexp_processor (~> 3.0)
     nokogiri (1.4.4)
     rake (0.8.7)
+    reek (1.2.8)
+      ruby2ruby (~> 1.2)
+      ruby_parser (~> 2.0)
+      sexp_processor (~> 3.0)
+    roodi (2.1.0)
+      ruby_parser
     rspec (2.5.0)
       rspec-core (~> 2.5.0)
       rspec-expectations (~> 2.5.0)
@@ -33,13 +45,23 @@ GEM
     rspec-expectations (2.5.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.5.0)
+    ruby2ruby (1.2.5)
+      ruby_parser (~> 2.0)
+      sexp_processor (~> 3.0)
+    ruby_parser (2.0.6)
+      sexp_processor (~> 3.0)
     sexp_processor (3.0.5)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  Saikuro (= 1.1.0)
   bundler (= 1.0.13)
   connfu!
+  flay (= 1.4.2)
+  flog (= 2.5.1)
   rake (= 0.8.7)
+  reek (= 1.2.8)
+  roodi (= 2.1.0)
   rspec (= 2.5.0)

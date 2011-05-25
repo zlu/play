@@ -118,9 +118,9 @@ class Ozone
   end
   
   def show_sending(iq_stanza)
-    ap 'Sending to Server' + '=====>'
-    ap iq_stanza
-    ap '=====>'
+    l.info 'Sending to Server' + '=====>'
+    l.info iq_stanza
+    l.info '=====>'
   end
 end
 
@@ -132,16 +132,16 @@ setup client_jid, client_password
 
 # Lets us know when we are logged in
 when_ready {
-  ap 'Logged in!'
+  l.info 'Logged in!'
 }
 
 # Filters for all <iq/> messages and executes the block
 iq do |m|
-  ap 'inside of iq handler'
-  ap 'Received from Server' + '<====='
-  ap m
-  ap m.class.name
-  ap '<====='
+  l.info 'inside of iq handler'
+  l.info 'Received from Server' + '<====='
+  l.info m
+  l.info m.class.name
+  l.info '<====='
   if m.attributes['id'].value != @ozone.request_id
     # Naive script for now, simply does a serial execution of a callflow
     case @ozone.state
