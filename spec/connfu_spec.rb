@@ -7,6 +7,7 @@ describe Connfu do
       @password = 'password'
       Connfu.setup(@host, @password)
       @connection = Connfu.connection
+      Connfu::IqParser.stub(:parse)
     end
 
     it "should create a connection to server" do
@@ -44,9 +45,12 @@ describe Connfu do
     end
   end
 
-  describe "ClassMethods" do
-    describe "#on" do
-      it "should store "
+  describe "examples" do
+    it "should parse all examples" do
+      pending
+
+      l.debug str = File.open('../examples/answer_example.rb').readlines.join
+      l.debug Connfu::DslProcessor.new.process(ParseTree.new.parse_tree_for_string(str)[0])
     end
   end
 end

@@ -7,10 +7,9 @@ RSpec.configure do |config|
   config.mock_with :rspec
 end
 
-def create_offer
-  xml = offer_iq
-  doc = Nokogiri::XML.parse xml
-  Connfu::Offer.import(doc.root)
+def create_iq(iq_xml)
+  doc = Nokogiri::XML.parse iq_xml
+  Blather::Stanza::Iq.import(doc.root)
 end
 
 def offer_iq

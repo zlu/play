@@ -8,7 +8,7 @@ describe Connfu::Verbs do
     @client.stub(:write)
     Connfu.connection = @client
 
-    @offer = create_offer
+    @offer = create_iq(offer_iq)
     Connfu.context = @offer
   end
 

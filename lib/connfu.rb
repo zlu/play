@@ -4,7 +4,6 @@
   blather/client/client
   parse_tree
   sexp_processor
-  ruby_parser
 
   connfu/verbs
   connfu/event
@@ -44,14 +43,19 @@ module Connfu
   end
 
   def self.setup(host, password)
+    str = File.open(File.expand_path('../../examples/answer_example.rb', __FILE__)).readlines.join
+    Connfu::DslProcessor.new.process(ParseTree.new.parse_tree_for_string(str)[0])
+
     @connection = Blather::Client.new.setup(host, password)
     @connection.register_handler(:ready, lambda { p 'Established @connection to Connfu Server' })
-    @connection.register_handler(:iq) do |offer_iq|
+    @connection.register_handler(:iq) do |iq|
       l.info 'Connfu#setup - register_handler(iq)'
-      l.info offer_iq
-      if offer_iq && offer_iq.children.length > 0 && offer_iq.children[0].name == 'offer'
+      parsed = Connfu::IqParser.parse(iq)
+      l.debug parsed
+      l.debug parsed.class.name
+      if iq && iq.children.length > 0 && iq.children[0].name == 'offer'
         l.info 'offer iq'
-        self.context = offer_iq
+        self.context = iq
 
         ClassMethods.saved.each do |k, v|
           v.call(@connection)
@@ -71,7 +75,6 @@ module Connfu
 
     def on(context, &block)
       l.info "on"
-      
       @@saved = {context => block}
     end
   end

@@ -10,7 +10,7 @@ describe Connfu::CallCommands do
   before do
     Connfu.connection = mock('connection')
 
-    @offer = create_offer
+    @offer = create_iq(offer_iq)
     Connfu.context = @offer
 
     @call_commands = ['accept', 'answer', 'hangup', 'reject', 'redirect']
