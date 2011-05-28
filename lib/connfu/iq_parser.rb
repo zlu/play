@@ -4,10 +4,13 @@ module Connfu
       doc = Nokogiri::XML.parse(iq.to_xml)
       node = Blather::XMPPNode.import(doc.root)
       result_node = nil
+      l.debug iq.type
       if iq.to_xml.match(/.*<offer.*/)
         result_node = Connfu::Offer.import(node)
       elsif iq.to_xml.match(/.*<complete.*urn:xmpp:ozone:say:1.*/)
         result_node = Connfu::Event::SayComplete.import(node)
+      elsif iq.type == :result
+        result_node = Connfu::Result.new
       else
         result_node = Connfu::Error.import(node)
       end
@@ -20,7 +23,8 @@ module Connfu
       command = Connfu.dsl_processor.handlers.shift
       if command.instance_of?(Hash)
         l.debug "fire_event: #{clazz} #{command.keys.first} with #{command.values.first}"
-        clazz.module_eval command.keys.first.to_s, command.values.first
+#        clazz.module_eval command.keys.first.to_s, command.values.first
+        clazz.send command.keys.first, command.values.first
       else
         l.debug "fire_event: #{clazz} #{command}"
         clazz.module_eval "#{command}"

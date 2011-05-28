@@ -12,6 +12,10 @@ def create_iq(iq_xml)
   Blather::Stanza::Iq.import(doc.root)
 end
 
+def result_iq
+  "<iq type='result' id='blather000b' from='localhost' to='usera@localhost/voxeo'/>"
+end
+
 def offer_iq
   "<iq type='set' id='0617104e-5574-4529-8ddd-b60e2dee4fca' from='c8a59e48-eaf6-42b4-a89b-e5c42afce2c7@10.0.2.11' to='usera@10.0.2.11/voxeo'>
       <offer xmlns='urn:xmpp:ozone:1' to='sip:usera@10.0.2.11' from='sip:foobar@localhost'>

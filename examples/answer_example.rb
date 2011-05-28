@@ -12,7 +12,7 @@ class AnswerExample
 
   on :offer do
     answer
-    say('hello, this is connfu')
+#    say('hello, this is connfu')
   end
 end
 

@@ -11,6 +11,7 @@
   connfu/iq_parser
   connfu/dsl_processor
   connfu/error
+  connfu/result
   connfu/offer
   connfu/utils
   connfu/logger
