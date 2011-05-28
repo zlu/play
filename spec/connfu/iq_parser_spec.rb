@@ -15,5 +15,11 @@ describe Connfu::IqParser do
       error.should be_instance_of Connfu::Error
       error.id.should eq error_iq.match(/.*id='(.*)'\sfrom=.*/)[1]
     end
+
+    it "should create a complete event for say" do
+      say_complete = Connfu::IqParser.parse(say_complete_iq)
+      say_complete.should be_instance_of Connfu::Event::SayComplete
+      say_complete.get_attribute(:from).should eq say_complete_iq.match(/.*from='(.*)'>\s.*/)[1]
+    end
   end
 end

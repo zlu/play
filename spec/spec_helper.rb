@@ -49,3 +49,9 @@ def error_iq
     </end>
   </iq>"
 end
+
+def say_complete_iq
+  "<iq type='set' to='16577@app.ozone.net/1' from='9f00061@call.ozone.net/fgh4590'>
+     <complete reason='success' xmlns='urn:xmpp:ozone:say:1'>
+   </iq>"
+end

@@ -7,6 +7,7 @@
   ruby_parser
 
   connfu/verbs
+  connfu/event
   connfu/call_commands
   connfu/iq_parser
   connfu/dsl_processor
