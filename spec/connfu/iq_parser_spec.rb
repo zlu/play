@@ -55,6 +55,7 @@ describe Connfu::IqParser do
 
     context "when two events are fired" do
       before do
+        TestClass.stub(:answer)
         Connfu::IqParser.fire_event(TestClass)
       end
 

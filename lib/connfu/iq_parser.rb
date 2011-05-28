@@ -23,7 +23,6 @@ module Connfu
       command = Connfu.dsl_processor.handlers.shift
       if command.instance_of?(Hash)
         l.debug "fire_event: #{clazz} #{command.keys.first} with #{command.values.first}"
-#        clazz.module_eval command.keys.first.to_s, command.values.first
         clazz.send command.keys.first, command.values.first
       else
         l.debug "fire_event: #{clazz} #{command}"
