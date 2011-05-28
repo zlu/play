@@ -7,6 +7,7 @@ module Connfu
           xml.speak text
         }
       end
+
       iq
     end
 

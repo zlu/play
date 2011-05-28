@@ -7,6 +7,12 @@ class TestClass
 end
 
 describe Connfu::IqParser do
+  before do
+    Connfu.setup('host', 'password')
+    @dp = Connfu.dsl_processor
+    @dp.handlers = ["answer", {"say" => 'foo bar'}, "hangup"]
+  end
+
   describe "#parse" do
     it "should create an offer for offer iq" do
       offer = Connfu::IqParser.parse(create_iq(offer_iq))
@@ -28,30 +34,27 @@ describe Connfu::IqParser do
   end
 
   describe "#fire_event" do
-    before do
-      @dp = Connfu::DslProcessor.new
-      Connfu::DslProcessor.handlers = ["answer", "say", "hangup"]
-    end
-
     it "should reduce command handlers by 1" do
       TestClass.stub(:answer)
-      lambda { Connfu::IqParser.fire_event(TestClass) }.should change { Connfu::DslProcessor.handlers.size }.by(-1)
+      lambda {
+        Connfu::IqParser.fire_event(TestClass)
+      }.should change { @dp.handlers.size }.by(-1)
     end
 
-    context "for the first time" do
+    context "when one event is fired" do
       it "should cause the answer command to execute" do
         TestClass.should_receive(:answer)
         Connfu::IqParser.fire_event(TestClass)
       end
     end
 
-    context "for the second time" do
-      it "should cause the say command to execute" do
-
-        pending
-
-        TestClass.should_receive(:say)
+    context "when two events are fired" do
+      before do
         Connfu::IqParser.fire_event(TestClass)
+      end
+
+      it "should cause the say, the 2nd command in handlers, to execute" do
+        TestClass.should_receive(:say)
         Connfu::IqParser.fire_event(TestClass)
       end
     end

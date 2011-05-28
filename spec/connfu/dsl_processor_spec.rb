@@ -53,18 +53,18 @@ describe Connfu::DslProcessor do
   it "should parse first test correctly" do
     exp = ParseTree.new.parse_tree_for_string(first_test)
     @dp.process(exp[0])
-    Connfu::DslProcessor.handlers.should eq [:answer]
+    @dp.handlers.should eq [:answer]
   end
 
   it "should parse second test correctly" do
     exp = ParseTree.new.parse_tree_for_string(second_test)
     @dp.process(exp[0])
-    Connfu::DslProcessor.handlers.should eq [:answer, {:say=>"hi"}, :hangup]
+    @dp.handlers.should eq [:answer, {:say=>"hi"}, :hangup]
   end
 
   it "should parse full test correctly" do
     exp = ParseTree.new.parse_tree_for_string(full_test)
     @dp.process(exp[0])
-    Connfu::DslProcessor.handlers.should eq [:answer, {:say=>"hello.  this is connfu"}]
+    @dp.handlers.should eq [:answer, {:say=>"hello.  this is connfu"}]
   end
 end

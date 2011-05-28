@@ -3,18 +3,28 @@ module Connfu
     def self.parse(iq)
       doc = Nokogiri::XML.parse(iq.to_xml)
       node = Blather::XMPPNode.import(doc.root)
+      result_node = nil
       if iq.to_xml.match(/.*<offer.*/)
-        Connfu::Offer.import(node)
+        result_node = Connfu::Offer.import(node)
       elsif iq.to_xml.match(/.*<complete.*urn:xmpp:ozone:say:1.*/)
-        Connfu::Event::SayComplete.import(node)
+        result_node = Connfu::Event::SayComplete.import(node)
       else
-        Connfu::Error.import(node)
+        result_node = Connfu::Error.import(node)
       end
+
+      result_node
     end
 
     def self.fire_event(clazz)
-      command = Connfu::DslProcessor.handlers.shift
-      clazz.module_eval command
+      l.debug Connfu.dsl_processor.handlers
+      command = Connfu.dsl_processor.handlers.shift
+      if command.instance_of?(Hash)
+        l.debug "fire_event: #{clazz} #{command.keys.first} with #{command.values.first}"
+        clazz.module_eval command.keys.first.to_s, command.values.first
+      else
+        l.debug "fire_event: #{clazz} #{command}"
+        clazz.module_eval "#{command}"
+      end
     end
   end
 end

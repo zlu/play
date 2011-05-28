@@ -20,6 +20,7 @@ module Connfu
         Nokogiri::XML::Builder.with(iq) do |xml|
           xml.send call_command, {"xmlns" => "urn:xmpp:ozone:1"}
         end
+
         iq
       end
 
