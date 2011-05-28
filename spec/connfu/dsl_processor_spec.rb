@@ -37,6 +37,7 @@ describe Connfu::DslProcessor do
   it "should parse second test correctly" do
     exp = ParseTree.new.parse_tree_for_string(second_test)
     l.debug exp
-    Connfu::DslProcessor.new.process(exp[0])
+    @dp.process(exp[0])
+    @dp.handlers.should eq [:answer, {:say=>"hi"}, :hangup]
   end
 end
