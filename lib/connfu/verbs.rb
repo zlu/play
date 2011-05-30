@@ -4,7 +4,7 @@ module Connfu
       iq = Blather::Stanza::Iq.new(:set, to)
       Nokogiri::XML::Builder.with(iq) do |xml|
         xml.say_("xmlns" => "urn:xmpp:ozone:say:1") {
-          xml.speak text
+          xml.text text
         }
       end
 

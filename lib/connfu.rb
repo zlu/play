@@ -64,8 +64,8 @@ module Connfu
     @connection.register_handler(:iq) do |iq|
       l.info 'Connfu#setup - register_handler(iq)'
       parsed = Connfu::IqParser.parse iq
-      l.debug parsed
-      l.debug parsed.class.name
+      l.debug 'Connfu.setup'
+      l.debug @base
       @context = parsed
       Connfu::IqParser.fire_event @base
     end

@@ -17,6 +17,5 @@ module Connfu
       l.info '==============>'
       write_to_stream(di_stanza)
     end
-
   end
 end

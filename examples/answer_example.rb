@@ -12,10 +12,10 @@ class AnswerExample
 
   on :offer do
     answer
+    sleep 3
     say('hello, this is connfu')
-#    say('hello, this is connfu')
-#    say('hello, this is connfu')
-#    hangup
+    sleep 3
+    hangup
   end
 end
 

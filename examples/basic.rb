@@ -64,7 +64,7 @@ class Ozone
     iq_stanza = create_iq_stanza
     builder = Nokogiri::XML::Builder.with(iq_stanza) { |xml| 
       xml.say_("xmlns" => "urn:xmpp:ozone:say:1") {
-        xml.speak text
+        xml.text text
       }
     }
     @request_id = iq_stanza.id
@@ -154,16 +154,17 @@ iq do |m|
 
       # Acknowledge the Offer to accept the call
       m.reply!
-
+sleep 5
       write_to_stream @ozone.answer
-    when :answered
+      when :answered
+        sleep 2
       #write_to_stream @ozone.say_audio("http://dl.dropbox.com/u/25511/Voxeo/troporocks.mp3")
       write_to_stream @ozone.say_text("Tropo Rocks!")
-    when :saying_text
-      write_to_stream @ozone.ask("What is your favorite color?", "red, green, blue")
-    when :asking
-      write_to_stream @ozone.transfer("sip:jose@10.0.2.11:49152")
-    when :transferred
+#    when :saying_text
+#      write_to_stream @ozone.ask("What is your favorite color?", "red, green, blue")
+#    when :asking
+#      write_to_stream @ozone.transfer("sip:jose@10.0.2.11:49152")
+#    when :transferred
       #write_to_stream @ozone.hangup
     end
   end
