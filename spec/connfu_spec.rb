@@ -8,6 +8,7 @@ describe Connfu do
       Connfu.setup(@host, @password)
       @connection = Connfu.connection
       Connfu::IqParser.stub(:parse)
+      Connfu::IqParser.stub(:fire_event)
     end
 
     it "should create a connection to server" do
@@ -17,6 +18,7 @@ describe Connfu do
 
     it "should setup the stream" do
       pending "Need to figure out how to post_init stream correctly"
+
       @connection.post_init(mock('stream'), Blather::JID.new('me.com'))
       @connection.send(:stream).should_not be_nil
     end

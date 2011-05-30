@@ -62,10 +62,8 @@ module Connfu
     @connection = Blather::Client.new.setup(host, password)
     @connection.register_handler(:ready, lambda { p 'Established @connection to Connfu Server' })
     @connection.register_handler(:iq) do |iq|
-      l.info 'Connfu#setup - register_handler(iq)'
+      l.debug 'Connfu#setup - register_handler(:iq)'
       parsed = Connfu::IqParser.parse iq
-      l.debug 'Connfu.setup'
-      l.debug @base
       @context = parsed
       Connfu::IqParser.fire_event @base
     end

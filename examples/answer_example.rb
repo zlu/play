@@ -13,8 +13,11 @@ class AnswerExample
   on :offer do
     answer
     sleep 3
+
     say('hello, this is connfu')
-    sleep 3
+    say('hello, this is connfu')
+
+    sleep 6
     hangup
   end
 end
