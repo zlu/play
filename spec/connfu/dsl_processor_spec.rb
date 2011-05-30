@@ -45,9 +45,24 @@ AnswerExample.new
 Connfu.start
 FULLTEST
 
+empty_test = <<EMPTYTEST
+class FirstDslTest
+  include Connfu
+
+  on :offer do
+  end
+end
+EMPTYTEST
+
 describe Connfu::DslProcessor do
   before do
     @dp = Connfu::DslProcessor.new
+  end
+
+  it "should parse empty test correctly" do
+    exp = ParseTree.new.parse_tree_for_string(empty_test)
+    @dp.process(exp[0])
+    @dp.handlers.should eq []
   end
 
   it "should parse first test correctly" do

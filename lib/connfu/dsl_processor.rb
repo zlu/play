@@ -11,7 +11,7 @@ module Connfu
     end
 
     def process_iter(exp)
-      if exp[1][0] == :fcall && exp[1][1] == :on
+      if exp[1][0] == :fcall && exp[1][1] == :on && !!exp[3]
         case exp[3][0]
           when :vcall
             @handlers << exp[3][1]
