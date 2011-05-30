@@ -10,7 +10,7 @@ module Connfu
       elsif iq.to_xml.match(/.*<complete.*urn:xmpp:ozone:say:1.*/)
         result_node = Connfu::Event::SayComplete.import(node)
       elsif iq.type == :result
-        result_node = Connfu::Result.import(node)
+        result_node = Connfu::Event::Result.import(node)
       else
         result_node = Connfu::Error.import(node)
       end
@@ -19,7 +19,6 @@ module Connfu
     end
 
     def self.fire_event
-#      l.debug Connfu.dsl_processor.handlers
       clazz = Connfu.base
       command = Connfu.dsl_processor.handlers.shift
       if command.instance_of?(Hash)

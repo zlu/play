@@ -22,7 +22,7 @@ describe Connfu::IqParser do
 
     it "should create a result for result iq" do
       result = Connfu::IqParser.parse(create_iq(result_iq))
-      result.should be_instance_of Connfu::Result
+      result.should be_instance_of Connfu::Event::Result
       result.id.should eq result_iq.match(/.*id='(.*)'\sfrom=.*/)[1]
     end
 

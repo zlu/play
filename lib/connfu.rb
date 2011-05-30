@@ -12,7 +12,6 @@
   connfu/dsl_processor
   connfu/event
   connfu/error
-  connfu/result
   connfu/offer
   connfu/utils
 ].each { |file| require file }
