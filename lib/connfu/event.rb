@@ -4,8 +4,8 @@ module Connfu
   module Event
     class SayComplete < Blather::Stanza::Iq
       def self.import(node)
-        super(node)
         Connfu::IqParser.fire_event
+        super(node)
       end
     end
   end
