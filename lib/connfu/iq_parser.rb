@@ -18,8 +18,9 @@ module Connfu
       result_node
     end
 
-    def self.fire_event(clazz)
-      l.debug Connfu.dsl_processor.handlers
+    def self.fire_event
+#      l.debug Connfu.dsl_processor.handlers
+      clazz = Connfu.base
       command = Connfu.dsl_processor.handlers.shift
       if command.instance_of?(Hash)
         l.debug "fire_event: #{clazz} #{command.keys.first} with #{command.values.first}"

@@ -5,24 +5,28 @@
   parse_tree
   sexp_processor
 
+  connfu/logger
   connfu/verbs
-  connfu/event
   connfu/call_commands
   connfu/iq_parser
   connfu/dsl_processor
+  connfu/event
   connfu/error
   connfu/result
   connfu/offer
   connfu/utils
-  connfu/logger
 ].each { |file| require file }
 
 module Connfu
   #TODO initialized twice, why?
   l.info 'Connfu'
 
-  attr_reader :base
+  @@base = nil
   @@dsl_processor = Connfu::DslProcessor.new
+
+  def self.base
+    @@base
+  end
 
   def self.context=(offer_iq)
     @context = offer_iq
@@ -49,7 +53,7 @@ module Connfu
   end
 
   def self.included(base)
-    @base = base
+    @@base = base
     base.extend ClassMethods
     base.extend Connfu::Verbs
     base.extend Connfu::CallCommands
@@ -65,7 +69,7 @@ module Connfu
       l.debug 'Connfu#setup - register_handler(:iq)'
       parsed = Connfu::IqParser.parse iq
       @context = parsed
-      Connfu::IqParser.fire_event @base
+      Connfu::IqParser.fire_event
     end
   end
 
