@@ -3,15 +3,19 @@
 # Start as (-D for debug):
 #   ./blather_ozone.rb -D 
 
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+
 require 'rubygems'
 require 'blather/client'
-require 'awesome_print'
+require File.join(File.expand_path('../../lib', __FILE__), 'connfu')
 
 # The user credentials want to login Ozone as
 client_jid = 'usera@127.0.0.1'
 client_password = '1'
 
 class Ozone
+  include Connfu
+  
   attr_reader :state, :call_id, :request_id
   
   def initialize(client_jid)
