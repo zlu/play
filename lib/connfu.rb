@@ -14,6 +14,7 @@
   connfu/error
   connfu/offer
   connfu/utils
+  connfu/dsl
 ].each { |file| require file }
 
 module Connfu
@@ -53,7 +54,7 @@ module Connfu
 
   def self.included(base)
     @@base = base
-    base.extend ClassMethods
+    base.extend Connfu::Dsl
     base.extend Connfu::Verbs
     base.extend Connfu::CallCommands
   end
@@ -74,11 +75,5 @@ module Connfu
 
   def self.start
     EM.run { @connection.run }
-  end
-
-  module ClassMethods
-    def on(context, &block)
-      l.info "on"
-    end
   end
 end
