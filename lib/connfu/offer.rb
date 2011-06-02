@@ -1,9 +1,13 @@
 module Connfu
   class Offer < Blather::Stanza::Iq
-    def self.create_from_iq(offer_iq)
-      xml = offer_iq
-      doc = Nokogiri::XML.parse xml
-      self.import(doc.root)
+    def self.result_for_node(node)
+      result_iq = Blather::Stanza::Iq.new(:result, node.from)
+      result_iq.from = node.to
+      result_iq
+    end
+
+    def self.import(node)
+      super(node).tap {Connfu.connection.write result_for_node(node)}
     end
   end
 end

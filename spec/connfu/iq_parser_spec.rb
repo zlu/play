@@ -9,15 +9,24 @@ end
 describe Connfu::IqParser do
   before do
     Connfu.setup('host', 'password')
+    @stream = mock('stream')
+    Connfu.connection.post_init(@stream, Blather::JID.new('me.com'))
     @dp = Connfu.dsl_processor
     @dp.handlers = ["answer", {"say" => 'foo bar'}, "hangup"]
   end
 
   describe "#parse" do
-    it "should create an offer for offer iq" do
-      offer = Connfu::IqParser.parse(create_iq(offer_iq))
-      offer.should be_instance_of Connfu::Offer
-      offer.id.should eq offer_iq.match(/.*id='(.*)'\sfrom=.*/)[1]
+    context 'an offer iq' do
+      before do
+        @offer_iq = create_iq(offer_iq)
+      end
+
+      it "should create an offer" do
+        @stream.stub!(:send)
+        offer = Connfu::IqParser.parse(@offer_iq)
+        offer.should be_instance_of Connfu::Offer
+        offer.id.should eq offer_iq.match(/.*id='(.*)'\sfrom=.*/)[1]
+      end
     end
 
     it "should create a result for result iq" do
@@ -44,7 +53,7 @@ describe Connfu::IqParser do
     end
 
     it "should set the connfu context after parsing" do
-
+      pending 'maybe removed if to and from can be obtain in other fashion'
     end
   end
 

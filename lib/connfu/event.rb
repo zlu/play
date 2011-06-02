@@ -8,6 +8,9 @@ module Connfu
     end
 
     class Result < Blather::Stanza::Iq
+      def self.create(node)
+        node.reply!
+      end
     end
   end
 end

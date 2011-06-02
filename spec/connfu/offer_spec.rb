@@ -1,21 +1,23 @@
 require 'spec_helper'
 
 describe Connfu::Offer do
-  context "when offer comes from Prism" do
-    before do
-      @offer = Connfu::Offer.create_from_iq(offer_iq)
-    end
+  before do
+    @offer_iq = create_iq(offer_iq)
+  end
 
-    it "should contain an offer node" do
-      @offer.children[1].name.should eq "offer"
+  describe '#result_for_node' do
+    it 'should create an empty result iq based on offer iq' do
+      result_iq = Connfu::Offer.result_for_node(@offer_iq)
+      result_iq.from.should eq @offer_iq.to
+      result_iq.to.should eq @offer_iq.from
     end
+  end
 
-    it "should be an instance of Offer" do
-      @offer.should be_instance_of(Connfu::Offer)
-    end
-
-    it "should create a ringing event" do
-      
+  describe "#import" do
+    it 'should send an empty result iq to server' do
+      #TODO figure out .with part
+      Connfu.connection.should_receive(:write)#.with(Connfu::Offer.result_for_node(@offer_iq))
+      Connfu::Offer.import(@offer_iq)
     end
   end
 end

@@ -7,6 +7,7 @@ module Connfu
       l.debug iq.type
       if iq.to_xml.match(/.*<offer.*/)
         result_node = Connfu::Offer.import(node)
+        Connfu::Event::Result.create(result_node)
       elsif iq.to_xml.match(/.*<complete.*urn:xmpp:ozone:say:1.*/)
         result_node = Connfu::Event::SayComplete.import(node)
       elsif iq.type == :result
