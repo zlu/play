@@ -102,15 +102,4 @@ describe Connfu::CallCommands do
       eval "redirect(#{to}, #{from})"
     end
   end
-
-  describe "#answer" do
-    it "should only respond to ringing event" do
-      pending
-    end
-
-    it "should change state from ringing to answered" do
-      pending
-    end
-  end
-
 end

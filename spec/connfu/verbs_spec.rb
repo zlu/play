@@ -41,13 +41,5 @@ describe Connfu::Verbs do
       @client.should_receive(:write)
       say(@text_to_say)
     end
-
-    it "should not respond to ringing event" do
-      pending
-    end
-
-    it "should respond to answered event" do
-      pending
-    end
   end
 end
