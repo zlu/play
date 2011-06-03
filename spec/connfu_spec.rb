@@ -16,13 +16,6 @@ describe Connfu do
       @connection.should be_setup
     end
 
-    it "should setup the stream" do
-      pending "Need to figure out how to post_init stream correctly"
-
-      @connection.post_init(mock('stream'), Blather::JID.new('me.com'))
-      @connection.send(:stream).should_not be_nil
-    end
-
     it "should register ready handler that prints out connection message" do
       ready_handler = @connection.handlers[:ready]
       ready_handler[0][0].should_not be_nil
@@ -41,6 +34,13 @@ describe Connfu do
   end
 
   describe "#start" do
+    it 'should initialize call context' do
+      EM.stub(:run)
+      lambda {
+        Connfu.start
+      }.should change(Connfu, :context).from(nil).to({})
+    end
+
     it "should start the EventMachine" do
       EM.should_receive(:run)
       Connfu.start

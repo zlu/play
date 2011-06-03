@@ -83,5 +83,15 @@ describe Connfu::IqParser do
         Connfu::IqParser.fire_event
       end
     end
+
+    context 'when hangup is going to be called' do
+      before do
+        @dp.handlers = ['hangup']
+      end
+
+      it "should not call hangup for result iq" do
+        pending
+      end
+    end
   end
 end

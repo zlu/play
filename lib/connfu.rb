@@ -6,6 +6,7 @@
   sexp_processor
 
   connfu/logger
+  connfu/call_context
   connfu/verbs
   connfu/call_commands
   connfu/iq_parser
@@ -67,6 +68,7 @@ module Connfu
     @connection.register_handler(:ready, lambda { p 'Established @connection to Connfu Server' })
     @connection.register_handler(:iq) do |iq|
       l.debug 'Connfu#setup - register_handler(:iq)'
+      l.debug iq
       parsed = Connfu::IqParser.parse iq
       @context = parsed
       Connfu::IqParser.fire_event
@@ -74,6 +76,7 @@ module Connfu
   end
 
   def self.start
+    @context ||= {}
     EM.run { @connection.run }
   end
 end

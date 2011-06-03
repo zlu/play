@@ -9,4 +9,8 @@ describe Connfu::Event do
       end
     end
   end
+
+  describe Connfu::Event::Result do
+    
+  end
 end

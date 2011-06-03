@@ -45,6 +45,16 @@ def error_iq_for_answer
   </iq>"
 end
 
+def error_iq_for_answer_with_text
+  "<iq type='error' id='blather000c' from='usera@localhost/voxeo' to='usera@localhost/voxeo'>
+    <answer xmlns='urn:xmpp:ozone:1'/>
+    <error type='cancel'>
+      <item-not-found xmlns='urn:ietf:params:xml:ns:xmpp-stanzas'/>
+      <text xmlns='urn:ietf:params:xml:ns:xmpp-stanzas' lang='en'>Could not find call [id=usera]</text>
+    </error>
+  </iq>"
+end
+
 def error_iq
   "<iq type='set' id='1c291bf2-db31-4b0f-bd95-dea4b58c3496' from='1942e51e-61f2-47b1-97bf-8cccbc6d4683@localhost' to='usera@localhost/voxeo'>
     <end xmlns='urn:xmpp:ozone:1'>

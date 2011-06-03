@@ -7,6 +7,8 @@ module Connfu
     end
 
     def self.import(node)
+      jid = Blather::JID.new(node.from)
+      Connfu.context[jid.node] = node
       super(node).tap {Connfu.connection.write result_for_node(node)}
     end
   end
