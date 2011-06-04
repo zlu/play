@@ -19,9 +19,6 @@
 ].each { |file| require file }
 
 module Connfu
-  #TODO initialized twice, why?
-  l.info 'Connfu'
-
   @@base = nil
   @@dsl_processor = Connfu::DslProcessor.new
 
@@ -54,22 +51,23 @@ module Connfu
   end
 
   def self.included(base)
+    l.debug "+++++++++++++++++++included"
     @@base = base
     base.extend Connfu::Dsl
     base.extend Connfu::Verbs
     base.extend Connfu::CallCommands
+
+    str = File.open(File.expand_path("../../examples/#{Connfu::Utils.underscore(base.to_s)}.rb", __FILE__)).readlines.join
+    @@dsl_processor.process(ParseTree.new.parse_tree_for_string(str)[0])
   end
 
   def self.setup(host, password)
-    str = File.open(File.expand_path('../../examples/answer_example.rb', __FILE__)).readlines.join
-    @@dsl_processor.process(ParseTree.new.parse_tree_for_string(str)[0])
-
     @connection = Blather::Client.new.setup(host, password)
     @connection.register_handler(:ready, lambda { p 'Established @connection to Connfu Server' })
     @connection.register_handler(:iq) do |iq|
       l.debug 'Connfu#setup - register_handler(:iq)'
       l.debug iq
-      parsed = Connfu::IqParser.parse iq
+      Connfu::IqParser.parse iq
       Connfu::IqParser.fire_event
     end
   end

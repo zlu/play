@@ -7,15 +7,13 @@ require File.join(File.expand_path('../../lib', __FILE__), 'connfu')
 
 Connfu.setup "usera@127.0.0.1", "1"
 
-class AnswerExample
+class RejectExample
   include Connfu
 
   on :offer do
-    answer
-    say('hello, this is connfu')
-#    hangup
+    reject
   end
 end
 
-AnswerExample.new
+RejectExample.new
 Connfu.start
