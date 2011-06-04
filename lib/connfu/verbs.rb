@@ -13,7 +13,7 @@ module Connfu
 
     def say(text)
       l.info 'say'
-      Connfu.connection.write say_iq(Connfu.context.from.to_s, text)
+      Connfu.connection.write say_iq(Connfu.context.values.first.from.to_s, text)
     end
   end
 end

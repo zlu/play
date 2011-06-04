@@ -29,10 +29,10 @@ module Connfu
     @@base
   end
 
-  def self.context=(offer_iq)
-    @context = offer_iq
+  def self.context=(context)
+    @context = context
   end
-
+  
   def self.context
     @context
   end
@@ -70,7 +70,6 @@ module Connfu
       l.debug 'Connfu#setup - register_handler(:iq)'
       l.debug iq
       parsed = Connfu::IqParser.parse iq
-      @context = parsed
       Connfu::IqParser.fire_event
     end
   end

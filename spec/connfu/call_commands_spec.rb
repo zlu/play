@@ -9,11 +9,12 @@ describe Connfu::CallCommands do
 
   before do
     Connfu.connection = mock('connection')
-
+    Connfu.connection.stub(:write)
+    EM.stub(:run)
+    Connfu.start
     @offer = create_iq(offer_iq)
-    Connfu.context = @offer
-
-    @call_commands = ['accept', 'answer', 'hangup', 'reject', 'redirect']
+    Connfu::Offer.import(@offer)
+    @call_commands = ['accept', 'answer', 'hangup', 'reject']
   end
 
   describe "call_commands_iq" do
@@ -25,7 +26,7 @@ describe Connfu::CallCommands do
 
     it "should be an iq of type set" do
       @call_commands.each do |call_command|
-        cc_iq = MyClass.send :"#{call_command}_iq", @offer.from.to_s, @offer.to.to_s
+        cc_iq = MyClass.send :"#{call_command}_iq"
         cc_iq.should be_a_kind_of Blather::Stanza::Iq
         cc_iq.type.should eq :set
       end
@@ -33,7 +34,7 @@ describe Connfu::CallCommands do
 
     it "should contain a to attribute whose value is the from attribute of offer" do
       @call_commands.each do |call_command|
-        cc_iq = MyClass.send :"#{call_command}_iq", @offer.from.to_s, @offer.to.to_s
+        cc_iq = MyClass.send :"#{call_command}_iq"
         cc_iq.to.should_not be_nil
         cc_iq.to.should eq @offer.from
       end
@@ -41,7 +42,7 @@ describe Connfu::CallCommands do
 
     it "should contain a from attribute whose value is the to attribute of offer" do
       @call_commands.each do |call_command|
-        cc_iq = MyClass.send :"#{call_command}_iq", @offer.from.to_s, @offer.to.to_s
+        cc_iq = MyClass.send :"#{call_command}_iq"
         cc_iq.from.should_not be_nil
         cc_iq.from.should eq @offer.to
       end
@@ -49,22 +50,15 @@ describe Connfu::CallCommands do
 
     it "should contain an call_command node" do
       @call_commands.each do |call_command|
-        cc_iq = MyClass.send :"#{call_command}_iq", @offer.from.to_s, @offer.to.to_s
+        cc_iq = MyClass.send :"#{call_command}_iq"
         cc_iq.child.name.should eq call_command
       end
     end
 
     it "should have an ozone namespace" do
       @call_commands.each do |call_command|
-        cc_iq = MyClass.send :"#{call_command}_iq", @offer.from.to_s, @offer.to.to_s
+        cc_iq = MyClass.send :"#{call_command}_iq"
         cc_iq.children.first.namespace.href.should eq "urn:xmpp:ozone:1"
-      end
-    end
-
-    context 'for redirect command' do
-      it "should contain a to attribute" do
-        redirect_iq = redirect_iq(@offer.from.to_s, @offer.from.to_s)
-        redirect_iq.children.first.attributes["to"].value.should eq @offer.from.to_s
       end
     end
   end
@@ -97,9 +91,8 @@ describe Connfu::CallCommands do
     it "should include to attribute in the redirect command iq" do
       #TODO enable with regex
       to = "14151112222"
-      from = "14151112223"
       Connfu.connection.should_receive(:write) #.with(/#{to}/)
-      eval "redirect(#{to}, #{from})"
+      eval "redirect(#{to})"
     end
   end
 end

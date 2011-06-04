@@ -12,6 +12,7 @@ describe Connfu::Offer do
       result_iq = Connfu::Offer.result_for_node(@offer_iq)
       result_iq.from.should eq @offer_iq.to
       result_iq.to.should eq @offer_iq.from
+      result_iq.id.should eq @offer_iq.id
     end
   end
 
