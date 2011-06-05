@@ -77,3 +77,22 @@ def outbound_call_iq
      </dial>
   </iq>"
 end
+
+def ask_iq
+  "<iq type='set' to='9f00061@call.ozone.net/1' from='16577@app.ozone.net/1'>
+    <ask xmlns='urn:xmpp:ozone:ask:1'
+        bargein='true'
+        min-confidence='0.3'
+        mode='speech|dtmf|any'
+        recognizer='en-US'
+        terminator='#'
+        timeout='12000'>
+      <prompt voice='allison'>
+        Please enter your four digit pin
+      </prompt>
+      <choices content-type='application/grammar+voxeo'>
+        [4 DIGITS]
+      </choices>
+    </ask>
+  </iq>"
+end

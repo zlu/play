@@ -7,7 +7,7 @@
 
   connfu/logger
   connfu/call_context
-  connfu/verbs
+  connfu/component
   connfu/call_commands
   connfu/outbound_call
   connfu/iq_parser
@@ -54,7 +54,7 @@ module Connfu
   def self.included(base)
     @@base = base
     base.extend Connfu::Dsl
-    base.extend Connfu::Verbs
+    base.extend Connfu::Component
     base.extend Connfu::CallCommands
     base.extend Connfu::OutboundCall
 
