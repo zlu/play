@@ -55,10 +55,13 @@ describe Connfu::OutboundCall do
   end
 
   describe 'dial' do
-    it 'should write to connfu::connection' do
-      #TODO should test parameters to write
-      Connfu.connection.should_receive(:write)
+    it 'should register a ready handler with block' do
+      Connfu.connection.should_receive(:register_handler)
       MyClass.send :dial, 'foo'
+    end
+
+    it 'should write to connfu::connection' do
+      pending 'should test parameters to write'
     end
   end
 end
