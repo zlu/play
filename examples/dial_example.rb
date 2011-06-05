@@ -10,8 +10,8 @@ Connfu.setup "usera@127.0.0.1", "1"
 class DialExample
   include Connfu
 
-  dial 'usera@127.0.0.1'
-
+  block = lambda {dial 'sip:16508983130@127.0.0.1'}
+  Connfu.connection.register_handler :ready, &block
 end
 
 DialExample.new

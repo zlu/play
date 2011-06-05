@@ -6,12 +6,12 @@ module Connfu
       Nokogiri::XML::Builder.with(oc_iq) do |xml|
         xml.dial(:to => to, :from => from, "xmlns" => "urn:xmpp:ozone:1")
       end
-
+      l.debug oc_iq
       oc_iq
     end
 
     def dial(to)
-      Connfu.connection.write outbound_call_iq('to_domain', 'from_resource', to, 'from')
+      Connfu.connection.write outbound_call_iq('127.0.0.1', 'usera@127.0.0.1', to, 'sip:usera@127.0.0.1')
     end
   end
 end
