@@ -68,3 +68,12 @@ def say_complete_iq
      <complete reason='success' xmlns='urn:xmpp:ozone:say:1'>
    </iq>"
 end
+
+def outbound_call_iq
+  "<iq type='set' to='call.ozone.net' from='16577@app.ozone.net/1'>
+     <dial to='tel:+13055195825' from='tel:+14152226789' xmlns='urn:xmpp:ozone:1'>
+        <header name='x-skill' value='agent' />
+        <header name='x-customer-id' value='8877' />
+     </dial>
+  </iq>"
+end

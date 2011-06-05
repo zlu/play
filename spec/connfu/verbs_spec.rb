@@ -4,12 +4,10 @@ describe Connfu::Verbs do
   include Connfu::Verbs
 
   before do
-    @client = mock('client')
-    @client.stub(:write)
-    Connfu.connection = @client
-
+    Connfu.setup('host', 'password')
+    EM.stub(:run)
+    Connfu::start
     @offer = create_iq(offer_iq)
-    Connfu.context = @offer
   end
 
   describe "#say_iq" do

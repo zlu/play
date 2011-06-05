@@ -13,8 +13,6 @@ module Connfu
     end
 
     def redirect(to)
-      l.debug 'sending to server redirect'
-      l.debug redirect_iq(to)
       Connfu.connection.write redirect_iq(to)
     end
 

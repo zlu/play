@@ -9,6 +9,7 @@
   connfu/call_context
   connfu/verbs
   connfu/call_commands
+  connfu/outbound_call
   connfu/iq_parser
   connfu/dsl_processor
   connfu/event
@@ -29,7 +30,7 @@ module Connfu
   def self.context=(context)
     @context = context
   end
-  
+
   def self.context
     @context
   end
@@ -55,9 +56,13 @@ module Connfu
     base.extend Connfu::Dsl
     base.extend Connfu::Verbs
     base.extend Connfu::CallCommands
+    base.extend Connfu::OutboundCall
 
-    str = File.open(File.expand_path("../../examples/#{Connfu::Utils.underscore(base.to_s)}.rb", __FILE__)).readlines.join
-    @@dsl_processor.process(ParseTree.new.parse_tree_for_string(str)[0])
+    begin
+      str = File.open(File.expand_path("../../examples/#{Connfu::Utils.underscore(base.to_s)}.rb", __FILE__)).readlines.join
+      @@dsl_processor.process(ParseTree.new.parse_tree_for_string(str)[0])
+    rescue
+    end
   end
 
   def self.setup(host, password)
