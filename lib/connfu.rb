@@ -51,7 +51,6 @@ module Connfu
   end
 
   def self.included(base)
-    l.debug "+++++++++++++++++++included"
     @@base = base
     base.extend Connfu::Dsl
     base.extend Connfu::Verbs

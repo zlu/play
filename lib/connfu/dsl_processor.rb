@@ -15,6 +15,8 @@ module Connfu
         case exp[3][0]
           when :vcall
             @handlers << exp[3][1]
+          when :fcall
+            @handlers << {exp[3][1] => exp[3][2][1][1]}
           when :block
             size = exp[3].length - 1
             (1..size).each do |i|

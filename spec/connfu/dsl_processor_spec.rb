@@ -54,6 +54,16 @@ class FirstDslTest
 end
 EMPTYTEST
 
+redirect_test = <<REDIRECTTEST
+class RedirectTest
+  include Connfu
+
+  on :offer do
+    redirect('sip:16508983130@127.0.0.1')
+  end
+end
+REDIRECTTEST
+
 describe Connfu::DslProcessor do
   before do
     @dp = Connfu::DslProcessor.new
@@ -67,6 +77,7 @@ describe Connfu::DslProcessor do
 
   it "should parse first test correctly" do
     exp = ParseTree.new.parse_tree_for_string(first_test)
+    l.debug exp
     @dp.process(exp[0])
     @dp.handlers.should eq [:answer]
   end
@@ -74,12 +85,19 @@ describe Connfu::DslProcessor do
   it "should parse second test correctly" do
     exp = ParseTree.new.parse_tree_for_string(second_test)
     @dp.process(exp[0])
-    @dp.handlers.should eq [:answer, {:say=>"hi"}, :hangup]
+    @dp.handlers.should eq [:answer, {:say => "hi"}, :hangup]
   end
 
   it "should parse full test correctly" do
     exp = ParseTree.new.parse_tree_for_string(full_test)
     @dp.process(exp[0])
-    @dp.handlers.should eq [:answer, {:say=>"hello.  this is connfu"}]
+    @dp.handlers.should eq [:answer, {:say => "hello.  this is connfu"}]
+  end
+
+  it 'should parse redirect test correctly' do
+    exp = ParseTree.new.parse_tree_for_string(redirect_test)
+    l.debug exp
+    @dp.process(exp[0])
+    @dp.handlers.should eq [{:redirect => "sip:16508983130@127.0.0.1"}]
   end
 end
