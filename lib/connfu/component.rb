@@ -11,7 +11,7 @@ module Connfu
       iq
     end
 
-    def say(text) 
+    def say(text)
       l.info 'say'
       Connfu.connection.write say_iq(text)
     end
@@ -23,6 +23,9 @@ module Connfu
       Nokogiri::XML::Builder.with(ask_iq) do |xml|
         xml.ask("xmlns" => "urn:xmpp:ozone:ask:1") do |xml|
           xml.prompt prompt
+          xml.choices("content-type" => "application/grammar+voxeo") do |xml|
+            xml.text '[4 DIGITS]'
+          end
         end
       end
       l.debug ask_iq

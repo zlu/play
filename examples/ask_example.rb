@@ -12,7 +12,7 @@ class AskExample
 
   on :offer do
     answer
-    ask(:prompt => 'please enter your four digit pin')
+    ask('please enter your four digit pin')
   end
 end
 

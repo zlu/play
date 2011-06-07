@@ -96,3 +96,13 @@ def ask_iq
     </ask>
   </iq>"
 end
+
+def complete_for_ask
+  "<iq type='set' id='47b63bdd-4b60-45b9-974f-1217068f09f8'
+       from='b30bedad-a48e-4dea-b8ef-9d05f40759c7@127.0.0.1/c41520e1-9789-4439-b388-9ce1f3b97e86'
+       to='usera@127.0.0.1/voxeo'>
+     <complete xmlns='urn:xmpp:ozone:ask:1'
+               reason='SUCCESS'
+               concept='1111' interpretation='1111' confidence='1.0' utterance='1111'/>
+  </iq>"
+end

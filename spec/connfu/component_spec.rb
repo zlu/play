@@ -51,6 +51,7 @@ describe Connfu::Component do
       @ask = ask_iq(@prompt)
       @ask_node = @ask.children.first
       @prompt_node = @ask_node.children.first
+      @choices_node = @ask_node.next
     end
 
     it 'should by an iq of type set' do
@@ -79,6 +80,15 @@ describe Connfu::Component do
 
     it 'should contain ozone namespace' do
       @ask_node.namespace.href.should eq "urn:xmpp:ozone:ask:1"
+    end
+
+    it 'should contain required choices node' do
+      @choices_node.should be_instance_of Nokogiri::XML::Element
+    end
+
+    it 'should contain a content type attribute in choices node' do
+      pending 'is content-type attribute required?'
+#      @choices_node.shouldcontent-type='application/grammar+voxeo'
     end
   end
 
