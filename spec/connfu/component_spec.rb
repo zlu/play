@@ -51,7 +51,7 @@ describe Connfu::Component do
       @ask = ask_iq(@prompt)
       @ask_node = @ask.children.first
       @prompt_node = @ask_node.children.first
-      @choices_node = @ask_node.next
+      @choices_node = @prompt_node.next
     end
 
     it 'should by an iq of type set' do
