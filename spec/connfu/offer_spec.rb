@@ -2,8 +2,6 @@ require 'spec_helper'
 
 describe Connfu::Offer do
   before do
-    EM.stub(:run)
-    Connfu::start
     @offer_iq = create_iq(offer_iq)
   end
 

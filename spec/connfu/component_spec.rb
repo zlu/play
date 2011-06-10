@@ -6,8 +6,6 @@ describe Connfu::Component do
   describe "#say_iq" do
     before do
       Connfu.setup('host', 'password')
-      EM.stub(:run)
-      Connfu::start
       Connfu.connection.stub(:write)
       Connfu::Offer.import(create_iq(offer_iq))
       @text_to_say = "Oh yeah, connfu is awesome"
@@ -42,8 +40,6 @@ describe Connfu::Component do
   describe '#ask_iq' do
     before do
       Connfu.setup('host', 'password')
-      EM.stub(:run)
-      Connfu::start
       Connfu.connection.stub(:write)
       Connfu::Offer.import(create_iq(offer_iq))
       @offer = Connfu.context.values.first

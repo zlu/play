@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-include Connfu::IqParser
-
 class TestClass
   include Connfu
 end
@@ -13,8 +11,6 @@ describe Connfu::IqParser do
     Connfu.connection.post_init(@stream, Blather::JID.new('me.com'))
     @dp = Connfu.dsl_processor
     @dp.handlers = ["answer", {"say" => 'foo bar'}, "hangup"]
-    EM.stub(:run)
-    Connfu::start
   end
 
   describe "#parse" do
