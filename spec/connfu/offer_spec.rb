@@ -38,7 +38,6 @@ describe Connfu::Offer do
        allow_message_expectations_on_nil
        Connfu.connection.stub(:write)
        Connfu::Offer.import(@offer_iq)
-       l.debug @offer_iq.from.to_s
        Connfu.context.keys.first.should eq @offer_iq.from.to_s.match(/(.*)@.*/)[1]
        Connfu.context.values.first.should eq @offer_iq
      end

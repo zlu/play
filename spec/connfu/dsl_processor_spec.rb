@@ -64,6 +64,19 @@ class RedirectTest
 end
 REDIRECTTEST
 
+ask_test = <<ASKTEST
+class AskExample
+  include Connfu
+
+  on :offer do
+    answer
+    ask('please enter your four digit pin') do |result|
+      say 'your input is ' + result
+    end
+  end
+end
+ASKTEST
+
 describe Connfu::DslProcessor do
   before do
     @dp = Connfu::DslProcessor.new
@@ -77,7 +90,6 @@ describe Connfu::DslProcessor do
 
   it "should parse first test correctly" do
     exp = ParseTree.new.parse_tree_for_string(first_test)
-    l.debug exp
     @dp.process(exp[0])
     @dp.handlers.should eq [:answer]
   end
@@ -96,8 +108,16 @@ describe Connfu::DslProcessor do
 
   it 'should parse redirect test correctly' do
     exp = ParseTree.new.parse_tree_for_string(redirect_test)
-    l.debug exp
     @dp.process(exp[0])
     @dp.handlers.should eq [{:redirect => "sip:16508983130@127.0.0.1"}]
+  end
+
+  it 'should parse ask test correctly' do
+    pending 'fix exmaples first'
+    exp = ParseTree.new.parse_tree_for_string(ask_test)
+    l.debug exp[0]
+    @dp.process(exp[0])
+    l.debug @dp.handlers
+    @dp.handlers.should eq [{:ask => "please input a four digit pin"}]
   end
 end

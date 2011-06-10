@@ -1,9 +1,5 @@
 require 'spec_helper'
 
-class TestClass
-  include Connfu
-end
-
 describe Connfu::IqParser do
   before do
     Connfu.setup('host', 'password')
@@ -54,7 +50,7 @@ describe Connfu::IqParser do
 
   describe "#fire_event" do
     it "should reduce command handlers by 1" do
-      TestClass.stub(:answer)
+      Connfu.connection.stub(:write)
       lambda {
         Connfu::IqParser.fire_event
       }.should change { @dp.handlers.size }.by(-1)
@@ -62,19 +58,19 @@ describe Connfu::IqParser do
 
     context "firing one event" do
       it "should cause the answer command to execute" do
-        TestClass.should_receive(:answer)
+        MyTestClass.should_receive(:answer)
         Connfu::IqParser.fire_event
       end
     end
 
     context "firing two events" do
       before do
-        TestClass.stub(:answer)
+        MyTestClass.stub(:answer)
         Connfu::IqParser.fire_event
       end
 
       it "should cause the say to execute" do
-        TestClass.should_receive(:say)
+        MyTestClass.should_receive(:say)
         Connfu::IqParser.fire_event
       end
     end

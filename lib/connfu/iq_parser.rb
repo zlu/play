@@ -21,12 +21,12 @@ module Connfu
     def self.fire_event
       clazz = Connfu.base
       command = Connfu.dsl_processor.handlers.shift
-      l.debug command
+#      l.debug command
       if command.instance_of?(Hash)
-        l.debug "fire_event: #{clazz} #{command.keys.first} with #{command.values.first}"
+#        l.debug "fire_event: #{clazz} #{command.keys.first} with #{command.values.first}"
         clazz.send command.keys.first, command.values.first
       else
-        l.debug "fire_event: #{clazz} #{command}"
+#        l.debug "fire_event: #{clazz} #{command}"
         clazz.module_eval "#{command}"
       end
     end

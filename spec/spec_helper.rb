@@ -7,6 +7,10 @@ RSpec.configure do |config|
   config.mock_with :rspec
 end
 
+class MyTestClass;
+  include Connfu;
+end
+
 def create_iq(iq_xml)
   doc = Nokogiri::XML.parse iq_xml
   Blather::Stanza::Iq.import(doc.root)

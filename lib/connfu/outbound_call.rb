@@ -6,7 +6,7 @@ module Connfu
       Nokogiri::XML::Builder.with(oc_iq) do |xml|
         xml.dial(:to => to, :from => from, "xmlns" => "urn:xmpp:ozone:1")
       end
-      l.debug oc_iq
+
       oc_iq
     end
 

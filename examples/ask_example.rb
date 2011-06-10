@@ -12,7 +12,9 @@ class AskExample
 
   on :offer do
     answer
-    ask('please enter your four digit pin')
+    ask('please enter your four digit pin') do |result|
+      say 'your input is ' + result
+    end
   end
 end
 

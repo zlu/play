@@ -3,10 +3,6 @@ require 'spec_helper'
 describe Connfu::OutboundCall do
   include Connfu::OutboundCall
 
-  class MyClass
-    include Connfu
-  end
-
   before do
     Connfu.setup "userb@127.0.0.1", "1"
   end
@@ -17,7 +13,7 @@ describe Connfu::OutboundCall do
       @from_resource = 'userb@127.0.0.1'
       @to = 'usera@127.0.0.1'
       @from= 'userb@127.0.0.1'
-      @outbound_call_iq = MyClass.send :outbound_call_iq, @to_domain, @from_resource, @to, @from
+      @outbound_call_iq = MyTestClass.send :outbound_call_iq, @to_domain, @from_resource, @to, @from
       @dial_node = @outbound_call_iq.children.first
     end
 
@@ -57,7 +53,7 @@ describe Connfu::OutboundCall do
   describe 'dial' do
     it 'should register a ready handler with block' do
       Connfu.connection.should_receive(:register_handler)
-      MyClass.send :dial, 'foo'
+      MyTestClass.send :dial, 'foo'
     end
 
     it 'should write to connfu::connection' do

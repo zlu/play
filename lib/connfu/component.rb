@@ -12,7 +12,6 @@ module Connfu
     end
 
     def say(text)
-      l.info 'say'
       Connfu.connection.write say_iq(text)
     end
 
@@ -28,7 +27,6 @@ module Connfu
           end
         end
       end
-      l.debug ask_iq
 
       ask_iq
     end

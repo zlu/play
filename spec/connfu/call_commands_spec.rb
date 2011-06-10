@@ -3,10 +3,6 @@ require 'spec_helper'
 describe Connfu::CallCommands do
   include Connfu::CallCommands
 
-  class MyClass;
-    include Connfu;
-  end
-
   before do
     Connfu.connection = mock('connection')
     Connfu.setup('host', 'password')
@@ -19,13 +15,13 @@ describe Connfu::CallCommands do
   describe "call_commands_iq" do
     it "should create an iq method for each call command" do
       @call_commands.each do |call_command|
-        MyClass.should respond_to :"#{call_command}_iq"
+        MyTestClass.should respond_to :"#{call_command}_iq"
       end
     end
 
     it "should be an iq of type set" do
       @call_commands.each do |call_command|
-        cc_iq = MyClass.send :"#{call_command}_iq"
+        cc_iq = MyTestClass.send :"#{call_command}_iq"
         cc_iq.should be_a_kind_of Blather::Stanza::Iq
         cc_iq.type.should eq :set
       end
@@ -33,7 +29,7 @@ describe Connfu::CallCommands do
 
     it "should contain a to attribute whose value is the from attribute of offer" do
       @call_commands.each do |call_command|
-        cc_iq = MyClass.send :"#{call_command}_iq"
+        cc_iq = MyTestClass.send :"#{call_command}_iq"
         cc_iq.to.should_not be_nil
         cc_iq.to.should eq @offer.from
       end
@@ -41,7 +37,7 @@ describe Connfu::CallCommands do
 
     it "should contain a from attribute whose value is the to attribute of offer" do
       @call_commands.each do |call_command|
-        cc_iq = MyClass.send :"#{call_command}_iq"
+        cc_iq = MyTestClass.send :"#{call_command}_iq"
         cc_iq.from.should_not be_nil
         cc_iq.from.should eq @offer.to
       end
@@ -49,14 +45,14 @@ describe Connfu::CallCommands do
 
     it "should contain an call_command node" do
       @call_commands.each do |call_command|
-        cc_iq = MyClass.send :"#{call_command}_iq"
+        cc_iq = MyTestClass.send :"#{call_command}_iq"
         cc_iq.child.name.should eq call_command
       end
     end
 
     it "should have an ozone namespace" do
       @call_commands.each do |call_command|
-        cc_iq = MyClass.send :"#{call_command}_iq"
+        cc_iq = MyTestClass.send :"#{call_command}_iq"
         cc_iq.children.first.namespace.href.should eq "urn:xmpp:ozone:1"
       end
     end
@@ -69,7 +65,7 @@ describe Connfu::CallCommands do
 
     it "should create a method for each call_command" do
       @call_commands.each do |call_command|
-        MyClass.should respond_to :"#{call_command}"
+        MyTestClass.should respond_to :"#{call_command}"
       end
     end
 
@@ -84,7 +80,7 @@ describe Connfu::CallCommands do
 
   describe "redirect" do
     it "should respond to redirect" do
-      MyClass.should respond_to :redirect
+      MyTestClass.should respond_to :redirect
     end
 
     it "should include to attribute in the redirect command iq" do
