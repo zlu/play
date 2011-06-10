@@ -66,6 +66,7 @@ module Connfu
   end
 
   def self.setup(host, password)
+    @context ||= {}
     @connection = Blather::Client.new.setup(host, password)
     @connection.register_handler(:ready, lambda { p 'Established @connection to Connfu Server' })
     @connection.register_handler(:iq) do |iq|
@@ -77,7 +78,6 @@ module Connfu
   end
 
   def self.start
-    @context ||= {}
     EM.run { @connection.run }
   end
 end

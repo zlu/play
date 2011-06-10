@@ -9,6 +9,7 @@ describe Connfu::CallCommands do
 
   before do
     Connfu.connection = mock('connection')
+    Connfu.setup('host', 'password')
     Connfu.connection.stub(:write)
     EM.stub(:run)
     Connfu.start
