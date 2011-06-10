@@ -3,10 +3,9 @@ require 'rake'
 
 task :default => [:test]
 
-require 'rake/testtask'
-Rake::TestTask.new(:test) do |test|
-  test.libs << 'spec'
-  test.pattern = 'spec/**/*_spec.rb'
-  test.verbose = true
-  test.options = '--color'
+require 'rspec/core'
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:test) do |spec|
+  spec.pattern = 'spec/**/*_spec.rb'
+  spec.rspec_opts = '--color'
 end
