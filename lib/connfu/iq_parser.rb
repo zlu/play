@@ -4,7 +4,6 @@ module Connfu
       doc = Nokogiri::XML.parse(iq.to_xml)
       node = Blather::XMPPNode.import(doc.root)
       result_node = nil
-      l.debug iq.type
       if iq.to_xml.match(/.*<offer.*/)
         result_node = Connfu::Offer.import(node)
         Connfu::Event::Result.create(result_node)
