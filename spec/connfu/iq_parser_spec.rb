@@ -67,20 +67,20 @@ describe Connfu::IqParser do
       }.should change { @dp.handlers.size }.by(-1)
     end
 
-    context "when one event is fired" do
+    context "firing one event" do
       it "should cause the answer command to execute" do
         TestClass.should_receive(:answer)
         Connfu::IqParser.fire_event
       end
     end
 
-    context "when two events are fired" do
+    context "firing two events" do
       before do
         TestClass.stub(:answer)
         Connfu::IqParser.fire_event
       end
 
-      it "should cause the say, the 2nd command in handlers, to execute" do
+      it "should cause the say to execute" do
         TestClass.should_receive(:say)
         Connfu::IqParser.fire_event
       end
