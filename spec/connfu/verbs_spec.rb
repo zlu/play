@@ -5,15 +5,16 @@ describe Connfu::Component do
 
   before do
     Connfu.setup('host', 'password')
+    Connfu.connection.stub(:write)
     EM.stub(:run)
     Connfu::start
-    @offer = create_iq(offer_iq)
+    @offer = Connfu::Offer.import(create_iq(offer_iq))
   end
 
   describe "#say_iq" do
     before do
       @text_to_say = "Oh yeah, connfu is awesome"
-      @say = say_iq(@offer.from.to_s, @text_to_say)
+      @say = say_iq(@text_to_say)
     end
 
     it "should be an iq of type set" do
@@ -36,7 +37,7 @@ describe Connfu::Component do
     end
 
     it "should send say iq to server" do
-      @client.should_receive(:write)
+      Connfu.connection.should_receive(:write)
       say(@text_to_say)
     end
   end
