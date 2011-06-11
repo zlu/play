@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-first_test = <<"FIRST"
+answer_test = <<"FIRST"
 class FirstDslTest
   include Connfu
 
@@ -10,7 +10,7 @@ class FirstDslTest
 end
 FIRST
 
-second_test = <<SECOND
+say_test = <<SECOND
 class SecondDslTest
   include Connfu
 
@@ -88,14 +88,14 @@ describe Connfu::DslProcessor do
     @dp.handlers.should eq []
   end
 
-  it "should parse first test correctly" do
-    exp = ParseTree.new.parse_tree_for_string(first_test)
+  it "should parse answer test correctly" do
+    exp = ParseTree.new.parse_tree_for_string(answer_test)
     @dp.process(exp[0])
     @dp.handlers.should eq [:answer]
   end
 
-  it "should parse second test correctly" do
-    exp = ParseTree.new.parse_tree_for_string(second_test)
+  it "should parse say test correctly" do
+    exp = ParseTree.new.parse_tree_for_string(say_test)
     @dp.process(exp[0])
     @dp.handlers.should eq [:answer, {:say => "hi"}, :hangup]
   end
@@ -113,7 +113,6 @@ describe Connfu::DslProcessor do
   end
 
   it 'should parse ask test correctly' do
-    pending 'fix exmaples first'
     exp = ParseTree.new.parse_tree_for_string(ask_test)
     l.debug exp[0]
     @dp.process(exp[0])
