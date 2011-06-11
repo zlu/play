@@ -15,7 +15,7 @@ module Connfu
         result_node = Connfu::Error.import(node)
       end
 
-      self.fire_event
+      self.fire_event unless iq.type == :result
       result_node
     end
 

@@ -77,9 +77,7 @@ describe Connfu::IqParser do
       end
 
       it "should not call hangup for result iq" do
-        incoming_iq = mock('result_iq')
-        incoming_iq.stub(:type).and_return(:result)
-        Connfu::IqParser.stub(:parse)
+        incoming_iq = create_iq(result_iq)
         MyTestClass.should_not_receive(:hangup)
         Connfu.connection.send :call_handler_for, :iq, incoming_iq
       end
