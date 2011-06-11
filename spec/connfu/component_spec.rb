@@ -83,8 +83,8 @@ describe Connfu::Component do
     end
 
     it 'should contain a content type attribute in choices node' do
-      pending 'is content-type attribute required?'
-#      @choices_node.shouldcontent-type='application/grammar+voxeo'
+      @choices_node.attributes['content-type'].should_not be_nil
+      @choices_node.attributes['content-type'].value.should match(/application\/grammar.*/)
     end
   end
 
