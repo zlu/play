@@ -15,6 +15,7 @@ module Connfu
         result_node = Connfu::Error.import(node)
       end
 
+      self.fire_event
       result_node
     end
 

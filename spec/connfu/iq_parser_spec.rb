@@ -8,9 +8,13 @@ describe Connfu::IqParser do
   end
 
   describe "#parse" do
+    before do
+      Connfu.connection.stub(:write)
+      Connfu::IqParser.stub(:fire_event)
+    end
+
     context 'an offer iq' do
       before do
-        Connfu.connection.stub(:write)
         @offer = Connfu::Offer.import(create_iq(offer_iq))
       end
 
@@ -73,7 +77,11 @@ describe Connfu::IqParser do
       end
 
       it "should not call hangup for result iq" do
-        pending
+        incoming_iq = mock('result_iq')
+        incoming_iq.stub(:type).and_return(:result)
+        Connfu::IqParser.stub(:parse)
+        MyTestClass.should_not_receive(:hangup)
+        Connfu.connection.send :call_handler_for, :iq, incoming_iq
       end
     end
   end

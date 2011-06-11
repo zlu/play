@@ -73,7 +73,6 @@ module Connfu
       l.debug 'Connfu#setup - register_handler(:iq)'
       l.debug iq
       Connfu::IqParser.parse iq
-      Connfu::IqParser.fire_event
     end
   end
 
