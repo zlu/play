@@ -51,13 +51,15 @@ describe Connfu::OutboundCall do
   end
 
   describe 'dial' do
-    it 'should register a ready handler with block' do
-      Connfu.connection.should_receive(:register_handler)
-      MyTestClass.send :dial, 'foo'
+    it 'should register a ready handler with a block' do
+      Connfu.connection.should_receive(:register_handler).with(:ready, &lambda{})
+      MyTestClass.send :dial, ''
     end
 
-    it 'should write to connfu::connection' do
-      pending 'should test parameters to write'
+    it 'dial the after connection is ready' do
+      MyTestClass.send :dial, 'sip_number'
+      Connfu.connection.should_receive(:write)
+      Connfu.connection.send :call_handler_for, :ready, ''
     end
   end
 end

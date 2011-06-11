@@ -38,14 +38,6 @@ describe Connfu::IqParser do
       say_complete.should be_instance_of Connfu::Event::SayComplete
       say_complete.get_attribute(:from).should eq say_complete_iq.match(/.*from='(.*)'>\s.*/)[1]
     end
-
-    it "should handle unknown type of incoming iq" do
-      pending 'need to find out what unknown iq or string can come from prism'
-    end
-
-    it "should set the connfu context after parsing" do
-      pending 'maybe removed if to and from can be obtain in other fashion'
-    end
   end
 
   describe "#fire_event" do

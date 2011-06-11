@@ -27,24 +27,16 @@ describe Connfu do
     end
 
     it "should register ready handler that prints out connection message" do
-      pending 'need access to handlers and their associated block'
-      l.debug @connection.send :current_handlers
       Connfu.setup(@host, @password)
-      ready_handler = @connection.send :current_handlers[:ready]
-      ready_handler[0][0].should_not be_nil
-      ready_proc = ready_handler[0][0][0]
-      ready_proc.should be_instance_of(Proc)
       Connfu.should_receive(:p).with('Established @connection to Connfu Server')
-      ready_proc.call
+      Connfu.connection.send :call_handler_for, :ready, ''
     end
 
     it "should register iq handler for offer" do
-      pending 'need access to handlers and their associated block'
+      iq = mock('incoming_iq')
       Connfu.setup(@host, @password)
-      iq_handler = @connection.send :current_handlers[:iq]
-      iq_proc = iq_handler[0][1]
-      iq_proc.should be_instance_of(Proc)
-      iq_proc.call
+      Connfu::IqParser.should_receive(:parse).with(iq)
+      Connfu.connection.send :call_handler_for, :iq, iq
     end
   end
 
@@ -52,14 +44,6 @@ describe Connfu do
     it "should start the EventMachine" do
       EM.should_receive(:run)
       Connfu.start
-    end
-  end
-
-  describe "examples" do
-    it "should parse all examples" do
-      pending
-      l.debug str = File.open('../examples/answer_example.rb').readlines.join
-      l.debug Connfu::DslProcessor.new.process(ParseTree.new.parse_tree_for_string(str)[0])
     end
   end
 end
