@@ -70,7 +70,7 @@ class AskExample
 
   on :offer do
     answer
-    ask('please enter your four digit pin') do |result|
+    ask('please enter a four digit pin') do |result|
       say 'your input is ' + result
     end
   end
@@ -117,6 +117,6 @@ describe Connfu::DslProcessor do
     l.debug exp[0]
     @dp.process(exp[0])
     l.debug @dp.handlers
-    @dp.handlers.should eq [{:ask => "please input a four digit pin"}]
+    @dp.handlers.should eq [:answer, {:ask => "please enter a four digit pin"}]
   end
 end

@@ -29,6 +29,11 @@ module Connfu
               end
             end
         end
+      elsif exp[1][1] != :on
+        method = exp[1][1]
+        prompt = exp[1][2][1][1]
+        l.debug prompt
+        @handlers << {method => prompt}
       end
 
       s(exp.shift, process(exp.shift), exp.shift, process(exp.shift))
