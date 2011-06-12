@@ -35,11 +35,11 @@ module Connfu
         @handlers << {method_name => {:prompt => prompt, lasgn => body}}
       end
 
-      first = exp.shift
+      first  = exp.shift
       second = exp.shift
-      third = exp.shift
+      third  = exp.shift
       exp.shift if exp == s(s())
-      four = exp.shift
+      four   = exp.shift
       s(first, process(second), third, process(four))
     end
   end

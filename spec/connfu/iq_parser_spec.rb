@@ -77,6 +77,7 @@ describe Connfu::IqParser do
       end
 
       it "should not call hangup for result iq" do
+        pending 'how to handle hangup correctly - maybe add boolean param for synchronisation '
         incoming_iq = create_iq(result_iq)
         MyTestClass.should_not_receive(:hangup)
         Connfu.connection.send :call_handler_for, :iq, incoming_iq
