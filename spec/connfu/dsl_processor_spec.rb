@@ -83,40 +83,38 @@ describe Connfu::DslProcessor do
   end
 
   it "should parse empty test correctly" do
-    exp = ParseTree.new.parse_tree_for_string(empty_test)
-    @dp.process(exp[0])
+    exp = ParseTree.new.process(empty_test)
+    @dp.process(exp)
     @dp.handlers.should eq []
   end
 
   it "should parse answer test correctly" do
-    exp = ParseTree.new.parse_tree_for_string(answer_test)
-    @dp.process(exp[0])
+    exp = ParseTree.new.process(answer_test)
+    @dp.process(exp)
     @dp.handlers.should eq [:answer]
   end
 
   it "should parse say test correctly" do
-    exp = ParseTree.new.parse_tree_for_string(say_test)
-    @dp.process(exp[0])
+    exp = ParseTree.new.process(say_test)
+    @dp.process(exp)
     @dp.handlers.should eq [:answer, {:say => "hi"}, :hangup]
   end
 
   it "should parse full test correctly" do
-    exp = ParseTree.new.parse_tree_for_string(full_test)
-    @dp.process(exp[0])
+    exp = ParseTree.new.process(full_test)
+    @dp.process(exp)
     @dp.handlers.should eq [:answer, {:say => "hello.  this is connfu"}]
   end
 
   it 'should parse redirect test correctly' do
-    exp = ParseTree.new.parse_tree_for_string(redirect_test)
-    @dp.process(exp[0])
+    exp = ParseTree.new.process(redirect_test)
+    @dp.process(exp)
     @dp.handlers.should eq [{:redirect => "sip:16508983130@127.0.0.1"}]
   end
 
   it 'should parse ask test correctly' do
-    exp = ParseTree.new.parse_tree_for_string(ask_test)
-    l.debug exp[0]
-    @dp.process(exp[0])
-    l.debug @dp.handlers
-    @dp.handlers.should eq [:answer, {:ask => "please enter a four digit pin"}]
+    exp = ParseTree.new.process(ask_test)
+    @dp.process(exp)
+    @dp.handlers.should eq [:answer, {:ask=>{:result=>"say((\"your input is \" + result))", :prompt=>"please enter a four digit pin"}}]
   end
 end

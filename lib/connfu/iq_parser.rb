@@ -15,19 +15,20 @@ module Connfu
         result_node = Connfu::Error.import(node)
       end
 
-      self.fire_event unless iq.type == :result
+      self.fire_event
       result_node
     end
 
     def self.fire_event
       clazz = Connfu.base
+      l.debug Connfu.dsl_processor.handlers
       command = Connfu.dsl_processor.handlers.shift
-#      l.debug command
+      l.debug command
       if command.instance_of?(Hash)
-#        l.debug "fire_event: #{clazz} #{command.keys.first} with #{command.values.first}"
+        l.debug "fire_event: #{clazz} #{command.keys.first} with #{command.values.first}"
         clazz.send command.keys.first, command.values.first
       else
-#        l.debug "fire_event: #{clazz} #{command}"
+        l.debug "fire_event: #{clazz} #{command}"
         clazz.module_eval "#{command}"
       end
     end

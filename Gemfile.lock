@@ -5,6 +5,7 @@ PATH
       ParseTree (= 3.0.7)
       blather (= 0.5.0)
       extensions (= 0.6.0)
+      ruby2ruby (= 1.2.5)
       sexp_processor (= 3.0.5)
 
 GEM

@@ -4,6 +4,7 @@
   blather/client/client
   parse_tree
   sexp_processor
+  ruby2ruby
 
   connfu/logger
   connfu/call_context
@@ -60,7 +61,7 @@ module Connfu
 
     begin
       str = File.open(File.expand_path("../../examples/#{Connfu::Utils.underscore(base.to_s)}.rb", __FILE__)).readlines.join
-      @@dsl_processor.process(ParseTree.new.parse_tree_for_string(str)[0])
+      @@dsl_processor.process(ParseTree.new.process(str))
     rescue
     end
   end
