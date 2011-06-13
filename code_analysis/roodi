@@ -1,10 +1,9 @@
-lib/connfu/dsl_processor.rb:13 - Method name "process_iter" cyclomatic complexity is 11.  It should be 8 or less.
-lib/connfu.rb:28 - Don't use class variables. You might want to try a different design.
-lib/connfu.rb:48 - Don't use class variables. You might want to try a different design.
-lib/connfu.rb:63 - Don't use class variables. You might want to try a different design.
-lib/connfu/dsl_processor.rb:15 - Case statement is missing an else clause.
-lib/connfu/dsl_processor.rb:23 - Case statement is missing an else clause.
-lib/connfu.rb:65 - Rescue block should not be empty.
-lib/connfu/dsl_processor.rb:13 - Method "process_iter" has 21 lines.  It should have 20 or less.
+lib/connfu/dsl_processor.rb:16 - Method name "process_iter" cyclomatic complexity is 12.  It should be 8 or less.
+lib/connfu.rb:29 - Don't use class variables. You might want to try a different design.
+lib/connfu.rb:49 - Don't use class variables. You might want to try a different design.
+lib/connfu.rb:64 - Don't use class variables. You might want to try a different design.
+lib/connfu/dsl_processor.rb:18 - Case statement is missing an else clause.
+lib/connfu.rb:66 - Rescue block should not be empty.
+lib/connfu/dsl_processor.rb:16 - Method "process_iter" has 30 lines.  It should have 20 or less.
 
-Found 8 errors.
+Found 7 errors.

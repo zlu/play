@@ -3,7 +3,7 @@ lib/connfu.rb -- 5 warnings:
   Connfu declares the class variable @@dsl_processor (ClassVariable)
   Connfu#self.included has approx 7 statements (LongMethod)
   Connfu#self.setup calls l twice (Duplication)
-  Connfu#self.setup has approx 8 statements (LongMethod)
+  Connfu#self.setup has approx 7 statements (LongMethod)
 lib/connfu/call_commands.rb -- 6 warnings:
   Connfu::CallCommands#redirect_iq calls Connfu.context twice (Duplication)
   Connfu::CallCommands#redirect_iq calls Connfu.context.values twice (Duplication)
@@ -22,26 +22,36 @@ lib/connfu/component.rb -- 7 warnings:
   Connfu::Component#say_iq doesn't depend on instance state (LowCohesion)
   Connfu::Component#say_iq refers to xml more than self (LowCohesion)
 lib/connfu/dsl.rb -- 0 warnings
-lib/connfu/dsl_processor.rb -- 11 warnings:
+lib/connfu/dsl_processor.rb -- 16 warnings:
   Connfu::DslProcessor has no descriptive comment (IrresponsibleModule)
-  Connfu::DslProcessor#process_iter calls exp.shift 4 times (Duplication)
-  Connfu::DslProcessor#process_iter calls exp[1] twice (Duplication)
-  Connfu::DslProcessor#process_iter calls exp[3] 10 times (Duplication)
-  Connfu::DslProcessor#process_iter calls exp[3][1] twice (Duplication)
-  Connfu::DslProcessor#process_iter calls exp[3][i] 4 times (Duplication)
-  Connfu::DslProcessor#process_iter calls exp[3][i][1] twice (Duplication)
-  Connfu::DslProcessor#process_iter calls process(exp.shift) twice (Duplication)
-  Connfu::DslProcessor#process_iter has approx 6 statements (LongMethod)
+  Connfu::DslProcessor#process_iter calls (exp[1][2] == :on) twice (Duplication)
+  Connfu::DslProcessor#process_iter calls exp.shift 5 times (Duplication)
+  Connfu::DslProcessor#process_iter calls exp[1] 5 times (Duplication)
+  Connfu::DslProcessor#process_iter calls exp[1][2] 3 times (Duplication)
+  Connfu::DslProcessor#process_iter calls exp[3] 13 times (Duplication)
+  Connfu::DslProcessor#process_iter calls exp[3][2] twice (Duplication)
+  Connfu::DslProcessor#process_iter calls exp[3][3] twice (Duplication)
+  Connfu::DslProcessor#process_iter calls exp[3][3][1] twice (Duplication)
+  Connfu::DslProcessor#process_iter calls exp[3][i] 5 times (Duplication)
+  Connfu::DslProcessor#process_iter calls exp[3][i][2] twice (Duplication)
+  Connfu::DslProcessor#process_iter calls exp[3][i][3] twice (Duplication)
+  Connfu::DslProcessor#process_iter calls exp[3][i][3][1] twice (Duplication)
+  Connfu::DslProcessor#process_iter has approx 20 statements (LongMethod)
   Connfu::DslProcessor#process_iter has the variable name 'i' (UncommunicativeName)
   Connfu::DslProcessor#process_iter refers to exp more than self (LowCohesion)
 lib/connfu/error.rb -- 1 warning:
   Connfu::Error has no descriptive comment (IrresponsibleModule)
-lib/connfu/event.rb -- 2 warnings:
+lib/connfu/event.rb -- 5 warnings:
+  Connfu::Event::AskComplete has no descriptive comment (IrresponsibleModule)
+  Connfu::Event::AskComplete#react has approx 7 statements (LongMethod)
+  Connfu::Event::AskComplete#react has the variable name 'n' (UncommunicativeName)
   Connfu::Event::Result has no descriptive comment (IrresponsibleModule)
   Connfu::Event::SayComplete has no descriptive comment (IrresponsibleModule)
-lib/connfu/iq_parser.rb -- 2 warnings:
-  Connfu::IqParser#self.parse calls iq.to_xml 3 times (Duplication)
-  Connfu::IqParser#self.parse has approx 9 statements (LongMethod)
+lib/connfu/iq_parser.rb -- 4 warnings:
+  Connfu::IqParser#self.fire_event calls Connfu.dsl_processor twice (Duplication)
+  Connfu::IqParser#self.fire_event calls Connfu.dsl_processor.handlers twice (Duplication)
+  Connfu::IqParser#self.parse calls iq.to_xml 4 times (Duplication)
+  Connfu::IqParser#self.parse has approx 12 statements (LongMethod)
 lib/connfu/logger.rb -- 1 warning:
   Kernel#l has the name 'l' (UncommunicativeName)
 lib/connfu/offer.rb -- 1 warning:
