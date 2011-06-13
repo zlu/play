@@ -112,9 +112,19 @@ describe Connfu::DslProcessor do
     @dp.handlers.should eq [{:redirect => "sip:16508983130@127.0.0.1"}]
   end
 
-  it 'should parse ask test correctly' do
-    exp = ParseTree.new.process(ask_test)
-    @dp.process(exp)
-    @dp.handlers.should eq [:answer, {:ask=>{:result=>"say((\"your input is \" + result))", :prompt=>"please enter a four digit pin"}}]
+  context 'for ask test' do
+    before do
+      exp = ParseTree.new.process(ask_test)
+      @dp.process(exp)
+    end
+
+    it 'should parse ask test correctly' do
+      @dp.handlers.should eq [:answer, {:ask=>"please enter a four digit pin"}]
+    end
+
+    it 'should populate ash_handler' do
+      block = {'result' => "say((\"your input is \" + result))"}
+      @dp.ask_handler.should eq block
+    end
   end
 end

@@ -9,6 +9,9 @@ module Connfu
         Connfu::Event::Result.create(result_node)
       elsif iq.to_xml.match(/.*<complete.*urn:xmpp:ozone:say:1.*/)
         result_node = Connfu::Event::SayComplete.import(node)
+      elsif iq.to_xml.match(/.*<complete.*urn:xmpp:ozone:ask:1.*/)
+        result_node = Connfu::Event::AskComplete.import(node)
+        result_node.react
       elsif iq.type == :result
         result_node = Connfu::Event::Result.import(node)
       else
@@ -23,12 +26,12 @@ module Connfu
       clazz = Connfu.base
       l.debug Connfu.dsl_processor.handlers
       command = Connfu.dsl_processor.handlers.shift
-      l.debug command
+#      l.debug command
       if command.instance_of?(Hash)
-        l.debug "fire_event: #{clazz} #{command.keys.first} with #{command.values.first}"
+#        l.debug "fire_event: #{clazz} #{command.keys.first} with #{command.values.first}"
         clazz.send command.keys.first, command.values.first
       else
-        l.debug "fire_event: #{clazz} #{command}"
+#        l.debug "fire_event: #{clazz} #{command}"
         clazz.module_eval "#{command}"
       end
     end

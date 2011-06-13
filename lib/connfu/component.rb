@@ -20,7 +20,7 @@ module Connfu
       ask_iq = Blather::Stanza::Iq.new(:set, offer.from.to_s)
       ask_iq.from = offer.to.to_s
       Nokogiri::XML::Builder.with(ask_iq) do |xml|
-        xml.ask("xmlns" => "urn:xmpp:ozone:ask:1") do |xml|
+        xml.ask("xmlns" => "urn:xmpp:ozone:ask:1", "mode" => 'dtmf', "bargein" => 'false') do |xml|
           xml.prompt prompt
           xml.choices("content-type" => "application/grammar+voxeo") do |xml|
             xml.text '[4 DIGITS]'

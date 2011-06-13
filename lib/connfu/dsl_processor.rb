@@ -3,12 +3,14 @@ require 'parse_tree_extensions'
 module Connfu
   class DslProcessor < SexpProcessor
     attr_accessor :handlers
+    attr_accessor :ask_handler
 
     def initialize
       super
       self.strict = false
       self.auto_shift_type = false
       @handlers = []
+      @ask_handler = []
     end
 
     def process_iter(exp)
@@ -32,7 +34,8 @@ module Connfu
         prompt = method[3][1][1]
         lasgn = exp[2][1]
         body = Ruby2Ruby.new.process(exp[3])
-        @handlers << {method_name => {:prompt => prompt, lasgn => body}}
+        @handlers << {method_name => prompt}
+        @ask_handler = {lasgn.to_s => body}
       end
 
       first  = exp.shift

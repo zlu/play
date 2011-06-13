@@ -42,6 +42,20 @@ describe Connfu::IqParser do
       say_complete.should be_instance_of Connfu::Event::SayComplete
       say_complete.get_attribute(:from).should eq say_complete_iq.match(/.*from='(.*)'>\s.*/)[1]
     end
+
+    context 'for ask complete' do
+      before do
+        @ask_complete_iq = create_iq(complete_for_ask_iq)
+      end
+
+      it 'should create a complete event for ask' do
+        @ask_complete = Connfu::IqParser.parse(@ask_complete_iq)
+        @dp.handlers = [{:ask=>"please enter a four digit pin"}]
+        @dp.ask_handler = {'result'=>"say((\"your input is \" + result))"}
+        Connfu::IqParser.stub(:fire_event)
+        @ask_complete.should be_instance_of Connfu::Event::AskComplete
+      end
+    end
   end
 
   describe "#fire_event" do
@@ -59,7 +73,7 @@ describe Connfu::IqParser do
       end
     end
 
-    context "firing two events" do
+    context 'firing two events' do
       before do
         MyTestClass.stub(:answer)
         Connfu::IqParser.fire_event
@@ -77,7 +91,7 @@ describe Connfu::IqParser do
       end
 
       it "should not call hangup for result iq" do
-        pending 'how to handle hangup correctly - maybe add boolean param for synchronisation '
+        pending 'how to handle hangup correctly - maybe add boolean param for synchronisation'
         incoming_iq = create_iq(result_iq)
         MyTestClass.should_not_receive(:hangup)
         Connfu.connection.send :call_handler_for, :iq, incoming_iq

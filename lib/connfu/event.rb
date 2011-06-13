@@ -7,7 +7,19 @@ module Connfu
       end
     end
 
-    class Result < Blather::Stanza::Iq
+    class AskComplete < Blather::Stanza::Iq
+      def react
+        concept = self.children.select{|n| n.name == 'complete'}.first[:concept]
+        ah = Connfu.dsl_processor.ask_handler
+        lasgn = ah.keys.first
+        block = ah.values.first
+        block.gsub!(lasgn, "\"#{concept}\"")
+        l.debug block
+        Connfu.base.module_eval block
+      end
+    end
+
+    class Result < Blather::Stanza::Iq  
       def self.create(node)
         node.reply!
       end
