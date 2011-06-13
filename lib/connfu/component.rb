@@ -34,5 +34,20 @@ module Connfu
     def ask(prompt)
       Connfu.connection.write ask_iq(prompt)
     end
+
+    def transfer_iq(to)
+      iq = Blather::Stanza::Iq.new(:set, Connfu.context.values.first.from.to_s)
+      Nokogiri::XML::Builder.with(iq) do |xml|
+        xml.transfer("xmlns" => "urn:xmpp:ozone:transfer:1") {
+          xml.to to
+        }
+      end
+
+      iq
+    end
+
+    def transfer(to)
+      Connfu.connection.write transfer_iq(to)
+    end
   end
 end

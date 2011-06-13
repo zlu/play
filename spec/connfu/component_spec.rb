@@ -94,4 +94,41 @@ describe Connfu::Component do
       ask('foo')
     end
   end
+
+  describe '#transfer_iq' do
+    before do
+      Connfu.setup('host', 'password')
+      Connfu.connection.stub(:write)
+      Connfu::Offer.import(create_iq(offer_iq))
+      @to = "sip:usera@127.0.0.1"
+      @transfer = transfer_iq(@to)
+    end
+
+    it "should be an iq of type set" do
+      @transfer.should be_a_kind_of Blather::Stanza::Iq
+      @transfer.type.should eq :set
+    end
+
+    it "should contain a say node" do
+      @transfer.child.name.should eq "transfer"
+    end
+
+    it "should have an ozone:transfer namespace" do
+      @transfer.children.first.namespace.href.should eq "urn:xmpp:ozone:transfer:1"
+    end
+
+    it 'should contain a correct to node' do
+      to_node = @transfer.children.first.children.first
+      to_node.name.should eq 'to'
+      to_node.text.should eq @to
+    end
+  end
+
+  describe '#transfer' do
+    it "should send transfer iq to server" do
+      to = 'sip:usera@127.0.0.1'
+      Connfu.connection.should_receive(:write)
+      transfer(to)
+    end
+  end
 end

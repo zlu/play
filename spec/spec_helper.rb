@@ -110,3 +110,23 @@ def complete_for_ask_iq
                concept='1111' interpretation='1111' confidence='1.0' utterance='1111'/>
   </iq>"
 end
+
+def transfer_iq
+  "<iq type='set' to='9f00061@call.ozone.net/1' from='16577@app.ozone.net/1'>
+    <transfer xmlns='urn:xmpp:ozone:transfer:1'
+        from='tel:+14152226789'
+        terminator='*'
+        timeout='120000'
+        answer-on-media='true'>
+      <to>tel:+4159996565</to>
+      <to>tel:+3059871234</to>
+      <ring voice='allison'>
+        <audio url='http://acme.com/transfering.mp3'>
+            Please wait while your call is being transfered.
+        </audio>
+      </ring>
+      <header name='x-skill' value='agent' />
+      <header name='x-customer-id' value='8877' />
+    </transfer>
+  </iq>"
+end
