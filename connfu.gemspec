@@ -34,4 +34,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency("roodi", ["2.1.0"])
   s.add_development_dependency("reek", ["1.2.8"])
   s.add_development_dependency("Saikuro", ["1.1.0"])
+  s.add_development_dependency("rcov", ["0.9.9"])
 end
