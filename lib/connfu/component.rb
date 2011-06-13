@@ -49,5 +49,15 @@ module Connfu
     def transfer(to)
       Connfu.connection.write transfer_iq(to)
     end
+
+    def conference_iq(name)
+      iq = Blather::Stanza::Iq.new(:set, Connfu.context.values.first.from.to_s)
+      Nokogiri::XML::Builder.with(iq) do |xml|
+        xml.conference('xmlns' => 'urn:xmpp:ozone:conference:1', 'name' => name) {
+        }
+      end
+
+      iq
+    end
   end
 end

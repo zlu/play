@@ -130,3 +130,22 @@ def transfer_iq
     </transfer>
   </iq>"
 end
+
+def conference_iq1
+  "<iq type='set' to='9f00061@call.ozone.net/1' from='16577@app.ozone.net/1'>
+     <conference xmlns='urn:xmpp:ozone:conference:1'
+      name='1234'
+      mute='false'
+      terminator='*'
+      tone-passthrough='true'
+      moderator='true'>
+      <announcement voice='allison'>
+        Jose de Castro has entered the conference
+      </announcement>
+      <music voice='herbert'>
+        The moderator how not yet joined.. Listen to this awesome music while you wait.
+        <audio url='http://www.yanni.com/music/awesome.mp3' />
+      </music>
+    </conference>
+  </iq>"
+end

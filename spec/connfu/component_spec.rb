@@ -109,7 +109,7 @@ describe Connfu::Component do
       @transfer.type.should eq :set
     end
 
-    it "should contain a say node" do
+    it "should contain a transfer node" do
       @transfer.child.name.should eq "transfer"
     end
 
@@ -129,6 +129,29 @@ describe Connfu::Component do
       to = 'sip:usera@127.0.0.1'
       Connfu.connection.should_receive(:write)
       transfer(to)
+    end
+  end
+
+  describe '#conference_iq' do
+    before do
+      @conf_name = 'foo_conf'
+      @conference = conference_iq(@conf_name)
+      @cnode = @conference.children.first
+    end
+
+    it "should be an iq of type set" do
+      @conference.should be_a_kind_of Blather::Stanza::Iq
+      @conference.type.should eq :set
+    end
+
+    it "should contain a name attribute" do
+      name_attr = @cnode.attributes['name']
+      name_attr.should_not be_nil
+      name_attr.value.should eq @conf_name
+    end
+
+    it "should have an ozone:conference namespace" do
+      @cnode.namespace.href.should eq 'urn:xmpp:ozone:conference:1'
     end
   end
 end
