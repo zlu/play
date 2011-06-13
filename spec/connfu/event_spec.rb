@@ -20,9 +20,6 @@ describe Connfu::Event do
       end
 
       it 'should eval ask_handler' do
-        l.debug @event_node
-        l.debug Connfu.dsl_processor.ask_handler
-        l.debug @concept.class.name
         Connfu.base.should_receive(:module_eval).with("say((\"your input is \" + \"#{@concept}\"))")
         @event_node.react
       end

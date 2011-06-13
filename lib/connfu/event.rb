@@ -14,7 +14,6 @@ module Connfu
         lasgn = ah.keys.first
         block = ah.values.first
         block.gsub!(lasgn, "\"#{concept}\"")
-        l.debug block
         Connfu.base.module_eval block
       end
     end
