@@ -1,19 +1,25 @@
 module Connfu
   module IqParser
     def self.parse(iq)
-      doc = Nokogiri::XML.parse(iq.to_xml)
+      xml_iq = iq.to_xml
+      doc = Nokogiri::XML.parse(xml_iq)
       node = Blather::XMPPNode.import(doc.root)
       result_node = nil
-      if iq.to_xml.match(/.*<offer.*/)
+      if xml_iq.match(/.*<offer.*/)
         result_node = Connfu::Offer.import(node)
         Connfu::Event::Result.create(result_node)
-      elsif iq.to_xml.match(/.*<complete.*urn:xmpp:ozone:say:1.*/)
+      elsif xml_iq.match(/.*<complete.*urn:xmpp:ozone:say:1.*/)
         result_node = Connfu::Event::SayComplete.import(node)
-      elsif iq.to_xml.match(/.*<complete.*urn:xmpp:ozone:ask:1.*/)
+      elsif xml_iq.match(/.*<complete.*urn:xmpp:ozone:ask:1.*/)
         result_node = Connfu::Event::AskComplete.import(node)
         result_node.react
       elsif iq.type == :result
-        result_node = Connfu::Event::Result.import(node)
+        l.debug iq
+        if iq.xpath('/iq/ref').empty?
+          result_node = Connfu::Event::Result.import(node)
+        else
+          result_node = Connfu::Event::OutboundResult.import(node)
+        end
       else
         result_node = Connfu::Error.import(node)
       end

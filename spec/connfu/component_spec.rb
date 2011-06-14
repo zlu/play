@@ -154,4 +154,17 @@ describe Connfu::Component do
       @cnode.namespace.href.should eq 'urn:xmpp:ozone:conference:1'
     end
   end
+
+  describe '#conference' do
+    it 'should dial an outbound call first' do
+      
+    end
+
+    it 'should send conference iq to server' do
+      pending 'delayed'
+      conf_name = 'my_conf'
+      Connfu.connection.should_receive(:write)
+      conference(conf_name)
+    end
+  end
 end

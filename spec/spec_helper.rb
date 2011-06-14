@@ -149,3 +149,9 @@ def conference_iq1
     </conference>
   </iq>"
 end
+
+def outbound_result_iq
+  "<iq type='result' to='16577@app.ozone.net/1' from='call.ozone.net'>
+     <ref id='9f00061' />
+  </iq>"
+end

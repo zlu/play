@@ -11,9 +11,11 @@ module Connfu
     end
 
     def dial(to)
-      block = lambda {Connfu.connection.write outbound_call_iq('127.0.0.1', 'usera@127.0.0.1', to, 'sip:usera@127.0.0.1')}
+      block = lambda {
+        oc_iq = outbound_call_iq('127.0.0.1', 'usera@127.0.0.1', to, 'sip:usera@127.0.0.1')
+        Connfu.connection.write oc_iq
+      }
       Connfu.connection.register_handler :ready, &block
     end
   end
 end
-

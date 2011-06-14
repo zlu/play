@@ -23,5 +23,9 @@ module Connfu
         node.reply!
       end
     end
+
+    class OutboundResult < Blather::Stanza::Iq
+      
+    end
   end
 end

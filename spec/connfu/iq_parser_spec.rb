@@ -56,6 +56,17 @@ describe Connfu::IqParser do
         @ask_complete.should be_instance_of Connfu::Event::AskComplete
       end
     end
+
+    context 'for outbound call' do
+      before do
+        @oc_iq = create_iq(outbound_result_iq)
+      end
+
+      it 'should create a result iq for outbound call' do
+        @oc_result = Connfu::IqParser.parse(@oc_iq)
+        @oc_result.should be_instance_of Connfu::Event::OutboundResult
+      end
+    end
   end
 
   describe "#fire_event" do

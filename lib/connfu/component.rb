@@ -51,13 +51,21 @@ module Connfu
     end
 
     def conference_iq(name)
-      iq = Blather::Stanza::Iq.new(:set, Connfu.context.values.first.from.to_s)
+      iq = Blather::Stanza::Iq.new(:set, 'usera@127.0.0.1')
       Nokogiri::XML::Builder.with(iq) do |xml|
         xml.conference('xmlns' => 'urn:xmpp:ozone:conference:1', 'name' => name) {
         }
       end
 
       iq
+    end
+
+    def conference(name)
+      block = lambda {
+        ciq = conference_iq(name)
+        Connfu.connection.write Connfu.connection.write ciq
+      }
+      Connfu.connection.register_handler :ready, &block
     end
   end
 end
