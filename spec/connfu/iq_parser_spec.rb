@@ -49,9 +49,9 @@ describe Connfu::IqParser do
       end
 
       it 'should create a complete event for ask' do
-        @ask_complete = Connfu::IqParser.parse(@ask_complete_iq)
         @dp.handlers = [{:ask=>"please enter a four digit pin"}]
         @dp.ask_handler = {'result'=>"say((\"your input is \" + result))"}
+        @ask_complete = Connfu::IqParser.parse(@ask_complete_iq)
         Connfu::IqParser.stub(:fire_event)
         @ask_complete.should be_instance_of Connfu::Event::AskComplete
       end

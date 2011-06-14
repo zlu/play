@@ -14,12 +14,9 @@ module Connfu
         result_node = Connfu::Event::AskComplete.import(node)
         result_node.react
       elsif iq.type == :result
-        l.debug iq
-        if iq.xpath('/iq/ref').empty?
-          result_node = Connfu::Event::Result.import(node)
-        else
-          result_node = Connfu::Event::OutboundResult.import(node)
-        end
+        result_node = iq.xpath('/iq/ref').empty? ? \
+                      Connfu::Event::Result.import(node) : \
+                      Connfu::Event::OutboundResult.import(node)
       else
         result_node = Connfu::Error.import(node)
       end
@@ -30,7 +27,7 @@ module Connfu
 
     def self.fire_event
       clazz = Connfu.base
-      l.debug Connfu.dsl_processor.handlers
+#      l.debug Connfu.dsl_processor.handlers
       command = Connfu.dsl_processor.handlers.shift
 #      l.debug command
       if command.instance_of?(Hash)

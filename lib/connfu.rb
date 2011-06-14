@@ -36,6 +36,14 @@ module Connfu
     @context
   end
 
+  def self.outbound_context=(context)
+    @outbound_context = context
+  end
+
+  def self.outbound_context
+    @outbound_context
+  end
+
   def self.connection=(connection)
     @connection = connection
   end
@@ -68,6 +76,7 @@ module Connfu
 
   def self.setup(host, password)
     @context ||= {}
+    @outbound_context ||= {}
     @connection = Blather::Client.new.setup(host, password)
     @connection.register_handler(:ready, lambda { p 'Established @connection to Connfu Server' })
     @connection.register_handler(:iq) do |iq|

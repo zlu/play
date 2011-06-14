@@ -11,6 +11,7 @@ module Connfu
       def react
         concept = self.children.select{|n| n.name == 'complete'}.first[:concept]
         ah = Connfu.dsl_processor.ask_handler
+        l.debug ah
         lasgn = ah.keys.first
         block = ah.values.first
         block.gsub!(lasgn, "\"#{concept}\"")
@@ -25,7 +26,18 @@ module Connfu
     end
 
     class OutboundResult < Blather::Stanza::Iq
-      
+      def self.import(node)
+        update_context(node)
+        super(node)
+      end
+
+      private
+
+      def self.update_context(node)
+        ref_node = node.xpath('/iq/ref').first
+        call_id = ref_node.attributes['id'].value
+        Connfu.outbound_context[call_id] = node
+      end
     end
   end
 end

@@ -28,6 +28,7 @@ describe Connfu::Event do
 
   describe Connfu::Event::OutboundResult do
     before do
+      Connfu.setup('host', 'password')
       @oc_iq = Connfu::Event::OutboundResult.import(create_iq(outbound_result_iq))
       @ref_nodes = @oc_iq.children.select { |c| c.name == 'ref' }
     end
@@ -55,6 +56,15 @@ describe Connfu::Event do
 
       it 'should have an id attribute' do
         @ref_nodes.first.attributes['id'].should_not be_nil
+      end
+    end
+
+    describe '#self.import' do
+      it 'should update outbound call context' do
+        Connfu.outbound_context = {}
+        lambda {
+          Connfu::IqParser.parse(create_iq(outbound_result_iq))
+        }.should change{Connfu.outbound_context.count}.by(1)
       end
     end
   end

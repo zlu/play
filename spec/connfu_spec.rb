@@ -11,6 +11,7 @@ describe Connfu do
 
     after do
       Connfu.context = nil  
+      Connfu.outbound_context = nil
     end
 
     it "should create a connection to server" do
@@ -24,6 +25,12 @@ describe Connfu do
       lambda {
         Connfu.setup(@host, @password)
       }.should change(Connfu, :context).from(nil).to({})
+    end
+
+    it 'should initialize outbound call context' do
+      lambda {
+        Connfu.setup(@host, @password)
+      }.should change(Connfu, :outbound_context).from(nil).to({})
     end
 
     it "should register ready handler that prints out connection message" do
