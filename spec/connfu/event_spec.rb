@@ -71,6 +71,7 @@ describe Connfu::Event do
 
   describe 'Connfu::Event::Answered' do
     before do
+      Connfu.conference_handlers = []
       @answered = Connfu::Event::Answered.import(create_iq(answered_event_iq))
     end
 
