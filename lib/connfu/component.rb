@@ -51,7 +51,7 @@ module Connfu
     end
 
     def conference_iq(name)
-      iq = Blather::Stanza::Iq.new(:set, 'usera@127.0.0.1')
+      iq = Blather::Stanza::Iq.new(:set, '')
       Nokogiri::XML::Builder.with(iq) do |xml|
         xml.conference('xmlns' => 'urn:xmpp:ozone:conference:1', 'name' => name) {
         }
@@ -62,7 +62,7 @@ module Connfu
 
     def conference(name)
       block = lambda {
-        oc_iq = outbound_call_iq('127.0.0.1', 'usera@127.0.0.1', 'sip:16508983130@127.0.0.1', 'sip:usera@127.0.0.1')
+        oc_iq = outbound_call_iq('127.0.0.1', 'usera@127.0.0.1', 'sip:userb@127.0.0.1', 'sip:usera@127.0.0.1')
         Connfu.connection.write oc_iq
       }
       Connfu.connection.register_handler :ready, &block

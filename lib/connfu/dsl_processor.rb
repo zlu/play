@@ -26,6 +26,7 @@ module Connfu
                 @handlers << (exp[3][i][3][1].nil? ? exp[3][i][2] : {exp[3][i][2] => exp[3][i][3][1][1]})
               end
             end
+          else
         end
       elsif exp[1][2] != :on
         exp[1][2]
@@ -38,11 +39,11 @@ module Connfu
         @ask_handler = {lasgn.to_s => body}
       end
 
-      first  = exp.shift
+      first = exp.shift
       second = exp.shift
-      third  = exp.shift
+      third = exp.shift
       exp.shift if exp == s(s())
-      four   = exp.shift
+      four = exp.shift
       s(first, process(second), third, process(four))
     end
   end

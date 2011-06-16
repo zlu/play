@@ -10,7 +10,7 @@ require 'blather/client'
 require File.join(File.expand_path('../../lib', __FILE__), 'connfu')
 
 # The user credentials want to login Ozone as
-client_jid = 'usera@127.0.0.1'
+client_jid = 'userb@127.0.0.1'
 client_password = '1'
 
 class Ozone
@@ -154,10 +154,8 @@ iq do |m|
 
       # Acknowledge the Offer to accept the call
       m.reply!
-sleep 5
       write_to_stream @ozone.answer
       when :answered
-        sleep 2
       #write_to_stream @ozone.say_audio("http://dl.dropbox.com/u/25511/Voxeo/troporocks.mp3")
       write_to_stream @ozone.say_text("Tropo Rocks!")
 #    when :saying_text

@@ -15,8 +15,10 @@ module Connfu
         result_node = node.xpath('//oc:ref', 'oc' => 'urn:xmpp:ozone:1').empty? ? \
                       Connfu::Event::Result.import(node) : \
                       Connfu::Event::OutboundResult.import(node)
-      elsif !node.xpath('//x:answered', 'x' => 'urn:xmpp:ozone:1').first.nil?
+      elsif !node.xpath('//x:answer', 'x' => 'urn:xmpp:ozone:1').first.nil?
+#      elsif !node.xpath('//x:answered', 'x' => 'urn:xmpp:ozone:1').first.nil?
         answered = node.xpath('//x:answered', 'x' => 'urn:xmpp:ozone:1').first
+        answered = node.xpath('//x:answer', 'x' => 'urn:xmpp:ozone:1').first
         result_node = Connfu::Event::Answered.import(answered)
       else
         result_node = Connfu::Error.import(node)

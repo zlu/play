@@ -69,7 +69,7 @@ describe Connfu::IqParser do
     end
 
     it 'should be able to parse answered event' do
-      answered = Connfu::IqParser.parse(create_iq(answered_event_iq))
+      answered = Connfu::IqParser.parse(create_iq(temp_answered_event_iq))
       answered.should be_instance_of Connfu::Event::Answered
     end
   end

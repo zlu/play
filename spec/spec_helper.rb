@@ -131,7 +131,7 @@ def transfer_iq
   </iq>"
 end
 
-def conference_iq1
+def spec_conference_iq
   "<iq type='set' to='9f00061@call.ozone.net/1' from='16577@app.ozone.net/1'>
      <conference xmlns='urn:xmpp:ozone:conference:1'
       name='1234'
@@ -152,7 +152,7 @@ end
 
 def outbound_result_iq
   "<iq type='result' id='blather0008' from='127.0.0.1' to='usera@127.0.0.1/voxeo'>
-    <ref id='bdd11c28-c2b0-4e05-a406-021c3a47fc1f@127.0.0.1' xmlns='urn:xmpp:ozone:1'>
+    <ref jid='bdd11c28-c2b0-4e05-a406-021c3a47fc1f@127.0.0.1' xmlns='urn:xmpp:ozone:1'>
       <title />
     </ref>
   </iq>"
@@ -164,5 +164,13 @@ end
 def answered_event_iq
   "<iq to='16577@app.ozone.net/1' from='9f00061@call.ozone.net/1'>
     <answered xmlns='urn:xmpp:ozone:1' />
+  </iq>"
+end
+
+def temp_answered_event_iq
+  "<iq type='set' id='ab7dba28-3f26-4edc-af4e-19b63a3f254f' from='2e3cbaa6-4de3-426a-ac0a-249287a38ba6@127.0.0.1' to='usera@127.0.0.1/voxeo'>
+    <info xmlns='urn:xmpp:ozone:1'>
+      <answer/>
+    </info>
   </iq>"
 end

@@ -41,8 +41,14 @@ describe Connfu::Event do
       @oc_iq.type.should eq :result
     end
 
-    it 'should contain a to attribute' do
-      @oc_iq.attributes['to'].should_not be_nil
+    describe 'to attribute' do
+      before do
+        @to = @oc_iq.attributes['to']
+      end
+
+      it 'should not be nil' do
+        @to.should_not be_nil
+      end
     end
 
     it 'should contain a from attribute' do
@@ -55,7 +61,7 @@ describe Connfu::Event do
       end
 
       it 'should have an id attribute' do
-        @ref_nodes.first.attributes['id'].should_not be_nil
+        @ref_nodes.first.attributes['jid'].should_not be_nil
       end
     end
 
@@ -72,7 +78,8 @@ describe Connfu::Event do
   describe 'Connfu::Event::Answered' do
     before do
       Connfu.conference_handlers = []
-      @answered = Connfu::Event::Answered.import(create_iq(answered_event_iq))
+      Connfu.connection.stub(:write)
+      @answered = Connfu::Event::Answered.import(create_iq(temp_answered_event_iq))
     end
 
     it 'should be a kind of iq' do
@@ -88,14 +95,18 @@ describe Connfu::Event do
     end
 
     it 'should contain a answered node' do
-      @answered.xpath('//x:answered', 'x' => 'urn:xmpp:ozone:1').first.should_not be_nil
+#      @answered.xpath('//x:answered', 'x' => 'urn:xmpp:ozone:1').first.should_not be_nil
+      @answered.xpath('//x:answer', 'x' => 'urn:xmpp:ozone:1').first.should_not be_nil
     end
 
     describe '#self.import' do
-      it 'should send conference iq to server' do
-        Connfu.conference_handlers = ['foo']
-        Connfu.connection.should_receive(:write)
-        Connfu::IqParser.parse(Connfu::IqParser.parse(create_iq(answered_event_iq)))
+      it 'should send conference iq with correct call_id to server' do
+        Connfu.connection.unstub(:write)
+        conference_iq = create_iq(spec_conference_iq)
+        Connfu.conference_handlers = [conference_iq]
+        Connfu.outbound_context = {'call_idxxyy' => ''}
+        Connfu.connection.should_receive(:write).with(/call_idxxyy/)
+        Connfu::IqParser.parse(Connfu::IqParser.parse(create_iq(temp_answered_event_iq)))
       end
     end
   end
