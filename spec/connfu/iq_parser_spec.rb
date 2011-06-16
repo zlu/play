@@ -15,12 +15,14 @@ describe Connfu::IqParser do
 
     context 'an offer iq' do
       before do
-        @offer = Connfu::Offer.import(create_iq(offer_iq))
+        @offer_node = create_presence(offer_presence)
+        @offer = Connfu::Offer.import(@offer_node)
       end
 
       it "should create an offer" do
         @offer.should be_instance_of Connfu::Offer
-        @offer.id.should eq offer_iq.match(/.*id='(.*)'\sfrom=.*/)[1]
+        @offer.to.should eq @offer_node.attributes['to'].value
+        @offer.from.should eq @offer_node.attributes['from'].value
       end
     end
 

@@ -52,6 +52,13 @@ describe Connfu do
       Connfu::IqParser.should_receive(:parse).with(iq)
       Connfu.connection.send :call_handler_for, :iq, iq
     end
+
+    it 'should register presence handler' do
+      presence = mock('presence')
+      Connfu.setup(@host, @password)
+      Connfu::IqParser.should_receive(:parse).with(presence)
+      Connfu.connection.send :call_handler_for, :presence, presence
+    end
   end
 
   describe "#start" do

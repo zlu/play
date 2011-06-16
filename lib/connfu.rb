@@ -88,10 +88,12 @@ module Connfu
     @conference_handlers ||= []
     @connection = Blather::Client.new.setup(host, password)
     @connection.register_handler(:ready, lambda { p 'Established @connection to Connfu Server' })
-    @connection.register_handler(:iq) do |iq|
-      l.debug 'Connfu#setup - register_handler(:iq)'
-      l.debug iq
-      Connfu::IqParser.parse iq
+    [:iq, :presence].each do |stanza|
+      @connection.register_handler(stanza) do |msg|
+        l.debug "Receiving #{stanza} from server"
+        l.debug msg
+        Connfu::IqParser.parse msg
+      end
     end
   end
 

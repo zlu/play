@@ -16,6 +16,11 @@ def create_iq(iq_xml)
   Blather::Stanza::Iq.import(doc.root)
 end
 
+def create_presence(presence_xml)
+  doc = Nokogiri::XML.parse presence_xml
+  Blather::Stanza::Presence.import(doc.root)
+end
+
 def result_iq
   "<iq type='result' id='blather000b' from='localhost' to='usera@localhost/voxeo'/>"
 end
@@ -37,6 +42,25 @@ def offer_iq
         <header name='From' value='LocalTesting &lt;sip:foobar@localhost&gt;;tag=3kJ52w8ZiE7tdUTxtnoWM8MXcOb-deNj'/>
       </offer>
     </iq>"
+end
+
+def offer_presence
+  "<presence from='4a3fe31a-0c2a-4a9a-ae98-f5b8afb55708@127.0.0.1' to='usera@127.0.0.1/voxeo'>
+    <offer xmlns='urn:xmpp:ozone:1' to='sip:usera@127.0.0.1:5060' from='sip:16508983130@127.0.0.1'>
+      <header name='Max-Forwards' value='70'/>
+      <header name='Content-Length' value='422'/>
+      <header name='Contact' value='&lt;sip:16508983130@127.0.0.1:21702&gt;'/>
+      <header name='Supported' value='replaces'/>
+      <header name='Allow' value='INVITE'/>
+      <header name='To' value='&lt;sip:usera@127.0.0.1:5060&gt;'/>
+      <header name='CSeq' value='1 INVITE'/>
+      <header name='User-Agent' value='Bria 3 release 3.2 stamp 61503'/>
+      <header name='Via' value='SIP/2.0/UDP 127.0.0.1:21702;branch=z9hG4bK-d8754z-ab966854f39bb612-1---d8754z-;rport=21702'/>
+      <header name='Call-ID' value='MGRkMWJiOTVmM2ViMGM4NWNiYmFhZDk5NGMwMDcwOTE.'/>
+      <header name='Content-Type' value='application/sdp'/>
+      <header name='From' value='&lt;sip:16508983130@127.0.0.1&gt;;tag=34ccaa4d'/>
+    </offer>
+  </presence>"
 end
 
 def error_iq_for_answer

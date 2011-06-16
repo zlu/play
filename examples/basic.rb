@@ -7,6 +7,7 @@ $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 
 require 'rubygems'
 require 'blather/client'
+require 'blather/client/dsl'
 require File.join(File.expand_path('../../lib', __FILE__), 'connfu')
 
 # The user credentials want to login Ozone as
@@ -166,4 +167,11 @@ iq do |m|
       #write_to_stream @ozone.hangup
     end
   end
+end
+
+register :presence
+
+presence do |msg|
+  p '+++++++++++++++++++++inside of presence'
+  p msg
 end

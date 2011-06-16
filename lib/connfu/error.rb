@@ -1,7 +1,7 @@
 module Connfu
   class Error < Blather::Stanza::Iq
-    def self.create_from_iq(offer_iq)
-      xml = offer_iq
+    def self.create_from_presence(offer)
+      xml = offer
       doc = Nokogiri::XML.parse xml
       self.import(doc.root)
     end

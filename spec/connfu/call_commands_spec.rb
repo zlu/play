@@ -7,7 +7,7 @@ describe Connfu::CallCommands do
     Connfu.connection = mock('connection')
     Connfu.setup('host', 'password')
     Connfu.connection.stub(:write)
-    @offer = create_iq(offer_iq)
+    @offer = create_presence(offer_presence)
     Connfu::Offer.import(@offer)
     @call_commands = ['accept', 'answer', 'hangup', 'reject']
   end
