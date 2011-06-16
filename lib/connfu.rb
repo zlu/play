@@ -52,6 +52,14 @@ module Connfu
     @connection
   end
 
+  def self.conference_handlers=(ch)
+    @conference_handlers = ch
+  end
+  
+  def self.conference_handlers
+    @conference_handlers
+  end
+
   def self.dsl_processor
     @@dsl_processor
   end
@@ -77,6 +85,7 @@ module Connfu
   def self.setup(host, password)
     @context ||= {}
     @outbound_context ||= {}
+    @conference_handlers ||= []
     @connection = Blather::Client.new.setup(host, password)
     @connection.register_handler(:ready, lambda { p 'Established @connection to Connfu Server' })
     @connection.register_handler(:iq) do |iq|

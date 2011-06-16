@@ -151,7 +151,18 @@ def conference_iq1
 end
 
 def outbound_result_iq
-  "<iq type='result' to='16577@app.ozone.net/1' from='call.ozone.net'>
-     <ref id='9f00061' />
+  "<iq type='result' id='blather0008' from='127.0.0.1' to='usera@127.0.0.1/voxeo'>
+    <ref id='bdd11c28-c2b0-4e05-a406-021c3a47fc1f@127.0.0.1' xmlns='urn:xmpp:ozone:1'>
+      <title />
+    </ref>
+  </iq>"
+#  "<iq type='result' to='16577@app.ozone.net/1' from='call.ozone.net'>
+#     <ref id='9f00061' />
+#  </iq>"
+end
+
+def answered_event_iq
+  "<iq to='16577@app.ozone.net/1' from='9f00061@call.ozone.net/1'>
+    <answered xmlns='urn:xmpp:ozone:1' />
   </iq>"
 end

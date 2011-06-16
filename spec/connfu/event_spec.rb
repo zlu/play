@@ -64,8 +64,38 @@ describe Connfu::Event do
         Connfu.outbound_context = {}
         lambda {
           Connfu::IqParser.parse(create_iq(outbound_result_iq))
-        }.should change{Connfu.outbound_context.count}.by(1)
+        }.should change { Connfu.outbound_context.count }.by(1)
       end
+
+      context 'when outbound is initiated for conference' do
+        it 'should send conference iq to server' do
+          Connfu.conference_handlers = ['foo']
+          Connfu.connection.should_receive(:write)
+          Connfu::IqParser.parse(create_iq(outbound_result_iq))
+        end
+      end
+    end
+  end
+
+  describe 'Connfu::Event::Answered' do
+    before do
+      @answered = Connfu::Event::Answered.import(create_iq(answered_event_iq))
+    end
+
+    it 'should be a kind of iq' do
+      @answered.should be_kind_of Blather::Stanza::Iq
+    end
+
+    it 'should contain a to attribute' do
+      @answered.attributes['to'].should_not be_nil
+    end
+
+    it 'should contain a from attribute' do
+      @answered.attributes['from'].should_not be_nil
+    end
+
+    it 'should contain a answered node' do
+      @answered.xpath('//x:answered', 'x' => 'urn:xmpp:ozone:1').first.should_not be_nil
     end
   end
 end

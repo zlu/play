@@ -62,10 +62,11 @@ module Connfu
 
     def conference(name)
       block = lambda {
-        ciq = conference_iq(name)
-        Connfu.connection.write Connfu.connection.write ciq
+        oc_iq = outbound_call_iq('127.0.0.1', 'usera@127.0.0.1', 'sip:16508983130@127.0.0.1', 'sip:usera@127.0.0.1')
+        Connfu.connection.write oc_iq
       }
       Connfu.connection.register_handler :ready, &block
+      Connfu.conference_handlers << conference_iq(name)
     end
   end
 end

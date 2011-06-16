@@ -12,6 +12,7 @@ describe Connfu do
     after do
       Connfu.context = nil  
       Connfu.outbound_context = nil
+      Connfu.conference_handlers = nil
     end
 
     it "should create a connection to server" do
@@ -31,6 +32,12 @@ describe Connfu do
       lambda {
         Connfu.setup(@host, @password)
       }.should change(Connfu, :outbound_context).from(nil).to({})
+    end
+
+    it 'should initialize conference handler' do
+      lambda {
+        Connfu.setup(@host, @password)
+      }.should change(Connfu, :conference_handlers).from(nil).to([])
     end
 
     it "should register ready handler that prints out connection message" do

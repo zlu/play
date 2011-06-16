@@ -157,14 +157,14 @@ describe Connfu::Component do
 
   describe '#conference' do
     it 'should dial an outbound call first' do
-      
+      Connfu.connection.should_receive(:register_handler).with(:ready)
+      conference('foo')
     end
 
-    it 'should send conference iq to server' do
-      pending 'delayed'
-      conf_name = 'my_conf'
-      Connfu.connection.should_receive(:write)
-      conference(conf_name)
+    it 'should receive increase conference handler by 1' do
+      lambda {
+        conference('foo')
+      }.should change{Connfu.conference_handlers.count}.by(1)
     end
   end
 end
