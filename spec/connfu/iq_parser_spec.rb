@@ -67,6 +67,11 @@ describe Connfu::IqParser do
         @oc_result.should be_instance_of Connfu::Event::OutboundResult
       end
     end
+
+    it 'should be able to parse answered event' do
+      answered = Connfu::IqParser.parse(create_iq(answered_event_iq))
+      answered.should be_instance_of Connfu::Event::Answered
+    end
   end
 
   describe "#fire_event" do

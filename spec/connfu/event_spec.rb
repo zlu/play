@@ -66,14 +66,6 @@ describe Connfu::Event do
           Connfu::IqParser.parse(create_iq(outbound_result_iq))
         }.should change { Connfu.outbound_context.count }.by(1)
       end
-
-      context 'when outbound is initiated for conference' do
-        it 'should send conference iq to server' do
-          Connfu.conference_handlers = ['foo']
-          Connfu.connection.should_receive(:write)
-          Connfu::IqParser.parse(create_iq(outbound_result_iq))
-        end
-      end
     end
   end
 
@@ -96,6 +88,14 @@ describe Connfu::Event do
 
     it 'should contain a answered node' do
       @answered.xpath('//x:answered', 'x' => 'urn:xmpp:ozone:1').first.should_not be_nil
+    end
+
+    describe '#self.import' do
+      it 'should send conference iq to server' do
+        Connfu.conference_handlers = ['foo']
+        Connfu.connection.should_receive(:write)
+        Connfu::IqParser.parse(Connfu::IqParser.parse(create_iq(answered_event_iq)))
+      end
     end
   end
 end

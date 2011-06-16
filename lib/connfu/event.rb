@@ -18,7 +18,7 @@ module Connfu
       end
     end
 
-    class Result < Blather::Stanza::Iq  
+    class Result < Blather::Stanza::Iq
       def self.create(node)
         node.reply!
       end
@@ -37,13 +37,15 @@ module Connfu
         node.xpath('.//xmlns', 'urn:xmpp:ozone:1')
         call_id = ref_node.attributes['id'].value
         Connfu.outbound_context[call_id] = node
-        conf = Connfu.conference_handlers.shift
-        Connfu.connection.write(conf) unless conf.nil?
       end
     end
 
     class Answered < Blather::Stanza::Iq
-
+      def self.import(node)
+        conf = Connfu.conference_handlers.shift
+        Connfu.connection.write(conf) unless conf.nil?
+        super(node)
+      end
     end
   end
 end
