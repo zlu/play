@@ -4,7 +4,11 @@ module Connfu
       iq = Blather::Stanza::Iq.new(:set, Connfu.context.values.first.from.to_s)
       Nokogiri::XML::Builder.with(iq) do |xml|
         xml.say_("xmlns" => "urn:xmpp:ozone:say:1") {
-          xml.text text
+          unless text.match(/^http:\/\/.*(.mp3|.wav)$/).nil?
+            xml.audio('src' => text)
+          else
+            xml.text text
+          end
         }
       end
 

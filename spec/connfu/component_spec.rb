@@ -10,6 +10,8 @@ describe Connfu::Component do
       Connfu::Offer.import(create_stanza(offer_presence))
       @text_to_say = "Oh yeah, connfu is awesome"
       @say = say_iq(@text_to_say)
+      @url = 'http://www.phono.com/audio/troporocks.mp3'
+      @say_url = say_iq(@url)
     end
 
     it "should be an iq of type set" do
@@ -17,12 +19,29 @@ describe Connfu::Component do
       @say.type.should eq :set
     end
 
+    it 'should have a to attribute' do
+       pending 'in ozone spec but not actually required'
+    end
+
+    it 'should have a from attribute' do
+      pending 'in ozone spec but not actually required'
+    end
+
     it "should contain a say node" do
       @say.child.name.should eq "say"
     end
 
-    it "should have an ozone:say namespace" do
-      @say.children.first.namespace.href.should eq "urn:xmpp:ozone:say:1"
+    describe 'say node' do
+      it "should have an ozone:say namespace" do
+        @say.children.first.namespace.href.should eq "urn:xmpp:ozone:say:1"
+      end
+
+      it 'should parse audio file url' do
+        audio_node = @say_url.xpath('//x:audio', 'x' => 'urn:xmpp:ozone:say:1').first
+        audio_node.should_not be_nil
+        audio_node.attributes['src'].should_not be_nil
+        audio_node.attributes['src'].value.should eq @url
+      end
     end
   end
 
@@ -164,7 +183,7 @@ describe Connfu::Component do
     it 'should receive increase conference handler by 1' do
       lambda {
         conference('foo')
-      }.should change{Connfu.conference_handlers.count}.by(1)
+      }.should change { Connfu.conference_handlers.count }.by(1)
     end
   end
 end
