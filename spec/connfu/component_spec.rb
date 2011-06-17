@@ -7,7 +7,7 @@ describe Connfu::Component do
     before do
       Connfu.setup('host', 'password')
       Connfu.connection.stub(:write)
-      Connfu::Offer.import(create_presence(offer_presence))
+      Connfu::Offer.import(create_stanza(offer_presence))
       @text_to_say = "Oh yeah, connfu is awesome"
       @say = say_iq(@text_to_say)
     end
@@ -41,7 +41,7 @@ describe Connfu::Component do
     before do
       Connfu.setup('host', 'password')
       Connfu.connection.stub(:write)
-      Connfu::Offer.import(create_presence(offer_presence))
+      Connfu::Offer.import(create_stanza(offer_presence))
       @offer = Connfu.context.values.first
       @prompt = "Please input a four digit number"
       @ask = ask_iq(@prompt)
@@ -99,7 +99,7 @@ describe Connfu::Component do
     before do
       Connfu.setup('host', 'password')
       Connfu.connection.stub(:write)
-      Connfu::Offer.import(create_presence(offer_presence))
+      Connfu::Offer.import(create_stanza(offer_presence))
       @to = "sip:usera@127.0.0.1"
       @transfer = transfer_iq(@to)
     end

@@ -171,7 +171,27 @@ end
 
 register :presence
 
-presence do |msg|
+presence do |m|
   p '+++++++++++++++++++++inside of presence'
-  p msg
+  p m
+  if m.attributes['id'].value != @ozone.request_id
+    # Naive script for now, simply does a serial execution of a callflow
+    case @ozone.state
+    when :start
+      @ozone.call_id = m.from.to_s
+
+      # Acknowledge the Offer to accept the call
+      m.reply!
+      write_to_stream @ozone.answer
+      when :answered
+      #write_to_stream @ozone.say_audio("http://dl.dropbox.com/u/25511/Voxeo/troporocks.mp3")
+      write_to_stream @ozone.say_text("Tropo Rocks!")
+#    when :saying_text
+#      write_to_stream @ozone.ask("What is your favorite color?", "red, green, blue")
+#    when :asking
+#      write_to_stream @ozone.transfer("sip:jose@10.0.2.11:49152")
+#    when :transferred
+      #write_to_stream @ozone.hangup
+    end
+  end
 end

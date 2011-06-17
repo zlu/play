@@ -10,7 +10,7 @@ Connfu.setup "usera@127.0.0.1", "1"
 class DialExample
   include Connfu
 
-  dial 'sip:16508983130@127.0.0.1'
+  dial 'sip:userb@127.0.0.1'
 end
 
 DialExample.new

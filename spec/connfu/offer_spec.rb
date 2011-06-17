@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Connfu::Offer do
   before do
-    @offer = create_presence(offer_presence)
+    @offer = create_stanza(offer_presence)
   end
 
   describe '#result_for_node' do

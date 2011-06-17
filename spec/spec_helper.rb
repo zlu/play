@@ -16,7 +16,7 @@ def create_iq(iq_xml)
   Blather::Stanza::Iq.import(doc.root)
 end
 
-def create_presence(presence_xml)
+def create_stanza(presence_xml)
   doc = Nokogiri::XML.parse presence_xml
   Blather::Stanza::Presence.import(doc.root)
 end
@@ -161,20 +161,12 @@ def outbound_result_iq
   </iq>"
 end
 
-def answered_event_iq
-  "<iq to='16577@app.ozone.net/1' from='9f00061@call.ozone.net/1'>
+def answered_event
+  "<presence to='16577@app.ozone.net/1' from='9f00061@call.ozone.net/1'>
     <answered xmlns='urn:xmpp:ozone:1' />
-  </iq>"
+  </presence>"
 end
 
-def temp_answered_event_iq
-  "<iq type='set' id='ab7dba28-3f26-4edc-af4e-19b63a3f254f' from='2e3cbaa6-4de3-426a-ac0a-249287a38ba6@127.0.0.1' to='usera@127.0.0.1/voxeo'>
-    <info xmlns='urn:xmpp:ozone:1'>
-      <answer/>
-    </info>
-  </iq>"
-end
-#
 #/Users/zlu/.rvm/rubies/ree-1.8.7-2011.03/bin/ruby -e $stdout.sync=true;$stderr.sync=true;load($0=ARGV.shift) /Users/zlu/projects/thelab/play/examples/answer_example.rb
 #"Established @connection to Connfu Server"
 #D, [2011-06-16T17:11:11.471301 #1268] DEBUG -- : Receiving presence from server

@@ -15,7 +15,7 @@ describe Connfu::IqParser do
 
     context 'an offer iq' do
       before do
-        @offer_node = create_presence(offer_presence)
+        @offer_node = create_stanza(offer_presence)
         @offer = Connfu::Offer.import(@offer_node)
       end
 
@@ -71,7 +71,10 @@ describe Connfu::IqParser do
     end
 
     it 'should be able to parse answered event' do
-      answered = Connfu::IqParser.parse(create_iq(temp_answered_event_iq))
+      answered = Connfu::IqParser.parse(create_stanza(answered_event))
+      l.debug answered_event
+      l.debug create_stanza(answered_event)
+      l.debug answered
       answered.should be_instance_of Connfu::Event::Answered
     end
   end

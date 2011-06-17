@@ -79,7 +79,7 @@ describe Connfu::Event do
     before do
       Connfu.conference_handlers = []
       Connfu.connection.stub(:write)
-      @answered = Connfu::Event::Answered.import(create_iq(temp_answered_event_iq))
+      @answered = Connfu::Event::Answered.import(create_stanza(answered_event))
     end
 
     it 'should be a kind of iq' do
@@ -95,8 +95,7 @@ describe Connfu::Event do
     end
 
     it 'should contain a answered node' do
-#      @answered.xpath('//x:answered', 'x' => 'urn:xmpp:ozone:1').first.should_not be_nil
-      @answered.xpath('//x:answer', 'x' => 'urn:xmpp:ozone:1').first.should_not be_nil
+      @answered.xpath('//x:answered', 'x' => 'urn:xmpp:ozone:1').first.should_not be_nil
     end
 
     describe '#self.import' do
@@ -106,7 +105,7 @@ describe Connfu::Event do
         Connfu.conference_handlers = [conference_iq]
         Connfu.outbound_context = {'call_idxxyy' => ''}
         Connfu.connection.should_receive(:write).with(/call_idxxyy/)
-        Connfu::IqParser.parse(Connfu::IqParser.parse(create_iq(temp_answered_event_iq)))
+        Connfu::IqParser.parse(Connfu::IqParser.parse(create_stanza(answered_event)))
       end
     end
   end
