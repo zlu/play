@@ -12,6 +12,8 @@ module Connfu
     end
 
     def say(text)
+      l.debug 'sending say iq'
+      l.debug say_iq(text)
       Connfu.connection.write say_iq(text)
     end
 

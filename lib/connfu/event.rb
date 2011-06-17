@@ -34,8 +34,7 @@ module Connfu
 
       def self.update_context(node)
         ref_node = node.xpath('//oc:ref', 'oc' => 'urn:xmpp:ozone:1').first
-        node.xpath('.//xmlns', 'urn:xmpp:ozone:1')
-        call_id = ref_node.attributes['jid'].value
+        call_id = ref_node.attributes['id'].value
         Connfu.outbound_context[call_id] = node
       end
     end

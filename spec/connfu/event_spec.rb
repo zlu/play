@@ -61,7 +61,7 @@ describe Connfu::Event do
       end
 
       it 'should have an id attribute' do
-        @ref_nodes.first.attributes['jid'].should_not be_nil
+        @ref_nodes.first.attributes['id'].should_not be_nil
       end
     end
 

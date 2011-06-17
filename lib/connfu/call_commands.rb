@@ -29,8 +29,8 @@ module Connfu
 
       define_method :"#{call_command}" do
         cc_iq = eval "#{call_command}_iq"
-#        l.debug 'sending to server =>>>>'
-#        l.debug cc_iq
+        l.debug 'sending to server =>>>>'
+        l.debug cc_iq
         Connfu.connection.write(cc_iq)
       end
     end
