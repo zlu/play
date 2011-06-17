@@ -6,7 +6,7 @@ module Connfu
       if xml_iq.match(/.*<offer.*/)
         result_node = Connfu::Offer.import(node)
 #        Connfu::Event::Result.create(result_node)
-      elsif xml_iq.match(/.*<complete.*urn:xmpp:ozone:say:1.*/)
+      elsif !node.xpath('//x:success', 'x' => 'urn:xmpp:ozone:say:complete:1').empty?
         result_node = Connfu::Event::SayComplete.import(node)
       elsif xml_iq.match(/.*<complete.*urn:xmpp:ozone:ask:1.*/)
         result_node = Connfu::Event::AskComplete.import(node)

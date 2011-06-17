@@ -72,10 +72,12 @@ def error_iq
   </iq>"
 end
 
-def say_complete_iq
-  "<iq type='set' to='16577@app.ozone.net/1' from='9f00061@call.ozone.net/fgh4590'>
-     <complete reason='success' xmlns='urn:xmpp:ozone:say:1'>
-   </iq>"
+def say_complete_success
+  "<presence from='7bc6c7d5-1428-421d-bb40-22f58cdcd2ec@127.0.0.1/a1b45d70-6df2-4460-b172-4bd077e8966d' to='usera@127.0.0.1/voxeo'>
+    <complete xmlns='urn:xmpp:ozone:ext:1'>
+      <success xmlns='urn:xmpp:ozone:say:complete:1'/>
+    </complete>
+  </presence>"
 end
 
 def outbound_call_iq

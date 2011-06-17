@@ -40,9 +40,9 @@ describe Connfu::IqParser do
 
     it "should create a complete event for say" do
       Connfu::IqParser.stub(:fire_event)
-      say_complete = Connfu::IqParser.parse(create_iq(say_complete_iq))
+      say_complete = Connfu::IqParser.parse(create_iq(say_complete_success))
       say_complete.should be_instance_of Connfu::Event::SayComplete
-      say_complete.get_attribute(:from).should eq say_complete_iq.match(/.*from='(.*)'>\s.*/)[1]
+      say_complete.get_attribute(:from).should eq create_stanza(say_complete_success).attributes['from'].value
     end
 
     context 'for ask complete' do
