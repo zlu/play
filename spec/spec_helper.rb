@@ -108,14 +108,15 @@ def ask_iq
   </iq>"
 end
 
-def complete_for_ask_iq
-  "<iq type='set' id='47b63bdd-4b60-45b9-974f-1217068f09f8'
-       from='b30bedad-a48e-4dea-b8ef-9d05f40759c7@127.0.0.1/c41520e1-9789-4439-b388-9ce1f3b97e86'
-       to='usera@127.0.0.1/voxeo'>
-     <complete xmlns='urn:xmpp:ozone:ask:1'
-               reason='SUCCESS'
-               concept='1111' interpretation='1111' confidence='1.0' utterance='1111'/>
-  </iq>"
+def ask_complete_success
+  "<presence to='16577@app.ozone.net/1' from='9f00061@call.ozone.net/fgh4590'>
+    <complete xmlns='urn:xmpp:ozone:ext:1'>
+      <success mode='speech' confidence='0.45' xmlns='urn:xmpp:ozone:ask:complete:1'>
+        <interpretation>1234</interpretation>
+        <utterance>one two three four</utterance>
+      </success>
+    </complete>
+  </presence>"
 end
 
 def transfer_iq

@@ -47,13 +47,13 @@ describe Connfu::IqParser do
 
     context 'for ask complete' do
       before do
-        @ask_complete_iq = create_iq(complete_for_ask_iq)
+        @ask_complete_stanza = create_stanza(ask_complete_success)
       end
 
       it 'should create a complete event for ask' do
         @dp.handlers = [{:ask=>"please enter a four digit pin"}]
         @dp.ask_handler = {'result'=>"say((\"your input is \" + result))"}
-        @ask_complete = Connfu::IqParser.parse(@ask_complete_iq)
+        @ask_complete = Connfu::IqParser.parse(@ask_complete_stanza)
         Connfu::IqParser.stub(:fire_event)
         @ask_complete.should be_instance_of Connfu::Event::AskComplete
       end
@@ -72,9 +72,6 @@ describe Connfu::IqParser do
 
     it 'should be able to parse answered event' do
       answered = Connfu::IqParser.parse(create_stanza(answered_event))
-      l.debug answered_event
-      l.debug create_stanza(answered_event)
-      l.debug answered
       answered.should be_instance_of Connfu::Event::Answered
     end
   end

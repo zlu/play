@@ -8,7 +8,7 @@ module Connfu
 #        Connfu::Event::Result.create(result_node)
       elsif !node.xpath('//x:success', 'x' => 'urn:xmpp:ozone:say:complete:1').empty?
         result_node = Connfu::Event::SayComplete.import(node)
-      elsif xml_iq.match(/.*<complete.*urn:xmpp:ozone:ask:1.*/)
+      elsif !node.xpath('//x:success', 'x' => 'urn:xmpp:ozone:ask:complete:1').empty?
         result_node = Connfu::Event::AskComplete.import(node)
         result_node.react
       elsif node.type == :result
