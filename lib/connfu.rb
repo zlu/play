@@ -14,7 +14,6 @@
   connfu/iq_parser
   connfu/dsl_processor
   connfu/event
-  connfu/error
   connfu/offer
   connfu/utils
   connfu/dsl

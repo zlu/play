@@ -32,12 +32,6 @@ describe Connfu::IqParser do
       result.id.should eq result_iq.match(/.*id='(.*)'\sfrom=.*/)[1]
     end
 
-    it "should create an error for error iq" do
-      error = Connfu::IqParser.parse(create_iq(error_iq))
-      error.should be_instance_of Connfu::Error
-      error.id.should eq error_iq.match(/.*id='(.*)'\sfrom=.*/)[1]
-    end
-
     it "should create a complete event for say" do
       Connfu::IqParser.stub(:fire_event)
       say_complete = Connfu::IqParser.parse(create_iq(say_complete_success))
@@ -73,6 +67,17 @@ describe Connfu::IqParser do
     it 'should be able to parse answered event' do
       answered = Connfu::IqParser.parse(create_stanza(answered_event))
       answered.should be_instance_of Connfu::Event::Answered
+    end
+
+    context 'for end event' do
+      before do
+        l.debug end_stanza = create_stanza(end_event)
+        @end = Connfu::IqParser.parse(end_stanza)
+      end
+
+      it 'should create an end event' do
+        @end.should be_instance_of Connfu::Event::End
+      end
     end
   end
 

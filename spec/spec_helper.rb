@@ -64,14 +64,6 @@ def error_iq_for_answer_with_text
   </iq>"
 end
 
-def error_iq
-  "<iq type='set' id='1c291bf2-db31-4b0f-bd95-dea4b58c3496' from='1942e51e-61f2-47b1-97bf-8cccbc6d4683@localhost' to='usera@localhost/voxeo'>
-    <end xmlns='urn:xmpp:ozone:1'>
-      <error/>
-    </end>
-  </iq>"
-end
-
 def say_complete_success
   "<presence from='7bc6c7d5-1428-421d-bb40-22f58cdcd2ec@127.0.0.1/a1b45d70-6df2-4460-b172-4bd077e8966d' to='usera@127.0.0.1/voxeo'>
     <complete xmlns='urn:xmpp:ozone:ext:1'>

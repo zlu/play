@@ -16,8 +16,10 @@ module Connfu
                       Connfu::Event::OutboundResult.import(node)
       elsif !node.xpath('//x:answered', 'x' => 'urn:xmpp:ozone:1').empty?
         result_node = Connfu::Event::Answered.import(node)
+      elsif !node.xpath('//x:end', 'x' => 'urn:xmpp:ozone:1').empty?
+        result_node = Connfu::Event::End.import(node)
       else
-        result_node = Connfu::Error.import(node)
+
       end
 
       self.fire_event
