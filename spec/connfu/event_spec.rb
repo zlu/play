@@ -135,7 +135,7 @@ describe Connfu::Event do
       @answered.attributes['from'].should_not be_nil
     end
 
-    it 'should contain a answered node' do
+    it 'should contain an answered node' do
       @answered.xpath('//x:answered', 'x' => 'urn:xmpp:ozone:1').first.should_not be_nil
     end
 
@@ -158,6 +158,28 @@ describe Connfu::Event do
           Connfu::Event::Answered.import(@answered_stanza)
         }.should change{Connfu.outbound_calls[@from].state}.to(:answered)
       end
+    end
+  end
+
+  describe 'Connfu::Event::End' do
+    before do
+      @end_stanza = create_stanza(end_event)
+    end
+
+    it 'should be a kind of iq' do
+      @end_stanza.should be_kind_of Blather::Stanza::Presence
+    end
+
+    it 'should contain a to attribute' do
+      @end_stanza.attributes['to'].should_not be_nil
+    end
+
+    it 'should contain a from attribute' do
+      @end_stanza.attributes['from'].should_not be_nil
+    end
+
+    it 'should contain an end node' do
+      @end_stanza.xpath('//x:end', 'x' => 'urn:xmpp:ozone:1').first.should_not be_nil
     end
   end
 end

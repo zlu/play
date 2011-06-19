@@ -58,5 +58,9 @@ module Connfu
         super(node)
       end
     end
+
+    class End < Blather::Stanza::Iq
+      
+    end
   end
 end

@@ -175,3 +175,52 @@ def ringing_event
     <ringing xmlns='urn:xmpp:ozone:1' />
   </presence>"
 end
+
+#%w[timeout, busy, reject].each do |reason|
+#  define_method :"end_with_#{reason}_event" do
+#    "<presence to='16577@app.ozone.net/1' from='9f00061@call.ozone.net/1'>
+#    <end xmlns='urn:xmpp:ozone:1'>
+#      <\"#{timeout}\" />
+#    </end>
+#  </presence>"
+#  end
+#end
+
+def end_event
+  "<presence to='16577@app.ozone.net/1' from='9f00061@call.ozone.net/1'>
+    <end xmlns='urn:xmpp:ozone:1'>
+    </end>
+  </presence>"
+end
+
+def end_with_timeout_event
+  "<presence to='16577@app.ozone.net/1' from='9f00061@call.ozone.net/1'>
+    <end xmlns='urn:xmpp:ozone:1'>
+      <timeout />
+    </end>
+  </presence>"
+end
+
+def end_with_busy_event
+  "<presence to='16577@app.ozone.net/1' from='9f00061@call.ozone.net/1'>
+    <end xmlns='urn:xmpp:ozone:1'>
+      <busy />
+    </end>
+  </presence>"
+end
+
+def end_with_reject_event
+  "<presence to='16577@app.ozone.net/1' from='9f00061@call.ozone.net/1'>
+    <end xmlns='urn:xmpp:ozone:1'>
+      <reject />
+    </end>
+  </presence>"
+end
+
+def end_with_error_event
+  "<presence to='16577@app.ozone.net/1' from='9f00061@call.ozone.net/1'>
+    <end xmlns='urn:xmpp:ozone:1'>
+      <error>Error answering the call</error>
+    </end>
+  </presence>"
+end
