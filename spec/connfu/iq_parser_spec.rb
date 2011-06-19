@@ -65,6 +65,7 @@ describe Connfu::IqParser do
     end
 
     it 'should be able to parse answered event' do
+      Connfu::Call.stub(:update_state)
       answered = Connfu::IqParser.parse(create_stanza(answered_event))
       answered.should be_instance_of Connfu::Event::Answered
     end
