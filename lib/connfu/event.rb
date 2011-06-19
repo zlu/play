@@ -41,14 +41,8 @@ module Connfu
 
     class Ringing < Blather::Stanza::Iq
       def self.import(node)
-        update_state(node)
+        Connfu::Call.update_state(node, :ringing)
         super(node)
-      end
-
-      def self.update_state(node)
-        from = node.attributes['from'].value
-        call = Connfu.outbound_calls[from]
-        call.state = :ringing
       end
     end
 
@@ -59,14 +53,9 @@ module Connfu
           conf.attributes['to'].value = Connfu.outbound_context.keys.first
           Connfu.connection.write(conf.to_xml) unless conf.nil?
         end
-        update_state(node)
-        super(node)
-      end
 
-      def self.update_state(node)
-        from = node.attributes['from'].value
-        call = Connfu.outbound_calls[from]
-        call.state = :answered
+        Connfu::Call.update_state(node, :answered)
+        super(node)
       end
     end
   end
