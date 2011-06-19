@@ -118,7 +118,9 @@ describe Connfu::Event do
     before do
       Connfu.conference_handlers = []
       Connfu.connection.stub(:write)
-      @answered = Connfu::Event::Answered.import(create_stanza(answered_event))
+      @answered_stanza = create_stanza(answered_event)
+      @from = @answered_stanza.attributes['from'].value
+      @answered = Connfu::Event::Answered.import(@answered_stanza)
     end
 
     it 'should be a kind of iq' do
@@ -138,6 +140,10 @@ describe Connfu::Event do
     end
 
     describe '#self.import' do
+      before do
+        Connfu.outbound_calls[@from].state = nil
+      end
+
       it 'should send conference iq with correct call_id to server' do
         Connfu.connection.unstub(:write)
         conference_iq = create_iq(spec_conference_iq)
@@ -145,6 +151,12 @@ describe Connfu::Event do
         Connfu.outbound_context = {'call_idxxyy' => ''}
         Connfu.connection.should_receive(:write).with(/call_idxxyy/)
         Connfu::IqParser.parse(Connfu::IqParser.parse(create_stanza(answered_event)))
+      end
+
+      it 'should update current call state to answered' do
+        lambda {
+          Connfu::Event::Answered.import(@answered_stanza)
+        }.should change{Connfu.outbound_calls[@from].state}.to(:answered)
       end
     end
   end

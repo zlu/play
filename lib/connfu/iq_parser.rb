@@ -14,9 +14,8 @@ module Connfu
         result_node = node.xpath('//oc:ref', 'oc' => 'urn:xmpp:ozone:1').empty? ? \
                       Connfu::Event::Result.import(node) : \
                       Connfu::Event::OutboundResult.import(node)
-      elsif !node.xpath('//x:answered', 'x' => 'urn:xmpp:ozone:1').first.nil?
-        answered = node.xpath('//x:answered', 'x' => 'urn:xmpp:ozone:1').first
-        result_node = Connfu::Event::Answered.import(answered)
+      elsif !node.xpath('//x:answered', 'x' => 'urn:xmpp:ozone:1').empty?
+        result_node = Connfu::Event::Answered.import(node)
       else
         result_node = Connfu::Error.import(node)
       end
@@ -28,14 +27,15 @@ module Connfu
     def self.fire_event
       clazz = Connfu.base
       l.debug Connfu.dsl_processor.handlers
-      command = Connfu.dsl_processor.handlers.shift
-      l.debug command
-      if command.instance_of?(Hash)
-        l.debug "fire_event: #{clazz} #{command.keys.first} with #{command.values.first}"
-        clazz.send command.keys.first, command.values.first
-      else
-        l.debug "fire_event: #{clazz} #{command}"
-        clazz.module_eval "#{command}"
+      if (command = Connfu.dsl_processor.handlers.shift)
+        l.debug command
+        if command.instance_of?(Hash)
+          l.debug "fire_event: #{clazz} #{command.keys.first} with #{command.values.first}"
+          clazz.send command.keys.first, command.values.first
+        else
+          l.debug "fire_event: #{clazz} #{command}"
+          clazz.module_eval "#{command}"
+        end
       end
     end
   end

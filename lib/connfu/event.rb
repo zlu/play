@@ -59,7 +59,14 @@ module Connfu
           conf.attributes['to'].value = Connfu.outbound_context.keys.first
           Connfu.connection.write(conf.to_xml) unless conf.nil?
         end
+        update_state(node)
         super(node)
+      end
+
+      def self.update_state(node)
+        from = node.attributes['from'].value
+        call = Connfu.outbound_calls[from]
+        call.state = :answered
       end
     end
   end

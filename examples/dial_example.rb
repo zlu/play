@@ -13,7 +13,8 @@ class DialExample
   current_call = dial 'sip:userb@127.0.0.1'
 
   (1..10).each do
-    p current_call.status
+    Connfu.outbound_calls.values.first.state
+#    p current_call.status
     sleep 1
   end
 end
