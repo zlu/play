@@ -109,7 +109,7 @@ describe Connfu::Event do
       it 'should update current_call status' do
         lambda {
           Connfu::Event::Ringing.import(@ringing_stanza)
-        }.should change{Connfu.outbound_calls[@from].state}.to(:ringing)
+        }.should change { Connfu.outbound_calls[@from].state }.to(:ringing)
       end
     end
   end
@@ -156,30 +156,39 @@ describe Connfu::Event do
       it 'should update current call state to answered' do
         lambda {
           Connfu::Event::Answered.import(@answered_stanza)
-        }.should change{Connfu.outbound_calls[@from].state}.to(:answered)
+        }.should change { Connfu.outbound_calls[@from].state }.to(:answered)
       end
     end
   end
 
   describe 'Connfu::Event::End' do
-    before do
-      @end_stanza = create_stanza(end_event)
-    end
+    %w[timeout busy reject error].each do |reason|
+      before do
+        stanza = send "end_with_#{reason}_event"
+        @end_stanza =  send "create_stanza", stanza
+        @end_node = @end_stanza.xpath('//x:end', 'x' => 'urn:xmpp:ozone:1').first
+        @reason_node = @end_node.xpath("//x:#{reason}", 'x' => 'urn:xmpp:ozone:1').first
+      end
 
-    it 'should be a kind of iq' do
-      @end_stanza.should be_kind_of Blather::Stanza::Presence
-    end
+      it 'should be a kind of iq' do
+        @end_stanza.should be_kind_of Blather::Stanza::Presence
+      end
 
-    it 'should contain a to attribute' do
-      @end_stanza.attributes['to'].should_not be_nil
-    end
+      it 'should contain a to attribute' do
+        @end_stanza.attributes['to'].should_not be_nil
+      end
 
-    it 'should contain a from attribute' do
-      @end_stanza.attributes['from'].should_not be_nil
-    end
+      it 'should contain a from attribute' do
+        @end_stanza.attributes['from'].should_not be_nil
+      end
 
-    it 'should contain an end node' do
-      @end_stanza.xpath('//x:end', 'x' => 'urn:xmpp:ozone:1').first.should_not be_nil
+      it 'should contain an end node' do
+        @end_node.should_not be_nil
+      end
+
+      it 'should contain a reason node' do
+        @reason_node.should_not be_nil
+      end
     end
   end
 end
