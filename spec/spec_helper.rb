@@ -7,8 +7,8 @@ RSpec.configure do |config|
   config.mock_with :rspec
 end
 
-class MyTestClass;
-  include Connfu;
+class MyTestClass
+  include Connfu
 end
 
 def create_iq(iq_xml)
@@ -167,5 +167,11 @@ end
 def answered_event
   "<presence to='16577@app.ozone.net/1' from='9f00061@call.ozone.net/1'>
     <answered xmlns='urn:xmpp:ozone:1' />
+  </presence>"
+end
+
+def ringing_event
+  "<presence to='16577@app.ozone.net/1' from='9f00061@call.ozone.net/1'>
+    <ringing xmlns='urn:xmpp:ozone:1' />
   </presence>"
 end

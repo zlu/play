@@ -39,11 +39,23 @@ module Connfu
       end
     end
 
+    class Ringing < Blather::Stanza::Iq
+      def self.import(node)
+        update_state(node)
+        super(node)
+      end
+
+      def self.update_state(node)
+        from = node.attributes['from'].value
+        call = Connfu.outbound_calls[from]
+        call.state = :ringing
+      end
+    end
+
     class Answered < Blather::Stanza::Iq
       def self.import(node)
         conf = Connfu.conference_handlers.shift
         unless conf.nil?
-          l.debug '++++++++++sending conf iq to server'
           conf.attributes['to'].value = Connfu.outbound_context.keys.first
           Connfu.connection.write(conf.to_xml) unless conf.nil?
         end

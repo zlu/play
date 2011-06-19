@@ -18,6 +18,7 @@
   connfu/offer
   connfu/utils
   connfu/dsl
+  connfu/call
 ].each { |file| require file }
 
 module Connfu
@@ -42,6 +43,14 @@ module Connfu
 
   def self.outbound_context
     @outbound_context
+  end
+
+  def self.outbound_calls=(calls)
+    @outbound_calls = calls
+  end
+
+  def self.outbound_calls
+    @outbound_calls
   end
 
   def self.connection=(connection)
@@ -86,6 +95,7 @@ module Connfu
     @context ||= {}
     @outbound_context ||= {}
     @conference_handlers ||= []
+    @outbound_calls ||= {}
     @connection = Blather::Client.new.setup(host, password)
     @connection.register_handler(:ready, lambda { p 'Established @connection to Connfu Server' })
     [:iq, :presence].each do |stanza|

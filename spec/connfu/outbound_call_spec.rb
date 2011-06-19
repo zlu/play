@@ -14,6 +14,7 @@ describe Connfu::OutboundCall do
       @to = 'usera@127.0.0.1'
       @from= 'userb@127.0.0.1'
       @outbound_call_iq = MyTestClass.send :outbound_call_iq, @to_domain, @from_resource, @to, @from
+      l.debug @outbound_call_iq.children
       @dial_node = @outbound_call_iq.children.first
     end
 
@@ -51,6 +52,13 @@ describe Connfu::OutboundCall do
   end
 
   describe 'dial' do
+    before do
+      Connfu.outbound_calls = {}
+    end
+
+    let(:to) {'foo_number'}
+    let(:call) {dial(to)}
+
     it 'should register a ready handler with a block' do
       Connfu.connection.should_receive(:register_handler).with(:ready, &lambda{})
       MyTestClass.send :dial, ''
@@ -60,6 +68,17 @@ describe Connfu::OutboundCall do
       MyTestClass.send :dial, 'sip_number'
       Connfu.connection.should_receive(:write)
       Connfu.connection.send :call_handler_for, :ready, ''
+    end
+
+    it 'should return a call object' do
+      call.should be_instance_of Connfu::Call
+      call.to.should eq to
+    end
+
+    it 'should increase the count of outbound calls by 1' do
+      lambda {
+        dial(to)
+      }.should change{Connfu.outbound_calls.count}.by(1)
     end
   end
 end

@@ -16,6 +16,10 @@ module Connfu
         Connfu.connection.write oc_iq
       }
       Connfu.connection.register_handler :ready, &block
+
+      call = Connfu::Call.new(to)
+      Connfu.outbound_calls[to] = call
+      call
     end
   end
 end

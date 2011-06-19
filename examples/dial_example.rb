@@ -10,7 +10,12 @@ Connfu.setup "usera@127.0.0.1", "1"
 class DialExample
   include Connfu
 
-  dial 'sip:userb@127.0.0.1'
+  current_call = dial 'sip:userb@127.0.0.1'
+
+  (1..10).each do
+    p current_call.status
+    sleep 1
+  end
 end
 
 DialExample.new

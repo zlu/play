@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+include Connfu::OutboundCall
+
 describe Connfu::Event do
   describe Connfu::Event::SayComplete do
     describe "#import" do
@@ -71,6 +73,43 @@ describe Connfu::Event do
         lambda {
           Connfu::IqParser.parse(create_iq(outbound_result_iq))
         }.should change { Connfu.outbound_context.count }.by(1)
+      end
+    end
+  end
+
+  describe 'Connfu::Event::Ringing' do
+    before do
+      @ringing_stanza = create_stanza(ringing_event)
+      @from = @ringing_stanza.attributes['from'].value
+      dial(@from)
+      @ringing = Connfu::Event::Ringing.import(@ringing_stanza)
+    end
+
+    it 'should be a kind of iq' do
+      @ringing.should be_kind_of Blather::Stanza::Iq
+    end
+
+    it 'should contain a to attribute' do
+      @ringing.attributes['to'].should_not be_nil
+    end
+
+    it 'should contain a from attribute' do
+      @ringing.attributes['from'].should_not be_nil
+    end
+
+    it 'should contain a answered node' do
+      @ringing.xpath('//x:ringing', 'x' => 'urn:xmpp:ozone:1').first.should_not be_nil
+    end
+
+    describe '#import' do
+      before do
+        Connfu.outbound_calls[@from].state = nil
+      end
+
+      it 'should update current_call status' do
+        lambda {
+          Connfu::Event::Ringing.import(@ringing_stanza)
+        }.should change{Connfu.outbound_calls[@from].state}.to(:ringing)
       end
     end
   end
