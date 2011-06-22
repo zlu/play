@@ -6,6 +6,7 @@ module Connfu
     def self.update_state(node, state)
       from = node.attributes['from'].value
       call = Connfu.outbound_calls[from]
+      l.debug 'call state is: ' + state.to_s
       call.state = state
     end
 

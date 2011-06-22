@@ -14,7 +14,7 @@ describe Connfu::OutboundCall do
       @to = 'usera@127.0.0.1'
       @from= 'userb@127.0.0.1'
       @outbound_call_iq = MyTestClass.send :outbound_call_iq, @to_domain, @from_resource, @to, @from
-      l.debug @outbound_call_iq.children
+      @outbound_call_iq.children
       @dial_node = @outbound_call_iq.children.first
     end
 

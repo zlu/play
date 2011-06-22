@@ -14,7 +14,6 @@ class AnswerExample
     answer
     say('hello, this is connfu')
     say('http://www.phono.com/audio/troporocks.mp3')
-#    hangup
   end
 end
 

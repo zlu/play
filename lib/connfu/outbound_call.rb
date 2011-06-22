@@ -4,7 +4,7 @@ module Connfu
       oc_iq = Blather::Stanza::Iq.new(:set, to_domain)
       oc_iq.from = from_resource
       Nokogiri::XML::Builder.with(oc_iq) do |xml|
-        xml.dial(:to => to, :from => from, "xmlns" => "urn:xmpp:ozone:1")
+        xml.dial_(:to => to, :from => from, "xmlns" => "urn:xmpp:ozone:1")
       end
 
       oc_iq
@@ -12,7 +12,7 @@ module Connfu
 
     def dial(to)
       block = lambda {
-        oc_iq = outbound_call_iq('127.0.0.1', 'usera@127.0.0.1', to, 'sip:usera@127.0.0.1')
+        oc_iq = outbound_call_iq('127.0.0.1', 'userb@127.0.0.1', to, 'sip:userb@127.0.0.1')
         Connfu.connection.write oc_iq
       }
       Connfu.connection.register_handler :ready, &block
