@@ -15,5 +15,4 @@ class RedirectExample
   end
 end
 
-RedirectExample.new
 Connfu.start

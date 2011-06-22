@@ -13,5 +13,4 @@ class ConferenceExample
   conference('my_conference')
 end
 
-ConferenceExample.new
 Connfu.start

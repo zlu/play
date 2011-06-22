@@ -15,5 +15,4 @@ class DialExampleHelper
   end
 end
 
-DialExampleHelper.new
 Connfu.start

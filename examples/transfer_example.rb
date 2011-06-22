@@ -19,5 +19,4 @@ class TransferExample
   end
 end
 
-TransferExample.new
 Connfu.start

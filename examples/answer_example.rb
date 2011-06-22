@@ -17,5 +17,4 @@ class AnswerExample
   end
 end
 
-AnswerExample.new
 Connfu.start
