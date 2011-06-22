@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   s.add_dependency("sexp_processor", ["3.0.5"])
   s.add_dependency("ruby2ruby", ["1.2.5"])
 
-  s.add_development_dependency("bundler", ["1.0.13"])
+  s.add_development_dependency("bundler", ["~>1.0.13"])
   s.add_development_dependency("rake", ["0.8.7"])
   s.add_development_dependency("rspec", ["2.5.0"])
   s.add_development_dependency("flog", ["2.5.1"])

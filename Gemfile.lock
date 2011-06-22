@@ -63,7 +63,7 @@ PLATFORMS
 
 DEPENDENCIES
   Saikuro (= 1.1.0)
-  bundler (= 1.0.13)
+  bundler (~> 1.0.13)
   connfu!
   flay (= 1.4.2)
   flog (= 2.5.1)
