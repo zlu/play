@@ -34,6 +34,7 @@ GEM
       ruby_parser (~> 2.0)
       sexp_processor (~> 3.0)
     minitest (2.2.2)
+    mocha (0.9.12)
     nokogiri (1.4.4)
     rake (0.8.7)
     rcov (0.9.9)
@@ -67,6 +68,7 @@ DEPENDENCIES
   connfu!
   flay (= 1.4.2)
   flog (= 2.5.1)
+  mocha (= 0.9.12)
   rake (= 0.8.7)
   rcov (= 0.9.9)
   reek (= 1.2.8)
