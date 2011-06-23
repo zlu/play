@@ -5,8 +5,6 @@ require 'connfu'
 Connfu.setup "usera@127.0.0.1", "1"
 
 class Connfu::Handler
-  include Connfu::CallCommands
-
   ['accept', 'answer', 'hangup', 'reject'].each do |call_command|
     define_method :"#{call_command}_iq" do
       iq = Blather::Stanza::Iq.new(:set, Connfu.context.values.first.from)
@@ -19,15 +17,12 @@ class Connfu::Handler
     end
   end
 
-  def say_iq(text)
+  def say_iq(saying)
+    # p Connfu.context.values
     iq = Blather::Stanza::Iq.new(:set, Connfu.context.values.first.from.to_s)
     Nokogiri::XML::Builder.with(iq) do |xml|
       xml.say_("xmlns" => "urn:xmpp:ozone:say:1") {
-        unless text.match(/^http:\/\/.*(.mp3|.wav)$/).nil?
-          xml.audio('src' => text)
-        else
-          xml.text text
-        end
+        xml.text saying
       }
     end
 
@@ -35,25 +30,44 @@ class Connfu::Handler
   end
 
   def answer
-    write answer_iq
+    write answer_iq 
   end
 
-  def say(text)
-    write say_iq(text)
+  def say(saying)
+    write say_iq(saying)
+    wait
+  end
+  
+  def continue
+    if c = continuations.pop
+      c.call
+    end
   end
 
   private
 
+  def continuations
+    @continuations ||= []
+  end
+
+  def wait
+    callcc do |cc|
+      continuations << cc
+      throw :finished
+    end
+  end
+
   def write(iq)
-    p iq
-    Connfu.connection.write say_iq(iq)
+    p :sending, iq
+    Connfu.connection.write iq
   end
 end
 
 class AnswerExample < Connfu::Handler
   def on_offer
     answer
-    say "Hello Tom"
+    say "Turn the volume up a little bit now"
+    puts "Finished"
   end
 end
 

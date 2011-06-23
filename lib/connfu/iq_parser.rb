@@ -1,16 +1,17 @@
 module Connfu
   module IqParser
     def self.parse(node)
-      p node
       xml_iq = node.to_xml
       
       if xml_iq.match(/.*<offer.*/)
         Connfu::Offer.import(node)
-        @handler = AnswerExample.new.on_offer
+        @handler = AnswerExample.new
+        @handler.on_offer
       
       #         result_node = Connfu::Offer.import(node)
-      #       elsif !node.xpath('//x:success', 'x' => 'urn:xmpp:ozone:say:complete:1').empty?
-      #         result_node = Connfu::Event::SayComplete.import(node)
+      elsif !node.xpath('//x:success', 'x' => 'urn:xmpp:ozone:say:complete:1').empty?
+        @handler.continue
+        #result_node = Connfu::Event::SayComplete.import(node)
       #       elsif !node.xpath('//x:success', 'x' => 'urn:xmpp:ozone:ask:complete:1').empty?
       #         result_node = Connfu::Event::AskComplete.import(node)
       #         result_node.react
