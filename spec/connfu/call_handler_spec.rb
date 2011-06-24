@@ -1,55 +1,40 @@
 require 'spec_helper'
-
-class Connfu::CallHandler
-  def answer
-    wait
-  end
-
-  def say(text)
-  end
-
-  def handle(event)
-    continue
-  end
-
-  def continue
-    @continuation.call
-  end
-
-  private
-
-  def wait
-    callcc do |cc|
-      @continuation = cc
-      throw :waiting
-    end
-  end
-end
-
-class SimpleCallHandler < Connfu::CallHandler
-  def start
-    answer
-    say "hello"
-  end
-end
-
 describe Connfu::CallHandler do
   describe "A simple call handler" do
-    subject do
-      SimpleCallHandler.new
+
+    module TrivialDSL
+      def method_which_waits
+        wait
+      end
+
+      def next_method
+      end
     end
 
-    it "should not call say without acknowledge to answer" do
-      subject.expects(:say).never
+    class MyTrivialDSLExample
+      include Connfu::CallHandler
+      include TrivialDSL
+      def start
+        method_which_waits
+        next_method
+      end
+    end
+
+    subject do
+      MyTrivialDSLExample.new
+    end
+
+    it "should not call next method without acknowledge to previous synchronous method" do
+      subject.should_not_receive(:next_method)
       handling_messages do
         subject.start
       end
     end
 
-    it "should call say once acknowledgement to answer is handled" do
-      subject.expects(:say).with("hello")
+    it "should call next method once acknowledgement to synchronous method is handled" do
+      subject.should_receive(:next_method)
 
-      handling_messages :answer_acknowledge do
+      handling_messages :acknowledgement do
         subject.start
       end
     end
@@ -64,36 +49,3 @@ describe Connfu::CallHandler do
     end
   end
 end
-
-# class CallHandler
-#   def start
-#     answer
-#     say "hello"
-#     hangup
-#   end
-# end
-#
-# handler = CallHandler.new
-# handler.start
-#
-# handler should call "answer"
-# handler should not call "say"
-#
-#
-#
-# handler.handle(answer_acknowledge)
-# handler should perform "say"
-# handler should not perform "hangup"
-#
-#
-#
-# handler.handle(answer_acknowledge)
-# handler.handle(say_acknowledge)
-# handler should not perform "hangup"
-#
-#
-#
-# handler.handle(answer_acknowledge)
-# handler.handle(say_acknowledge)
-# handler.handle(say_complete)
-# handler should perform "hangup"

@@ -1,25 +1,15 @@
 module Connfu
   module Component
-    def say_iq(text)
-      iq = Blather::Stanza::Iq.new(:set, Connfu.context.values.first.from.to_s)
-      Nokogiri::XML::Builder.with(iq) do |xml|
-        xml.say_("xmlns" => "urn:xmpp:ozone:say:1") {
-          unless text.match(/^http:\/\/.*(.mp3|.wav)$/).nil?
-            xml.audio('src' => text)
-          else
-            xml.text text
-          end
-        }
-      end
-
-      iq
-    end
-
     def say(text)
       l.debug 'sending say iq'
-      l.debug say_iq(text)
-      Connfu.connection.write say_iq(text)
+      Connfu.adaptor.send_command Connfu::Commands::Say.new(:text => text, :to => server_address)
+      wait
     end
+  end
+end
+
+
+__END__
 
     def ask_iq(prompt)
       offer = Connfu.context.values.first

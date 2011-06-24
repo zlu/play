@@ -6,7 +6,7 @@ require 'connfu'
 Connfu.setup "usera@127.0.0.1", "1"
 
 class AnswerExample
-  include Connfu
+  include Connfu::Dsl
 
   on :offer do
     answer
@@ -15,4 +15,4 @@ class AnswerExample
   end
 end
 
-Connfu.start
+Connfu.start AnswerExample

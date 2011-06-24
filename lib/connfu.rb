@@ -8,21 +8,23 @@
 
   connfu/logger
   connfu/call_context
+  connfu/call_handler
+  connfu/ozone
   connfu/component
+  connfu/commands
   connfu/call_commands
   connfu/outbound_call
   connfu/iq_parser
-  connfu/dsl_processor
   connfu/event
   connfu/offer
   connfu/utils
   connfu/dsl
   connfu/call
+  connfu/connection_adaptor
 ].each { |file| require file }
 
 module Connfu
   @@base = nil
-  @@dsl_processor = Connfu::DslProcessor.new
 
   def self.base
     @@base
@@ -52,14 +54,6 @@ module Connfu
     @outbound_calls
   end
 
-  def self.connection=(connection)
-    @connection = connection
-  end
-
-  def self.connection
-    @connection
-  end
-
   def self.conference_handlers=(ch)
     @conference_handlers = ch
   end
@@ -68,26 +62,10 @@ module Connfu
     @conference_handlers
   end
 
-  def self.dsl_processor
-    @@dsl_processor
-  end
-
-  def self.dsl_processor=(dp)
-    @@dsl_processor = dp
-  end
-
-  def self.included(base)
-    @@base = base
-    base.extend Connfu::Dsl
-    base.extend Connfu::Component
-    base.extend Connfu::CallCommands
-    base.extend Connfu::OutboundCall
-
-    begin
-      str = File.open(File.expand_path("../../examples/#{Connfu::Utils.underscore(base.to_s)}.rb", __FILE__)).readlines.join
-      @@dsl_processor.process(ParseTree.new.process(str))
-    rescue
-    end
+  class << self
+    attr_accessor :handler_class
+    attr_accessor :connection
+    attr_accessor :adaptor
   end
 
   def self.setup(host, password)
@@ -96,20 +74,21 @@ module Connfu
     @conference_handlers ||= []
     @outbound_calls ||= {}
     @connection = Blather::Client.new.setup(host, password)
+    @adaptor = Connfu::ConnectionAdaptor.new(@connection)
     @connection.register_handler(:ready, lambda { p 'Established @connection to Connfu Server' })
     [:iq, :presence].each do |stanza|
       @connection.register_handler(stanza) do |msg|
         l.debug "Receiving #{stanza} from server"
         l.debug msg
-        catch :finished do
+        catch :waiting do
           Connfu::IqParser.parse msg
         end
-        
       end
     end
   end
 
-  def self.start
+  def self.start(handler_class)
+    @handler_class = handler_class
     EM.run { @connection.run }
   end
 end

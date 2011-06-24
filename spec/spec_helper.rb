@@ -21,12 +21,18 @@ def create_stanza(presence_xml)
   Blather::Stanza::Presence.import(doc.root)
 end
 
+RSpec::Matchers.define :be_stanzas do |expected_stanzas|
+  match do |actual|
+    actual.map { |x| x.to_s.gsub(/\n\s*/, "\n") } == expected_stanzas.map { |x| x.to_s.gsub(/\n\s*/, "\n") }
+  end
+end
+
 def result_iq
   "<iq type='result' id='blather000b' from='localhost' to='usera@localhost/voxeo'/>"
 end
 
-def offer_presence
-  "<presence from='4a3fe31a-0c2a-4a9a-ae98-f5b8afb55708@127.0.0.1' to='usera@127.0.0.1/voxeo'>
+def offer_presence(from='4a3fe31a-0c2a-4a9a-ae98-f5b8afb55708@127.0.0.1', to='usera@127.0.0.1/voxeo')
+  "<presence from='#{from}' to='#{to}'>
     <offer xmlns='urn:xmpp:ozone:1' to='sip:usera@127.0.0.1:5060' from='sip:16508983130@127.0.0.1'>
       <header name='Max-Forwards' value='70'/>
       <header name='Content-Length' value='422'/>
@@ -42,6 +48,12 @@ def offer_presence
       <header name='From' value='&lt;sip:16508983130@127.0.0.1&gt;;tag=34ccaa4d'/>
     </offer>
   </presence>"
+end
+
+def answer_iq
+  %{<iq type="set" to="9c011b43-b9be-4322-9adf-3d18e3af2f1b@127.0.0.1" id="blather000a" from="usera@127.0.0.1/voxeo">
+    <answer xmlns="urn:xmpp:ozone:1"/>
+  </iq>}
 end
 
 def error_iq_for_answer
