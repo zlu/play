@@ -80,9 +80,7 @@ module Connfu
       @connection.register_handler(stanza) do |msg|
         l.debug "Receiving #{stanza} from server"
         l.debug msg
-        catch :waiting do
-          Connfu::IqParser.parse msg
-        end
+        Connfu::IqParser.parse msg
       end
     end
   end

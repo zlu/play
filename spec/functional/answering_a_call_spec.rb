@@ -65,9 +65,7 @@ describe "answering a call" do
 
   def run_fake_event_loop(*events, &block)
     while event = events.shift do
-      catch :waiting do
-        Connfu::IqParser.handle_event event
-      end
+      Connfu::IqParser.handle_event_catching_waiting(event)
     end
   end
 

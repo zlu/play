@@ -26,7 +26,7 @@ module Connfu
     # end
 
     def self.parse(node)
-      handle_event(parse_event_from(node))
+      handle_event_catching_waiting(parse_event_from(node))
     end
 
     def self.parse_event_from(node)
@@ -37,6 +37,12 @@ module Connfu
         Connfu::Event::SayComplete.new
       elsif node.type == :result
         Connfu::Event::Result.new
+      end
+    end
+
+    def self.handle_event_catching_waiting(event)
+      catch :waiting do
+        handle_event(event)
       end
     end
 
