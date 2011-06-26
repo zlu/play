@@ -30,42 +30,14 @@ module Connfu
     @@base
   end
 
-  def self.context=(context)
-    @context = context
-  end
-
-  def self.context
-    @context
-  end
-
-  def self.outbound_context=(context)
-    @outbound_context = context
-  end
-
-  def self.outbound_context
-    @outbound_context
-  end
-
-  def self.outbound_calls=(calls)
-    @outbound_calls = calls
-  end
-
-  def self.outbound_calls
-    @outbound_calls
-  end
-
-  def self.conference_handlers=(ch)
-    @conference_handlers = ch
-  end
-  
-  def self.conference_handlers
-    @conference_handlers
-  end
-
   class << self
     attr_accessor :handler_class
     attr_accessor :connection
+    attr_accessor :context
     attr_accessor :adaptor
+    attr_accessor :conference_handlers
+    attr_accessor :outbound_calls
+    attr_accessor :outbound_context
   end
 
   def self.setup(host, password)
