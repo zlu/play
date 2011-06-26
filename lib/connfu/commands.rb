@@ -33,5 +33,8 @@ module Connfu
 
     class Answer < Base
     end
+
+    class Hangup < Base
+    end
   end
 end

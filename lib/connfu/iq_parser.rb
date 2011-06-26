@@ -50,14 +50,11 @@ module Connfu
     def self.handle_event(event)
       case event
       when Connfu::Event::Offer
-        l.debug '+++++++++++in handle offer'
         @handler = Connfu.handler_class.new(:from => event.presence_from, :to => event.presence_to)
-        l.debug @handler
         @handler.run
-        when Connfu::Event::Result
-          l.debug '+++++++++++in handle result'
-          l.debug @handler
-        @handler.handle(event)
+      when Connfu::Event::Result
+        l.debug '+++++++++++++++handle'
+        @handler.handle
       end
     end
   end

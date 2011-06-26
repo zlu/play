@@ -1,6 +1,6 @@
 module Connfu
   module CallHandler
-    def handle(event)
+    def handle
       continue
     end
 
