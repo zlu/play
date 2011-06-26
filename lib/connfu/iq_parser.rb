@@ -53,7 +53,6 @@ module Connfu
         @handler = Connfu.handler_class.new(:from => event.presence_from, :to => event.presence_to)
         @handler.run
       when Connfu::Event::Result
-        l.debug '+++++++++++++++handle'
         @handler.handle
       end
     end

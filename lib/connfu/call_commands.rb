@@ -1,6 +1,5 @@
 module Connfu
   module CallCommands
-
     def redirect_iq(to)
       iq = Blather::Stanza::Iq.new(:set, Connfu.context.values.first.from)
       iq['from'] = Connfu.context.values.first.to
@@ -17,11 +16,9 @@ module Connfu
 
     def answer
       Connfu.adaptor.send_command Connfu::Commands::Answer.new(:to => server_address, :from => client_address)
-      wait
     end
 
     def hangup
-      l.debug '+++++++++++++++++++hangup'
       Connfu.adaptor.send_command Connfu::Commands::Hangup.new(:to => server_address, :from => client_address)
       wait
     end
