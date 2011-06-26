@@ -1,7 +1,8 @@
 module Connfu
   module Ozone
-    def say_iq(text, to)
-      iq = Blather::Stanza::Iq.new(:set, to)
+    def say_iq(text, to, from)
+      iq = Blather::Stanza::Iq.new(:set, to, from)
+      iq['from'] = from
       Nokogiri::XML::Builder.with(iq) do |xml|
         xml.say_("xmlns" => "urn:xmpp:ozone:say:1") {
           unless text.match(/^http:\/\/.*(.mp3|.wav)$/).nil?
@@ -11,7 +12,7 @@ module Connfu
           end
         }
       end
-
+      l.debug iq
       iq
     end
 
@@ -19,8 +20,9 @@ module Connfu
       case command
       when Connfu::Commands::Answer
         answer_iq(command.to, command.from)
-      when Connfu::Commands::Say
-        say_iq(command.text, command.to)
+        when Connfu::Commands::Say
+          l.debug command
+        say_iq(command.text, command.to, command.from)
       end
     end
 

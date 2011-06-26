@@ -32,7 +32,8 @@ module Connfu
     def self.parse_event_from(node)
       if !node.xpath('//x:offer', 'x' => 'urn:xmpp:ozone:1').empty?
         presence_node = node.xpath('/presence').first
-        Connfu::Event::Offer.new(:from => presence_node.attributes['from'].value, :to => presence_node.attributes['to'].value)
+        p_attrs = presence_node.attributes
+        Connfu::Event::Offer.new(:from => p_attrs['from'].value, :to => p_attrs['to'].value)
       elsif !node.xpath('//x:success', 'x' => 'urn:xmpp:ozone:say:complete:1').empty?
         Connfu::Event::SayComplete.new
       elsif node.type == :result
@@ -49,9 +50,13 @@ module Connfu
     def self.handle_event(event)
       case event
       when Connfu::Event::Offer
+        l.debug '+++++++++++in handle offer'
         @handler = Connfu.handler_class.new(:from => event.presence_from, :to => event.presence_to)
+        l.debug @handler
         @handler.run
-      when Connfu::Event::Result
+        when Connfu::Event::Result
+          l.debug '+++++++++++in handle result'
+          l.debug @handler
         @handler.handle(event)
       end
     end

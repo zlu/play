@@ -6,8 +6,7 @@ module Connfu
       end
 
       def ==(other)
-        other.kind_of?(self.class) &&
-          other.params == @params
+        other.kind_of?(self.class) && other.params == @params
       end
 
       def to
@@ -26,6 +25,7 @@ module Connfu
     end
 
     class Say < Base
+      l.debug @params
       def text
         @params[:text]
       end
