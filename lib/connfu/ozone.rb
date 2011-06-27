@@ -29,7 +29,6 @@ module Connfu
         when Connfu::Commands::Say
           say_iq(command.text, command.to, command.from)
         when Connfu::Commands::Transfer
-          l.debug 'transfer here +++++++++++++++++++++++++++++++'
           transfer_iq(command.transfer_to, command.to, command.from)
       end
     end
@@ -60,8 +59,7 @@ module Connfu
           xml.to transfer_to
         }
       end
-      l.debug 'sending transfer iq'
-      l.debug iq
+
       iq
     end
 
