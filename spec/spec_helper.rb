@@ -7,6 +7,8 @@ RSpec.configure do |config|
   config.mock_with :mocha
 end
 
+l.level = Logger::WARN
+
 class MyTestClass
   include Connfu
 end

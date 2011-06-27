@@ -25,7 +25,6 @@ module Connfu
     end
 
     class Say < Base
-      l.debug @params
       def text
         @params[:text]
       end
