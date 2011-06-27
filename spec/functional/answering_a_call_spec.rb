@@ -46,7 +46,7 @@ describe "answering a call" do
 
     Connfu.adaptor.commands.should == [
       Connfu::Commands::Answer.new(:to => @server_address, :from => @client_address),
-      Connfu::Commands::Say.new(:text => 'hello, this is connfu', :to => @server_address)
+      Connfu::Commands::Say.new(:text => 'hello, this is connfu', :to => @server_address, :from => @client_address)
     ]
   end
 
@@ -58,8 +58,8 @@ describe "answering a call" do
 
     Connfu.adaptor.commands.should == [
       Connfu::Commands::Answer.new(:to => @server_address, :from => @client_address),
-      Connfu::Commands::Say.new(:text => 'hello, this is connfu', :to => @server_address),
-      Connfu::Commands::Say.new(:text => 'http://www.phono.com/audio/troporocks.mp3', :to => @server_address)
+      Connfu::Commands::Say.new(:text => 'hello, this is connfu', :to => @server_address, :from => @client_address),
+      Connfu::Commands::Say.new(:text => 'http://www.phono.com/audio/troporocks.mp3', :to => @server_address, :from => @client_address)
     ]
   end
 
