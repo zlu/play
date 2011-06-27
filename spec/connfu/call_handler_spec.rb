@@ -44,7 +44,7 @@ describe Connfu::CallHandler do
         yield
       end
       if m = messages.shift
-        subject.handle m
+        subject.handle
       end
     end
   end
