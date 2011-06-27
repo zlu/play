@@ -17,7 +17,6 @@ module Connfu
 
     module InstanceMethods
       def say(text)
-        l.debug 'sending say iq'
         Connfu.adaptor.send_command Connfu::Commands::Say.new(:text => text, :to => server_address, :from => client_address)
         wait
       end
@@ -28,7 +27,10 @@ module Connfu
 
       def hangup
         Connfu.adaptor.send_command Connfu::Commands::Hangup.new(:to => server_address, :from => client_address)
-        wait
+      end
+
+      def transfer(transfer_to)
+        Connfu.adaptor.send_command Connfu::Commands::Transfer.new(:to => server_address, :from => client_address, :transfer_to => transfer_to)
       end
     end
 

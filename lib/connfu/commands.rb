@@ -41,5 +41,11 @@ module Connfu
 
     class Hangup < Base
     end
+
+    class Transfer < Base
+      def transfer_to
+        @params[:transfer_to]
+      end
+    end
   end
 end

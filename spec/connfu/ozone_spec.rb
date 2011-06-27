@@ -135,6 +135,37 @@ describe Connfu::Ozone do
         subject.xpath("/iq").first.attributes["from"].value.should eq "client-address"
       end
     end
+
+    describe 'for the Transfer command' do
+      subject do
+        @transfer_to = 'sip:1324@connfu.com'
+        Connfu::Ozone.iq_from_command(Connfu::Commands::Transfer.new(:to => 'server-address', :from => 'client-address', :transfer_to => @transfer_to))
+      end
+
+      it "should generate hangup iq" do
+        subject.xpath("//x:transfer", "x" => "urn:xmpp:ozone:transfer:1").should_not be_empty
+      end
+
+      it "should be an iq of type 'set'" do
+        subject.type.should eq :set
+      end
+
+      it "should contain the 'to' address in the iq" do
+        subject.xpath("/iq").first.attributes["to"].value.should eq "server-address"
+      end
+
+      it "should contain the 'from' address in the iq" do
+        subject.xpath("/iq").first.attributes["from"].value.should eq "client-address"
+      end
+
+      it "should contain a 'transfer_to' node" do
+        transfer_to_node = subject.xpath("//x:to", "x" => "urn:xmpp:ozone:transfer:1").first
+        transfer_to_node.name.should eq 'to'
+        transfer_to_node.text.should eq @transfer_to
+      end
+
+    end
+
   end
 
 end

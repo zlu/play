@@ -8,11 +8,11 @@ require File.join(File.expand_path('../../lib', __FILE__), 'connfu')
 Connfu.setup "userb@127.0.0.1", "1"
 
 class DialExampleHelper
-  include Connfu
+  include Connfu::Dsl
 
   on :offer do
     answer
   end
 end
 
-Connfu.start
+Connfu.start DialExampleHelper
