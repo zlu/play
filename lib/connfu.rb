@@ -8,8 +8,9 @@
   connfu/ozone
   connfu/commands
   connfu/event
+  connfu/event_processor
   connfu/dsl
-  connfu/iq_parser
+  connfu/ozone/parser
   connfu/connection_adaptor
 ].each { |file| require file }
 
@@ -26,10 +27,11 @@ module Connfu
     @adaptor = Connfu::ConnectionAdaptor.new(@connection)
     @connection.register_handler(:ready, lambda { p 'Established @connection to Connfu Server' })
     [:iq, :presence].each do |stanza|
-      @connection.register_handler(stanza) do |msg|
+      @connection.register_handler(stanza) do |message|
         l.debug "Receiving #{stanza} from server"
-        l.debug msg
-        Connfu::IqParser.parse msg
+        l.debug message
+        event = Connfu::Ozone::Parser.parse_event_from(message)
+        Connfu::EventProcessor.handle_event_catching_waiting(event)
       end
     end
   end

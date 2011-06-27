@@ -20,7 +20,7 @@ end
 
 def run_fake_event_loop(*events, &block)
   while event = events.shift do
-    Connfu::IqParser.handle_event_catching_waiting(event)
+    Connfu::EventProcessor.handle_event_catching_waiting(event)
   end
 end
 
