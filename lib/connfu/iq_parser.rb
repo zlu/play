@@ -37,7 +37,14 @@ module Connfu
       elsif !node.xpath('//x:success', 'x' => 'urn:xmpp:ozone:say:complete:1').empty?
         Connfu::Event::SayComplete.new
       elsif node.type == :result
-        Connfu::Event::Result.new
+        if !node.xpath('//x:ref', 'x' => 'urn:xmpp:ozone:1').empty?
+          l.debug 'result with ref id, why why why'
+          l.debug node
+        else
+          l.debug 'result without ref'
+          l.debug node
+          Connfu::Event::Result.new
+        end
       end
     end
 

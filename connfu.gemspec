@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = %w{--charset=UTF-8}
   s.extra_rdoc_files = %w{README.md}
 
-  s.add_dependency("blather", ["0.5.0"])
+  s.add_dependency("blather", ["0.5.3"])
   s.add_dependency("extensions", ["0.6.0"])
   s.add_dependency("ParseTree", ["3.0.7"])
   s.add_dependency("sexp_processor", ["3.0.5"])

@@ -16,6 +16,7 @@ module Connfu
 
     def answer
       Connfu.adaptor.send_command Connfu::Commands::Answer.new(:to => server_address, :from => client_address)
+      wait
     end
 
     def hangup

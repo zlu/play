@@ -10,8 +10,9 @@ class AnswerExample
 
   on :offer do
     answer
-    say('hello, this is a much longer line of text that I hope will some a short while to read')
-    say('http://www.phono.com/audio/troporocks.mp3')
+    say('hello, this is connfu')
+#    say('http://www.phono.com/audio/troporocks.mp3')
+    hangup
   end
 end
 
