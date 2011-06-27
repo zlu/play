@@ -4,7 +4,7 @@
   blather/client/client
 
   connfu/logger
-  connfu/call_handler
+  connfu/continuation
   connfu/ozone
   connfu/component
   connfu/commands

@@ -1,19 +1,16 @@
 require 'spec_helper'
-describe Connfu::CallHandler do
-  describe "A simple call handler" do
+describe Connfu::Continuation do
+  describe "A dsl using continuation" do
+    class MyTrivialDSLExample
+      include Connfu::Continuation
 
-    module TrivialDSL
       def method_which_waits
         wait
       end
 
       def next_method
       end
-    end
 
-    class MyTrivialDSLExample
-      include Connfu::CallHandler
-      include TrivialDSL
       def start
         method_which_waits
         next_method
@@ -43,7 +40,7 @@ describe Connfu::CallHandler do
       catch :waiting do
         yield
       end
-      if m = messages.shift
+      if messages.shift == :acknowledgement
         subject.continue
       end
     end

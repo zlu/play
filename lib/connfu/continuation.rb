@@ -1,5 +1,5 @@
 module Connfu
-  module CallHandler
+  module Continuation
 
     def continue
       @continuation.call

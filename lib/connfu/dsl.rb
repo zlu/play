@@ -3,7 +3,7 @@ module Connfu
     def self.included(base)
       base.send(:include, Connfu::CallCommands)
       base.send(:include, Connfu::Component)
-      base.send(:include, Connfu::CallHandler)
+      base.send(:include, Connfu::Continuation)
       base.extend Connfu::Dsl::ClassMethods
       base.class_eval do
         attr_reader :server_address, :client_address
