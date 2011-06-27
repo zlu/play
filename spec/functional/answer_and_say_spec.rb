@@ -1,16 +1,5 @@
 require "spec_helper"
 
-class TestConnection
-  attr_reader :commands
-
-  def initialize
-    @commands = []
-  end
-  def send_command(command)
-    @commands << command
-  end
-end
-
 describe "answer and say something on a call" do
   class AnswerAndSayExample
     include Connfu::Dsl
@@ -51,11 +40,4 @@ describe "answer and say something on a call" do
       Connfu::Commands::Say.new(:text => 'http://www.phono.com/audio/troporocks.mp3', :to => @server_address, :from => @client_address)
     ]
   end
-
-  def run_fake_event_loop(*events, &block)
-    while event = events.shift do
-      Connfu::IqParser.handle_event_catching_waiting(event)
-    end
-  end
-
 end
