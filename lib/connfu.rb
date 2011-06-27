@@ -6,9 +6,7 @@
   connfu/logger
   connfu/continuation
   connfu/ozone
-  connfu/component
   connfu/commands
-  connfu/call_commands
   connfu/event
   connfu/dsl
   connfu/iq_parser
