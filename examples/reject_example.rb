@@ -15,4 +15,4 @@ class RejectExample
   end
 end
 
-Connfu.start
+Connfu.start RejectExample

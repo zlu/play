@@ -17,5 +17,4 @@ class AskExample
   end
 end
 
-AskExample.new
-Connfu.start
+Connfu.start AskExample

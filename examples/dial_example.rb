@@ -18,5 +18,4 @@ class DialExample
 #  end
 end
 
-DialExample.new
-Connfu.start
+Connfu.start DialExample
