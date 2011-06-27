@@ -31,7 +31,7 @@ module Connfu
         l.debug "Receiving #{stanza} from server"
         l.debug message
         event = Connfu::Ozone::Parser.parse_event_from(message)
-        Connfu::EventProcessor.handle_event_catching_waiting(event)
+        Connfu::EventProcessor.handle_event(event)
       end
     end
   end
