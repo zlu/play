@@ -12,8 +12,7 @@ module Connfu
           end
         }
       end
-      l.debug iq
-      l.debug iq.class
+
       iq
     end
 
