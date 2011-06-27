@@ -1,30 +1,5 @@
 module Connfu
   module IqParser
-    # def self.parse(node)
-    #   xml_iq = node.to_xml
-    #   result_node = nil
-    #   if xml_iq.match(/.*<offer.*/)
-    #   elsif !node.xpath('//x:success', 'x' => 'urn:xmpp:ozone:say:complete:1').empty?
-    #     result_node = Connfu::Event::SayComplete.import(node)
-    #   elsif !node.xpath('//x:success', 'x' => 'urn:xmpp:ozone:ask:complete:1').empty?
-    #     result_node = Connfu::Event::AskComplete.import(node)
-    #     result_node.react
-    #   elsif node.type == :result
-    #     result_node = node.xpath('//oc:ref', 'oc' => 'urn:xmpp:ozone:1').empty? ? \
-    #                   # Connfu::Event::Result.import(node) : \
-    #                   @handler.handle(:something) : \
-    #                   Connfu::Event::OutboundResult.import(node)
-    #   elsif !node.xpath('//x:answered', 'x' => 'urn:xmpp:ozone:1').empty?
-    #     result_node = Connfu::Event::Answered.import(node)
-    #   elsif !node.xpath('//x:end', 'x' => 'urn:xmpp:ozone:1').empty?
-    #     result_node = Connfu::Event::End.import(node)
-    #   else
-    #
-    #   end
-    #
-    #   result_node
-    # end
-
     def self.parse(node)
       handle_event_catching_waiting(parse_event_from(node))
     end
@@ -37,14 +12,7 @@ module Connfu
       elsif !node.xpath('//x:success', 'x' => 'urn:xmpp:ozone:say:complete:1').empty?
         Connfu::Event::SayComplete.new
       elsif node.type == :result
-        if !node.xpath('//x:ref', 'x' => 'urn:xmpp:ozone:1').empty?
-          l.debug 'result with ref id, why why why'
-          l.debug node
-        else
-          l.debug 'result without ref'
-          l.debug node
-          Connfu::Event::Result.new
-        end
+        Connfu::Event::Result.new
       end
     end
 

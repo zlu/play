@@ -6,14 +6,6 @@ describe Connfu do
       @host = 'foo@bar.com'
       @password = 'password'
       Connfu::IqParser.stub(:parse)
-      Connfu::IqParser.stub(:fire_event)
-    end
-
-    after do
-      Connfu.context = nil  
-      Connfu.outbound_context = nil
-      Connfu.conference_handlers = nil
-      Connfu.outbound_calls = nil
     end
 
     it "should create a connection to server" do
@@ -21,30 +13,6 @@ describe Connfu do
       @connection = Connfu.connection
       @connection.should be_instance_of(Blather::Client)
       @connection.should be_setup
-    end
-
-    it 'should initialize call context' do
-      lambda {
-        Connfu.setup(@host, @password)
-      }.should change(Connfu, :context).from(nil).to({})
-    end
-
-    it 'should initialize outbound call context' do
-      lambda {
-        Connfu.setup(@host, @password)
-      }.should change(Connfu, :outbound_context).from(nil).to({})
-    end
-
-    it 'should initialize conference handler' do
-      lambda {
-        Connfu.setup(@host, @password)
-      }.should change(Connfu, :conference_handlers).from(nil).to([])
-    end
-
-    it 'should initialize outbound_calls' do
-      lambda {
-        Connfu.setup(@host, @password)
-      }.should change(Connfu, :outbound_calls).from(nil).to({})
     end
 
     it "should register ready handler that prints out connection message" do
@@ -71,7 +39,7 @@ describe Connfu do
   describe "#start" do
     it "should start the EventMachine" do
       EM.should_receive(:run)
-      Connfu.start
+      Connfu.start(MyTestClass)
     end
   end
 end

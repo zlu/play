@@ -21,6 +21,10 @@ module Connfu
       case command
       when Connfu::Commands::Answer
         answer_iq(command.to, command.from)
+      when Connfu::Commands::Accept
+        accept_iq(command.to, command.from)
+      when Connfu::Commands::Reject
+        reject_iq(command.to, command.from)
       when Connfu::Commands::Hangup
         hangup_iq(command.to, command.from)
       when Connfu::Commands::Say

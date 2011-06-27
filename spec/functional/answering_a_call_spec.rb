@@ -17,8 +17,6 @@ describe "answering a call" do
 
     on :offer do
       answer
-      say('hello, this is connfu')
-      say('http://www.phono.com/audio/troporocks.mp3')
     end
   end
 
@@ -37,29 +35,6 @@ describe "answering a call" do
 
     Connfu.adaptor.commands.should == [
       Connfu::Commands::Answer.new(:to => @server_address, :from => @client_address),
-    ]
-  end
-
-  it "should send the first say command once the answer has been acknowledged" do
-    run_fake_event_loop Connfu::Event::Offer.new(:from => @server_address, :to => @client_address),
-                        Connfu::Event::Result.new
-
-    Connfu.adaptor.commands.should == [
-      Connfu::Commands::Answer.new(:to => @server_address, :from => @client_address),
-      Connfu::Commands::Say.new(:text => 'hello, this is connfu', :to => @server_address, :from => @client_address)
-    ]
-  end
-
-  it "should send the second say command once the first say command has completed" do
-    run_fake_event_loop Connfu::Event::Offer.new(:from => @server_address, :to => @client_address),
-                        Connfu::Event::Result.new,
-                        Connfu::Event::Result.new,
-                        Connfu::Event::SayComplete.new
-
-    Connfu.adaptor.commands.should == [
-      Connfu::Commands::Answer.new(:to => @server_address, :from => @client_address),
-      Connfu::Commands::Say.new(:text => 'hello, this is connfu', :to => @server_address, :from => @client_address),
-      Connfu::Commands::Say.new(:text => 'http://www.phono.com/audio/troporocks.mp3', :to => @server_address, :from => @client_address)
     ]
   end
 

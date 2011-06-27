@@ -34,6 +34,12 @@ module Connfu
     class Answer < Base
     end
 
+    class Accept < Base
+    end
+
+    class Reject < Base
+    end
+
     class Hangup < Base
     end
   end

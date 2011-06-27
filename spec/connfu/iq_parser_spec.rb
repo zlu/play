@@ -1,15 +1,7 @@
 require 'spec_helper'
 
 describe Connfu::IqParser do
-  # before do
-  #   Connfu.setup('host', 'password')
-  # end
-
   describe "#parse_event_from" do
-    # before do
-    #   Connfu.connection.stub(:write)
-    # end
-
     context 'an offer iq' do
       before do
         @node = create_stanza(offer_presence)
@@ -21,11 +13,11 @@ describe Connfu::IqParser do
       end
 
       it "should determine the from value of the offer" do
-        @event.from.should eq @node.attributes['from'].value
+        @event.presence_from.should eq @node.attributes['from'].value
       end
 
       it "should determine the to value of the offer" do
-        @event.to.should eq @node.attributes['to'].value
+        @event.presence_to.should eq @node.attributes['to'].value
       end
     end
 

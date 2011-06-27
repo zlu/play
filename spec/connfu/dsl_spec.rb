@@ -20,5 +20,4 @@ describe Connfu::Dsl do
       subject.answer
     end
   end
-
 end
