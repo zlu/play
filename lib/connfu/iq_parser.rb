@@ -57,10 +57,10 @@ module Connfu
     def self.handle_event(event)
       case event
       when Connfu::Event::Offer
-        @handler = Connfu.handler_class.new(:from => event.presence_from, :to => event.presence_to)
-        @handler.run
-      when Connfu::Event::Result
-        @handler.handle
+        Connfu.handler = Connfu.handler_class.new(:from => event.presence_from, :to => event.presence_to)
+        Connfu.handler.run
+      when Connfu::Event::SayComplete
+        Connfu.handler.handle
       end
     end
   end

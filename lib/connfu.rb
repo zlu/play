@@ -32,6 +32,7 @@ module Connfu
 
   class << self
     attr_accessor :handler_class
+    attr_accessor :handler
     attr_accessor :connection
     attr_accessor :context
     attr_accessor :adaptor
