@@ -56,7 +56,13 @@ module Connfu
       iq['from'] = from
       Nokogiri::XML::Builder.with(iq) do |xml|
         xml.transfer("xmlns" => "urn:xmpp:ozone:transfer:1") {
-          xml.to transfer_to
+          if transfer_to.instance_of? Array
+            transfer_to.each do |t|
+              xml.to t
+            end
+          else
+            xml.to transfer_to
+          end
         }
       end
 

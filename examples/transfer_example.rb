@@ -13,7 +13,7 @@ class TransferExample
   on :offer do
     answer
     say 'please wait while we transfer your call'
-    transfer('sip:16508983130@127.0.0.1')
+    transfer(['sip:usera@127.0.0.1', 'sip:userb@127.0.0.1'])
   end
 end
 

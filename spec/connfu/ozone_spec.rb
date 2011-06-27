@@ -100,9 +100,9 @@ describe Connfu::Ozone do
       subject do
         @url = "http://www.phono.com/audio/troporocks.mp3"
         command = Connfu::Commands::Say.new(
-          :to => 'server-address',
-          :from => 'client-address',
-          :text => @url)
+            :to => 'server-address',
+            :from => 'client-address',
+            :text => @url)
         Connfu::Ozone.iq_from_command(command)
       end
 
@@ -142,7 +142,7 @@ describe Connfu::Ozone do
         Connfu::Ozone.iq_from_command(Connfu::Commands::Transfer.new(:to => 'server-address', :from => 'client-address', :transfer_to => @transfer_to))
       end
 
-      it "should generate hangup iq" do
+      it "should generate transfer iq" do
         subject.xpath("//x:transfer", "x" => "urn:xmpp:ozone:transfer:1").should_not be_empty
       end
 
@@ -158,12 +158,29 @@ describe Connfu::Ozone do
         subject.xpath("/iq").first.attributes["from"].value.should eq "client-address"
       end
 
-      it "should contain a 'transfer_to' node" do
-        transfer_to_node = subject.xpath("//x:to", "x" => "urn:xmpp:ozone:transfer:1").first
-        transfer_to_node.name.should eq 'to'
-        transfer_to_node.text.should eq @transfer_to
+      context 'when transfer to a single end-point' do
+        it "should contain a 'transfer_to' node" do
+          transfer_to_node = subject.xpath("//x:to", "x" => "urn:xmpp:ozone:transfer:1").first
+          transfer_to_node.name.should eq 'to'
+          transfer_to_node.text.should eq @transfer_to
+        end
       end
 
+      context 'when transfer to multiple end-points' do
+        subject do
+          @transfer_to = ['sip:1324@connfu.com', 'sip:3432@connfu.com']
+          Connfu::Ozone.iq_from_command(Connfu::Commands::Transfer.new(:to => 'server-address', :from => 'client-address', :transfer_to => @transfer_to))
+        end
+
+        it "should contain correct number of 'transfer_to' nodes" do
+          transfer_to_nodes = subject.xpath("//x:to", "x" => "urn:xmpp:ozone:transfer:1")
+          transfer_to_nodes.size.should eq @transfer_to.length
+          transfer_to_nodes.each_with_index do |n, i|
+            n.name.should eq 'to'
+            n.text.should eq @transfer_to[i]
+          end
+        end
+      end
     end
 
   end
