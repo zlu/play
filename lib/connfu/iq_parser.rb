@@ -28,7 +28,7 @@ module Connfu
         Connfu.handler = Connfu.handler_class.new(:from => event.presence_from, :to => event.presence_to)
         Connfu.handler.run
       when Connfu::Event::SayComplete
-        Connfu.handler.handle
+        Connfu.handler.continue
       end
     end
   end

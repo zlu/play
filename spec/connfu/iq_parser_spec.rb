@@ -46,16 +46,16 @@ describe Connfu::IqParser do
 
   describe "#handle_event" do
     before do
-      Connfu.handler = mock("connection_handler")
+      Connfu.handler = mock("call_handler")
     end
 
     it "a result event" do
-      Connfu.handler.should_not_receive(:handle)
+      Connfu.handler.should_not_receive(:continue)
       Connfu::IqParser.handle_event(Connfu::Event::Result.new)
     end
 
     it "a say complete" do
-      Connfu.handler.should_receive(:handle)
+      Connfu.handler.should_receive(:continue)
       Connfu::IqParser.handle_event(Connfu::Event::SayComplete.new)
     end
   end

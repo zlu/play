@@ -1,10 +1,6 @@
 module Connfu
   module CallHandler
 
-    def handle
-      continue
-    end
-
     def continue
       @continuation.call
     end
