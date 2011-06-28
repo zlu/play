@@ -39,6 +39,13 @@ describe Connfu::Dsl do
     end
   end
 
+  describe 'reject' do
+    it 'should send Reject command to adaptor' do
+      Connfu.adaptor.should_receive(:send_command).with(Connfu::Commands::Reject.new(:from => 'client-address', :to => 'server-address'))
+      subject.reject
+    end
+  end
+
   describe 'transfer' do
     it 'should send Transfer command to adaptor' do
       transfer_to = 'sip:1652@connfu.com'
@@ -46,4 +53,5 @@ describe Connfu::Dsl do
       subject.transfer(transfer_to)
     end
   end
+
 end
