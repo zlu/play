@@ -17,24 +17,24 @@ module Connfu
 
     module InstanceMethods
       def say(text)
-        Connfu.adaptor.send_command Connfu::Commands::Say.new(:text => text, :to => server_address, :from => client_address)
+        send_command Connfu::Commands::Say.new(:text => text, :to => server_address, :from => client_address)
         wait
       end
 
       def answer
-        Connfu.adaptor.send_command Connfu::Commands::Answer.new(:to => server_address, :from => client_address)
+        send_command Connfu::Commands::Answer.new(:to => server_address, :from => client_address)
       end
 
       def reject
-        Connfu.adaptor.send_command Connfu::Commands::Reject.new(:to => server_address, :from => client_address)
+        send_command Connfu::Commands::Reject.new(:to => server_address, :from => client_address)
       end
 
       def hangup
-        Connfu.adaptor.send_command Connfu::Commands::Hangup.new(:to => server_address, :from => client_address)
+        send_command Connfu::Commands::Hangup.new(:to => server_address, :from => client_address)
       end
 
       def redirect(redirect_to)
-        Connfu.adaptor.send_command Connfu::Commands::Redirect.new(:redirect_to => redirect_to, :to => server_address, :from => client_address)
+        send_command Connfu::Commands::Redirect.new(:redirect_to => redirect_to, :to => server_address, :from => client_address)
       end
 
       def transfer(*transfer_to)
@@ -44,11 +44,16 @@ module Connfu
             transfer sip_address, options
           end
         else
-          Connfu.adaptor.send_command Connfu::Commands::Transfer.new(:transfer_to => transfer_to, :to => server_address, :from => client_address)
+          send_command Connfu::Commands::Transfer.new(:transfer_to => transfer_to, :to => server_address, :from => client_address)
           wait
         end
       end
 
+      private
+
+      def send_command(command)
+        Connfu.adaptor.send_command command
+      end
     end
 
     def initialize(params)
