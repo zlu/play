@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "answer and say something on a call" do
+describe "a call reject" do
   class RejectExample
     include Connfu::Dsl
 
@@ -19,11 +19,9 @@ describe "answer and say something on a call" do
     @client_address = "usera@127.0.0.whatever/voxeo"
   end
 
-  it "should reject the call" do
+  it "should send the reject command" do
     run_fake_event_loop Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
 
-    Connfu.adaptor.commands.should == [
-      Connfu::Commands::Reject.new(:to => @server_address, :from => @client_address),
-    ]
+    Connfu.adaptor.commands.last.should == Connfu::Commands::Reject.new(:to => @server_address, :from => @client_address)
   end
 end

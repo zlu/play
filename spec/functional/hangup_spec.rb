@@ -1,17 +1,17 @@
 require "spec_helper"
 
-describe "answering a call" do
-  class AnswerExample
+describe "hangup a call" do
+  class HangupExample
     include Connfu::Dsl
 
     on :offer do
-      answer
+      hangup
     end
   end
 
   before :each do
     Connfu.setup "testuser@testhost", "1"
-    Connfu.handler_class = AnswerExample
+    Connfu.handler_class = HangupExample
 
     Connfu.adaptor = TestConnection.new
 
@@ -19,10 +19,9 @@ describe "answering a call" do
     @client_address = "usera@127.0.0.whatever/voxeo"
   end
 
-  it "should send an answer command" do
+  it "should send the hangup command" do
     run_fake_event_loop Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
 
-    Connfu.adaptor.commands.last.should == Connfu::Commands::Answer.new(:to => @server_address, :from => @client_address)
+    Connfu.adaptor.commands.last.should == Connfu::Commands::Hangup.new(:to => @server_address, :from => @client_address)
   end
-
 end

@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "answer and say something on a call" do
+describe "a call redirect" do
   class RedirectExample
     include Connfu::Dsl
 
@@ -21,11 +21,9 @@ describe "answer and say something on a call" do
     @redirect_to = 'sip:another@connfu.com'
   end
 
-  it "should reject the call" do
+  it "should send the redirect command" do
     run_fake_event_loop Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
 
-    Connfu.adaptor.commands.should == [
-      Connfu::Commands::Redirect.new(:redirect_to => @redirect_to, :to => @server_address, :from => @client_address),
-    ]
+    Connfu.adaptor.commands.last.should == Connfu::Commands::Redirect.new(:redirect_to => @redirect_to, :to => @server_address, :from => @client_address)
   end
 end
