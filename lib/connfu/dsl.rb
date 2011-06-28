@@ -39,7 +39,15 @@ module Connfu
 
       def transfer(transfer_to)
         Connfu.adaptor.send_command Connfu::Commands::Transfer.new(:transfer_to => transfer_to, :to => server_address, :from => client_address)
+        wait
       end
+
+      def transfer_with_roundrobin(transfer_to)
+        transfer_to.each do |to|
+          Connfu.adaptor.send_command Connfu::Commands::Transfer.new(:transfer_to => to, :to => server_address, :from => client_address)
+        end
+      end
+
     end
 
     def initialize(params)

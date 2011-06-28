@@ -62,4 +62,14 @@ describe Connfu::Dsl do
     end
   end
 
+  describe 'transfer_with_round_robin' do
+    it 'should synchronously send individual transfer command matching each transfer_to' do
+      transfer_to = ['sip:1652@connfu.com', 'sip:onemore@connfu.com']
+      transfer_to.each do |to|
+        Connfu.adaptor.should_receive(:send_command).with(Connfu::Commands::Transfer.new(:transfer_to => to, :from => 'client-address', :to => 'server-address'))
+      end
+      subject.transfer_with_roundrobin(transfer_to)
+    end
+  end
+
 end
