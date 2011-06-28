@@ -36,6 +36,16 @@ describe Connfu::Continuation do
       end
     end
 
+    it "should only call next_method once, even when continue called twice" do
+      subject.should_receive(:next_method).once
+
+      handling_messages :acknowledgement do
+        subject.start
+      end
+
+      subject.continue
+    end
+
     def handling_messages(*messages, &block)
       catch :waiting do
         yield
