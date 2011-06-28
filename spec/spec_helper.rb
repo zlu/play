@@ -77,3 +77,19 @@ def say_complete_success
     </complete>
   </presence>"
 end
+
+def transfer_timeout_iq
+  "<presence to='16577@app.ozone.net/1' from='9f00061@call.ozone.net/fgh4590'>
+    <complete xmlns='urn:xmpp:ozone:ext:1'>
+      <timeout xmlns='urn:xmpp:ozone:transfer:complete:1' />
+    </complete>
+  </presence>"
+end
+
+def transfer_success_iq
+  "<presence to='16577@app.ozone.net/1' from='9f00061@call.ozone.net/fgh4590'>
+    <complete xmlns='urn:xmpp:ozone:ext:1'>
+      <success xmlns='urn:xmpp:ozone:transfer:complete:1' />
+    </complete>
+  </presence>"
+end

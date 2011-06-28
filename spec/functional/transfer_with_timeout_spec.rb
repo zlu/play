@@ -7,7 +7,9 @@ describe "a timeout occurs when attempting to transfer a call" do
     on :offer do
       answer
       say('hello, this is connfu, please wait to be transferred')
-      unless transfer('sip:userb@127.0.0.1')
+      if transfer('sip:userb@127.0.0.1')
+        say('transfer was successful')
+      else
         say('sorry nobody is available at the moment')
       end
     end
@@ -22,10 +24,23 @@ describe "a timeout occurs when attempting to transfer a call" do
     Connfu.adaptor = TestConnection.new
   end
 
+  it "should indicate that the call has been transferred successfully" do
+    run_fake_event_loop Connfu::Event::Offer.new(:from => @server_address, :to => @client_address),
+                        Connfu::Event::SayComplete.new,
+                        Connfu::Event::TransferSuccess.new
+
+    Connfu.adaptor.commands.should == [
+      Connfu::Commands::Answer.new(:to => @server_address, :from => @client_address),
+      Connfu::Commands::Say.new(:text => 'hello, this is connfu, please wait to be transferred', :to => @server_address, :from => @client_address),
+      Connfu::Commands::Transfer.new(:transfer_to => ['sip:userb@127.0.0.1'], :to => @server_address, :from => @client_address),
+      Connfu::Commands::Say.new(:text => 'transfer was successful', :to => @server_address, :from => @client_address)
+    ]
+  end
+
   it "should indicate that the call has been timed out" do
     run_fake_event_loop Connfu::Event::Offer.new(:from => @server_address, :to => @client_address),
                         Connfu::Event::SayComplete.new,
-                        Connfu::Event::Timeout.new
+                        Connfu::Event::TransferTimeout.new
 
     Connfu.adaptor.commands.should == [
       Connfu::Commands::Answer.new(:to => @server_address, :from => @client_address),

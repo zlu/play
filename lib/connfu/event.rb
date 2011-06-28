@@ -16,7 +16,10 @@ module Connfu
     class SayComplete
     end
 
-    class Timeout
+    class TransferSuccess
+    end
+
+    class TransferTimeout
     end
   end
 end

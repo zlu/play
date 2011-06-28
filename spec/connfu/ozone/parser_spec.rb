@@ -42,6 +42,28 @@ describe Connfu::Ozone::Parser do
         @event.should be_instance_of Connfu::Event::SayComplete
       end
     end
+
+    context "a transfer success iq" do
+      before do
+        @node = create_stanza(transfer_success_iq)
+        @event = Connfu::Ozone::Parser.parse_event_from(@node)
+      end
+
+      it "should create a TransferSuccess event" do
+        @event.should be_instance_of Connfu::Event::TransferSuccess
+      end
+    end
+
+    context "a transfer timeout iq" do
+      before do
+        @node = create_stanza(transfer_timeout_iq)
+        @event = Connfu::Ozone::Parser.parse_event_from(@node)
+      end
+
+      it "should create a TransferTimeout event" do
+        @event.should be_instance_of Connfu::Event::TransferTimeout
+      end
+    end
   end
 
 end

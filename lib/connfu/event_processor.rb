@@ -8,7 +8,9 @@ module Connfu
             Connfu.handler.run
           when Connfu::Event::SayComplete
             Connfu.handler.continue
-          when Connfu::Event::Timeout
+          when Connfu::Event::TransferSuccess
+            Connfu.handler.continue(true)
+          when Connfu::Event::TransferTimeout
             Connfu.handler.continue(false)
         end
       end

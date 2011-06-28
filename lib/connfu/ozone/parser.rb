@@ -9,6 +9,10 @@ module Connfu
           Connfu::Event::Offer.new(:from => p_attrs['from'].value, :to => p_attrs['to'].value)
         elsif !node.xpath('//x:success', 'x' => 'urn:xmpp:ozone:say:complete:1').empty?
           Connfu::Event::SayComplete.new
+        elsif !node.xpath('//x:success', 'x' => 'urn:xmpp:ozone:transfer:complete:1').empty?
+          Connfu::Event::TransferSuccess.new
+        elsif !node.xpath('//x:timeout', 'x' => 'urn:xmpp:ozone:transfer:complete:1').empty?
+          Connfu::Event::TransferTimeout.new
         elsif node.type == :result
           Connfu::Event::Result.new
         end
