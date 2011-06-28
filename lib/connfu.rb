@@ -1,6 +1,4 @@
 %w[
-  rubygems
-  blather
   blather/client/client
 
   connfu/logger

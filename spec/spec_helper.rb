@@ -1,6 +1,6 @@
-require 'rubygems'
+require 'bundler/setup'
 require 'rspec'
-require File.expand_path("../../lib/connfu", __FILE__)
+require 'connfu'
 
 RSpec.configure do |config|
   config.include RSpec::Matchers

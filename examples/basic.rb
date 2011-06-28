@@ -1,14 +1,14 @@
 #!/usr/bin/ruby
 
 # Start as (-D for debug):
-#   ./blather_ozone.rb -D 
-
-$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+#   ./blather_ozone.rb -D
 
 require 'rubygems'
+require 'bundler/setup'
+require 'connfu'
+
 require 'blather/client'
 require 'blather/client/dsl'
-require File.join(File.expand_path('../../lib', __FILE__), 'connfu')
 
 # The user credentials want to login Ozone as
 client_jid = 'userb@127.0.0.1'
@@ -16,29 +16,29 @@ client_password = '1'
 
 class Ozone
   include Connfu
-  
+
   attr_reader :state, :call_id, :request_id
-  
+
   def initialize(client_jid)
     @client_jid = client_jid
-    
+
     # Use @state to manage what state our call is in
     @state = :start
     @request_id = nil
   end
-  
-  # call_id setter 
+
+  # call_id setter
   def call_id=(call_id)
     @call_id = call_id
   end
-  
+
   def answer
     # Set the state
     @state = :answered
     # Create our <iq/> stanza container
     iq_stanza = create_iq_stanza
     # Add the specific XML snippet for the say
-    builder = Nokogiri::XML::Builder.with(iq_stanza) { |xml| 
+    builder = Nokogiri::XML::Builder.with(iq_stanza) { |xml|
       xml.answer("xmlns" => "urn:xmpp:ozone:1")
     }
     # Store the request id that Blather generated
@@ -46,11 +46,11 @@ class Ozone
     show_sending(iq_stanza)
     iq_stanza
   end
-  
+
   def say_audio(url)
     @state = :saying_audio
     iq_stanza = create_iq_stanza
-    builder = Nokogiri::XML::Builder.with(iq_stanza) { |xml| 
+    builder = Nokogiri::XML::Builder.with(iq_stanza) { |xml|
       xml.say_("xmlns" => "urn:xmpp:ozone:say:1") {
         xml.audio("url" => url)
       }
@@ -59,11 +59,11 @@ class Ozone
     show_sending(iq_stanza)
     iq_stanza
   end
-  
+
   def say_text(text)
     @state = :saying_text
     iq_stanza = create_iq_stanza
-    builder = Nokogiri::XML::Builder.with(iq_stanza) { |xml| 
+    builder = Nokogiri::XML::Builder.with(iq_stanza) { |xml|
       xml.say_("xmlns" => "urn:xmpp:ozone:say:1") {
         xml.text text
       }
@@ -72,11 +72,11 @@ class Ozone
     show_sending(iq_stanza)
     iq_stanza
   end
-  
+
   def ask(prompt, choices)
     @state = :asking
     iq_stanza = create_iq_stanza
-    builder = Nokogiri::XML::Builder.with(iq_stanza) { |xml| 
+    builder = Nokogiri::XML::Builder.with(iq_stanza) { |xml|
       xml.ask("xmlns" => "urn:xmpp:ozone:ask:1") {
         xml.prompt { xml.speak prompt }
         xml.choices("content-type" => "application/grammar+voxeo") {
@@ -88,11 +88,11 @@ class Ozone
     show_sending(iq_stanza)
     iq_stanza
   end
-  
+
   def transfer(destination)
     @state = :transferred
     iq_stanza = create_iq_stanza
-    builder = Nokogiri::XML::Builder.with(iq_stanza) { |xml| 
+    builder = Nokogiri::XML::Builder.with(iq_stanza) { |xml|
       xml.transfer("xmlns"      => "urn:xmpp:ozone:transfer:1",
                    "to"         => destination,
                    "terminator" => '#')
@@ -101,27 +101,27 @@ class Ozone
     show_sending(iq_stanza)
     iq_stanza
   end
-  
+
   def hangup
     # Set the start so that we may now accept another call on this connection
     @state = :start
     iq_stanza = create_iq_stanza
-    builder = Nokogiri::XML::Builder.with(iq_stanza) { |xml| 
+    builder = Nokogiri::XML::Builder.with(iq_stanza) { |xml|
       xml.hangup("xmlns" => "urn:xmpp:ozone:hangup:1")
     }
     @request_id = iq_stanza.id
     show_sending(iq_stanza)
     iq_stanza
   end
-  
-  private 
-  
+
+  private
+
   def create_iq_stanza
     iq_stanza = Blather::Stanza::Iq.new(:set, @call_id)
     iq_stanza.from = @client_jid
     iq_stanza
   end
-  
+
   def show_sending(iq_stanza)
     l.info 'Sending to Server' + '=====>'
     l.info iq_stanza
