@@ -46,10 +46,18 @@ describe Connfu::Dsl do
     end
   end
 
+  describe 'redirect' do
+    it 'should send Redirect command to adaptor' do
+      redirect_to = 'sip:1652@connfu.com'
+      Connfu.adaptor.should_receive(:send_command).with(Connfu::Commands::Redirect.new(:redirect_to => redirect_to, :from => 'client-address', :to => 'server-address'))
+      subject.redirect(redirect_to)
+    end
+  end
+
   describe 'transfer' do
     it 'should send Transfer command to adaptor' do
       transfer_to = 'sip:1652@connfu.com'
-      Connfu.adaptor.should_receive(:send_command).with(Connfu::Commands::Transfer.new(:from => 'client-address', :to => 'server-address', :transfer_to => transfer_to))
+      Connfu.adaptor.should_receive(:send_command).with(Connfu::Commands::Transfer.new(:transfer_to => transfer_to, :from => 'client-address', :to => 'server-address'))
       subject.transfer(transfer_to)
     end
   end

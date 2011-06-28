@@ -42,6 +42,12 @@ module Connfu
     class Hangup < Base
     end
 
+    class Redirect < Base
+      def redirect_to
+        @params[:redirect_to]
+      end
+    end
+
     class Transfer < Base
       def transfer_to
         @params[:transfer_to]

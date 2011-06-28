@@ -28,6 +28,8 @@ module Connfu
           hangup_iq(command.to, command.from)
         when Connfu::Commands::Say
           say_iq(command.text, command.to, command.from)
+        when Connfu::Commands::Redirect
+          redirect_iq(command.redirect_to, command.to, command.from)
         when Connfu::Commands::Transfer
           transfer_iq(command.transfer_to, command.to, command.from)
       end
@@ -49,6 +51,16 @@ module Connfu
 
         iq
       end
+    end
+
+    def redirect_iq(redirect_to, to, from)
+      iq = Blather::Stanza::Iq.new(:set, to)
+      iq['from'] = from
+      Nokogiri::XML::Builder.with(iq) do |xml|
+        xml.redirect("to" => redirect_to, "xmlns" => "urn:xmpp:ozone:1")
+      end
+
+      iq
     end
 
     def transfer_iq(transfer_to, to, from)

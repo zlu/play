@@ -33,8 +33,12 @@ module Connfu
         Connfu.adaptor.send_command Connfu::Commands::Hangup.new(:to => server_address, :from => client_address)
       end
 
+      def redirect(redirect_to)
+        Connfu.adaptor.send_command Connfu::Commands::Redirect.new(:redirect_to => redirect_to, :to => server_address, :from => client_address)
+      end
+
       def transfer(transfer_to)
-        Connfu.adaptor.send_command Connfu::Commands::Transfer.new(:to => server_address, :from => client_address, :transfer_to => transfer_to)
+        Connfu.adaptor.send_command Connfu::Commands::Transfer.new(:transfer_to => transfer_to, :to => server_address, :from => client_address)
       end
     end
 
