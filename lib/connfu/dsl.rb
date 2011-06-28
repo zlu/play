@@ -38,13 +38,14 @@ module Connfu
       end
 
       def transfer(*transfer_to)
-        Connfu.adaptor.send_command Connfu::Commands::Transfer.new(:transfer_to => transfer_to, :to => server_address, :from => client_address)
-        wait
-      end
-
-      def transfer_with_roundrobin(transfer_to)
-        transfer_to.each do |to|
-          Connfu.adaptor.send_command Connfu::Commands::Transfer.new(:transfer_to => to, :to => server_address, :from => client_address)
+        options = transfer_to.last.is_a?(Hash) ? transfer_to.pop : {}
+        if options.delete(:mode) == :round_robin
+          transfer_to.detect do |sip_address|
+            transfer sip_address, options
+          end
+        else
+          Connfu.adaptor.send_command Connfu::Commands::Transfer.new(:transfer_to => transfer_to, :to => server_address, :from => client_address)
+          wait
         end
       end
 
