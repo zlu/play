@@ -15,5 +15,8 @@ module Connfu
 
     class SayComplete
     end
+
+    class Timeout
+    end
   end
 end

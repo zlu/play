@@ -13,8 +13,8 @@ describe Connfu::Dsl do
     it 'should send Say command to adaptor' do
       allow_message_expectations_on_nil
       text = 'connfu is awesome'
+      Connfu.adaptor.should_receive(:send_command).with(Connfu::Commands::Say.new(:text => text, :from => 'client-address', :to => 'server-address'))
       catch :waiting do
-        Connfu.adaptor.should_receive(:send_command).with(Connfu::Commands::Say.new(:text => text, :from => 'client-address', :to => 'server-address'))
         subject.say(text)
       end
     end
@@ -57,19 +57,10 @@ describe Connfu::Dsl do
   describe 'transfer' do
     it 'should send Transfer command to adaptor' do
       transfer_to = 'sip:1652@connfu.com'
-      Connfu.adaptor.should_receive(:send_command).with(Connfu::Commands::Transfer.new(:transfer_to => transfer_to, :from => 'client-address', :to => 'server-address'))
-      subject.transfer(transfer_to)
-    end
-  end
-
-  describe 'transfer_with_round_robin' do
-    it 'should synchronously send individual transfer command matching each transfer_to' do
-      transfer_to = ['sip:1652@connfu.com', 'sip:onemore@connfu.com']
-      transfer_to.each do |to|
-        Connfu.adaptor.should_receive(:send_command).with(Connfu::Commands::Transfer.new(:transfer_to => to, :from => 'client-address', :to => 'server-address'))
+      Connfu.adaptor.should_receive(:send_command).with(Connfu::Commands::Transfer.new(:transfer_to => [transfer_to], :from => 'client-address', :to => 'server-address'))
+      catch :waiting do
+        subject.transfer(transfer_to)
       end
-      subject.transfer_with_roundrobin(transfer_to)
     end
   end
-
 end

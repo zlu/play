@@ -1,8 +1,8 @@
 module Connfu
   module Continuation
 
-    def continue
-      @continuation.call
+    def continue(result=nil)
+      @continuation.call result
     end
 
     private

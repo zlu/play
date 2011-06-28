@@ -8,6 +8,8 @@ module Connfu
             Connfu.handler.run
           when Connfu::Event::SayComplete
             Connfu.handler.continue
+          when Connfu::Event::Timeout
+            Connfu.handler.continue(false)
         end
       end
     end

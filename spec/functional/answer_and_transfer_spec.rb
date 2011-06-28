@@ -7,7 +7,7 @@ describe "answer and transfer a call" do
     on :offer do
       answer
       say('hello, this is connfu, please wait to be transferred')
-      transfer(['sip:userb@127.0.0.1', 'sip:userc@127.0.0.1'])
+      transfer('sip:userb@127.0.0.1')
     end
   end
 
@@ -36,7 +36,7 @@ describe "answer and transfer a call" do
     Connfu.adaptor.commands.should == [
       Connfu::Commands::Answer.new(:to => @server_address, :from => @client_address),
       Connfu::Commands::Say.new(:text => 'hello, this is connfu, please wait to be transferred', :to => @server_address, :from => @client_address),
-      Connfu::Commands::Transfer.new(:transfer_to => ['sip:userb@127.0.0.1', 'sip:userc@127.0.0.1'], :to => @server_address, :from => @client_address)
+      Connfu::Commands::Transfer.new(:transfer_to => ['sip:userb@127.0.0.1'], :to => @server_address, :from => @client_address)
     ]
   end
 end
