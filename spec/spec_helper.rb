@@ -36,6 +36,7 @@ class TestConnection
   def initialize
     @commands = []
   end
+
   def send_command(command)
     @commands << command
   end
