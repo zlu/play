@@ -4,7 +4,7 @@ require 'connfu'
 
 RSpec.configure do |config|
   config.include RSpec::Matchers
-  config.mock_with :mocha
+  # config.mock_with :mocha
 end
 
 l.level = Logger::WARN

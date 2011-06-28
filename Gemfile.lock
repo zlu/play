@@ -23,16 +23,10 @@ GEM
     flog (2.5.1)
       ruby_parser (~> 2.0)
       sexp_processor (~> 3.0)
-<<<<<<< HEAD
-    minitest (2.2.2)
-    mocha (0.9.12)
-    nokogiri (1.4.4)
-=======
     minitest (2.3.1)
     niceogiri (0.0.4)
       nokogiri (>= 1.4.0)
-    nokogiri (1.4.6)
->>>>>>> updated blather version
+    nokogiri (1.4.4)
     rake (0.8.7)
     rcov (0.9.9)
     reek (1.2.8)
@@ -65,7 +59,6 @@ DEPENDENCIES
   connfu!
   flay (= 1.4.2)
   flog (= 2.5.1)
-  mocha (= 0.9.12)
   rake (= 0.8.7)
   rcov (= 0.9.9)
   reek (= 1.2.8)
