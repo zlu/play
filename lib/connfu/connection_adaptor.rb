@@ -5,7 +5,7 @@ module Connfu
     end
 
     def send_command(command)
-      iq = Connfu::Ozone.iq_from_command(command)
+      iq = command.to_iq
       l.debug iq
       @connection.write iq
     end

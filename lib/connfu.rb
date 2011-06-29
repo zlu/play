@@ -3,7 +3,6 @@
 
   connfu/logger
   connfu/continuation
-  connfu/ozone
   connfu/commands
   connfu/event
   connfu/event_processor

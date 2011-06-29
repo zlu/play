@@ -1,11 +1,11 @@
 require "spec_helper"
 
-describe Connfu::Ozone do
+describe Connfu::Commands do
 
   describe "generating XMPP iq" do
     describe "for the Answer command" do
       subject do
-        Connfu::Ozone.iq_from_command(Connfu::Commands::Answer.new(:to => 'server-address', :from => 'client-address'))
+        Connfu::Commands::Answer.new(:to => 'server-address', :from => 'client-address').to_iq
       end
 
       it "should generate answer iq from Answer command" do
@@ -27,7 +27,7 @@ describe Connfu::Ozone do
 
     describe "for the Accept command" do
       subject do
-        Connfu::Ozone.iq_from_command(Connfu::Commands::Accept.new(:to => 'server-address', :from => 'client-address'))
+        Connfu::Commands::Accept.new(:to => 'server-address', :from => 'client-address').to_iq
       end
 
       it "should generate accept iq from Accept command" do
@@ -49,7 +49,7 @@ describe Connfu::Ozone do
 
     describe "for the Reject command" do
       subject do
-        Connfu::Ozone.iq_from_command(Connfu::Commands::Reject.new(:to => 'server-address', :from => 'client-address'))
+        Connfu::Commands::Reject.new(:to => 'server-address', :from => 'client-address').to_iq
       end
 
       it "should generate reject iq from Reject command" do
@@ -71,8 +71,7 @@ describe Connfu::Ozone do
 
     describe "for the Say component with plain text" do
       subject do
-        command = Connfu::Commands::Say.new(:to => 'server-address', :from => 'client-address', :text => "Hello")
-        Connfu::Ozone.iq_from_command(command)
+        Connfu::Commands::Say.new(:to => 'server-address', :from => 'client-address', :text => "Hello").to_iq
       end
 
       it "should generate say iq" do
@@ -99,7 +98,7 @@ describe Connfu::Ozone do
     describe 'for the Redirect command' do
       subject do
         @redirect_to = 'sip:1324@connfu.com'
-        Connfu::Ozone.iq_from_command(Connfu::Commands::Redirect.new(:redirect_to => @redirect_to, :to => 'server-address', :from => 'client-address'))
+        Connfu::Commands::Redirect.new(:redirect_to => @redirect_to, :to => 'server-address', :from => 'client-address').to_iq
       end
 
       it "should be an iq of type 'set'" do
@@ -127,11 +126,7 @@ describe Connfu::Ozone do
     describe "for the Say component with a url" do
       subject do
         @url = "http://www.phono.com/audio/troporocks.mp3"
-        command = Connfu::Commands::Say.new(
-            :to => 'server-address',
-            :from => 'client-address',
-            :text => @url)
-        Connfu::Ozone.iq_from_command(command)
+        Connfu::Commands::Say.new(:to => 'server-address', :from => 'client-address', :text => @url).to_iq
       end
 
       it "should contain the 'audio' node with the correct src" do
@@ -144,7 +139,7 @@ describe Connfu::Ozone do
 
     describe "for the Hangup command" do
       subject do
-        Connfu::Ozone.iq_from_command(Connfu::Commands::Hangup.new(:to => 'server-address', :from => 'client-address'))
+        Connfu::Commands::Hangup.new(:to => 'server-address', :from => 'client-address').to_iq
       end
 
       it "should generate hangup iq" do
@@ -167,7 +162,7 @@ describe Connfu::Ozone do
     describe 'for the Transfer command' do
       subject do
         @transfer_to = 'sip:1324@connfu.com'
-        Connfu::Ozone.iq_from_command(Connfu::Commands::Transfer.new(:to => 'server-address', :from => 'client-address', :transfer_to => @transfer_to))
+        Connfu::Commands::Transfer.new(:to => 'server-address', :from => 'client-address', :transfer_to => @transfer_to).to_iq
       end
 
       it "should generate transfer iq" do
@@ -185,7 +180,7 @@ describe Connfu::Ozone do
       it "should contain the 'from' address in the iq" do
         subject.xpath("/iq").first.attributes["from"].value.should eq "client-address"
       end
-      
+
       it 'should not contain a timeout attribute' do
         transfer_node = subject.xpath("x:transfer", "x" => "urn:xmpp:ozone:transfer:1").first
         transfer_node.attributes['timeout'].should be_nil
@@ -194,7 +189,7 @@ describe Connfu::Ozone do
       context 'with a timeout parameter' do
         subject do
           @transfer_to = 'sip:1324@connfu.com'
-          Connfu::Ozone.iq_from_command(Connfu::Commands::Transfer.new(:to => 'server-address', :from => 'client-address', :transfer_to => @transfer_to, :timeout => 5000))
+          Connfu::Commands::Transfer.new(:to => 'server-address', :from => 'client-address', :transfer_to => @transfer_to, :timeout => 5000).to_iq
         end
 
         it 'should contain a timeout attribute when it is passed in as an option' do
@@ -203,7 +198,7 @@ describe Connfu::Ozone do
         end
 
       end
-      
+
       context 'when transfer to a single end-point' do
         it "should contain a 'transfer_to' node" do
           transfer_to_node = subject.xpath("//x:to", "x" => "urn:xmpp:ozone:transfer:1").first
@@ -215,7 +210,7 @@ describe Connfu::Ozone do
       context 'when transfer to multiple end-points' do
         subject do
           @transfer_to = ['sip:1324@connfu.com', 'sip:3432@connfu.com']
-          Connfu::Ozone.iq_from_command(Connfu::Commands::Transfer.new(:to => 'server-address', :from => 'client-address', :transfer_to => @transfer_to))
+          Connfu::Commands::Transfer.new(:to => 'server-address', :from => 'client-address', :transfer_to => @transfer_to).to_iq
         end
 
         it "should contain correct number of 'transfer_to' nodes" do
