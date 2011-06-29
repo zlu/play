@@ -50,17 +50,15 @@ module Connfu
       end
 
       def handle_event(event)
-        catch :waiting do
-          case event
-            when Connfu::Event::Offer
-              run
-            when Connfu::Event::SayComplete
-              continue
-            when Connfu::Event::TransferSuccess
-              continue(true)
-            when Connfu::Event::TransferTimeout
-              continue(false)
-          end
+        case event
+          when Connfu::Event::Offer
+            start
+          when Connfu::Event::SayComplete
+            continue
+          when Connfu::Event::TransferSuccess
+            continue(true)
+          when Connfu::Event::TransferTimeout
+            continue(false)
         end
       end
 
