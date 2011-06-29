@@ -24,7 +24,7 @@ RSpec::Matchers.define :be_stanzas do |expected_stanzas|
 end
 
 class TestConnection
-  attr_reader :commands
+  attr_accessor :commands
 
   def initialize
     @commands = []

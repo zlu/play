@@ -19,6 +19,10 @@ describe Connfu::Ozone::Parser do
       it "should determine the to value of the offer" do
         @event.presence_to.should eq @node.attributes['to'].value
       end
+
+      it "should determine the call_id value of the offer" do
+        @event.call_id.should eq @node.from.node
+      end
     end
 
     context "a result iq" do
@@ -41,6 +45,10 @@ describe Connfu::Ozone::Parser do
       it "should create a SayComplete event" do
         @event.should be_instance_of Connfu::Event::SayComplete
       end
+
+      it "should determine the call_id value of say complete" do
+        @event.call_id.should eq @node.from.node
+      end
     end
 
     context "a transfer success iq" do
@@ -52,6 +60,10 @@ describe Connfu::Ozone::Parser do
       it "should create a TransferSuccess event" do
         @event.should be_instance_of Connfu::Event::TransferSuccess
       end
+
+      it "should determine the call_id value of the transfer success iq" do
+        @event.call_id.should eq @node.from.node
+      end
     end
 
     context "a transfer timeout iq" do
@@ -62,6 +74,10 @@ describe Connfu::Ozone::Parser do
 
       it "should create a TransferTimeout event" do
         @event.should be_instance_of Connfu::Event::TransferTimeout
+      end
+
+      it "should determine the call_id value of the transfer timeout iq" do
+        @event.call_id.should eq @node.from.node
       end
     end
   end
