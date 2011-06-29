@@ -15,7 +15,6 @@
 module Connfu
   class << self
     attr_accessor :event_processor
-    attr_accessor :handler
     attr_accessor :connection
     attr_accessor :adaptor
   end

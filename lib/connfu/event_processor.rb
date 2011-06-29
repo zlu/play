@@ -19,9 +19,9 @@ module Connfu
 
     def handler_for(event)
       if event.is_a?(Connfu::Event::Offer)
-        Connfu.handler = @handler_class.new(:from => event.presence_from, :to => event.presence_to)
+        @handler = @handler_class.new(:from => event.presence_from, :to => event.presence_to)
       else
-        Connfu.handler
+        @handler
       end
     end
   end
