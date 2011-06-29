@@ -1,6 +1,19 @@
 module Connfu
   module EventProcessor
     def self.handle_event(event)
+      callcc do |resume|
+        # Because the event handling code uses continuations, when
+        # it returns the call stack can be from a previous call to
+        # handle_event.  Once the event has been handled, we need
+        # to force it back to the latest call stack, or all manner
+        # of strangeness can occur
+        @latest_resume = resume
+        handle_event_without_resume(event)
+        @latest_resume.call
+      end
+    end
+
+    def self.handle_event_without_resume(event)
       catch :waiting do
         case event
           when Connfu::Event::Offer
