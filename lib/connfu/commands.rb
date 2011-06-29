@@ -52,6 +52,10 @@ module Connfu
       def transfer_to
         @params[:transfer_to]
       end
+      
+      def timeout
+        @params[:timeout]
+      end
     end
   end
 end

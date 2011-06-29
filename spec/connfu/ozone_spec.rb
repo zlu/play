@@ -185,7 +185,25 @@ describe Connfu::Ozone do
       it "should contain the 'from' address in the iq" do
         subject.xpath("/iq").first.attributes["from"].value.should eq "client-address"
       end
+      
+      it 'should not contain a timeout attribute' do
+        transfer_node = subject.xpath("x:transfer", "x" => "urn:xmpp:ozone:transfer:1").first
+        transfer_node.attributes['timeout'].should be_nil
+      end
 
+      context 'with a timeout parameter' do
+        subject do
+          @transfer_to = 'sip:1324@connfu.com'
+          Connfu::Ozone.iq_from_command(Connfu::Commands::Transfer.new(:to => 'server-address', :from => 'client-address', :transfer_to => @transfer_to, :timeout => 5000))
+        end
+
+        it 'should contain a timeout attribute when it is passed in as an option' do
+          transfer_node = subject.xpath("x:transfer", "x" => "urn:xmpp:ozone:transfer:1").first
+          transfer_node.attributes['timeout'].value.should eq "5000"
+        end
+
+      end
+      
       context 'when transfer to a single end-point' do
         it "should contain a 'transfer_to' node" do
           transfer_to_node = subject.xpath("//x:to", "x" => "urn:xmpp:ozone:transfer:1").first
@@ -210,7 +228,5 @@ describe Connfu::Ozone do
         end
       end
     end
-
   end
-
 end

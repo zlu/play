@@ -62,6 +62,16 @@ describe Connfu::Dsl do
         subject.transfer(transfer_to)
       end
     end
+    
+    it 'should send Transfer command with optional timeout' do
+      transfer_to = 'sip:1652@connfu.com'
+      timeout_in_seconds = 5
+      cmd = Connfu::Commands::Transfer.new(:transfer_to => [transfer_to], :from => 'client-address', :to => 'server-address', :timeout => (timeout_in_seconds * 1000))
+      Connfu.adaptor.should_receive(:send_command).with(cmd)
+      catch :waiting do
+        subject.transfer(transfer_to, :timeout => timeout_in_seconds)
+      end      
+    end
   end
 
   describe '#handle_event(event)' do

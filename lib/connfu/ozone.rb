@@ -31,7 +31,7 @@ module Connfu
         when Connfu::Commands::Redirect
           redirect_iq(command.redirect_to, command.to, command.from)
         when Connfu::Commands::Transfer
-          transfer_iq(command.transfer_to, command.to, command.from)
+          transfer_iq(command.transfer_to, command.to, command.from, command.timeout)
       end
     end
 
@@ -63,12 +63,14 @@ module Connfu
       iq
     end
 
-    def transfer_iq(transfer_to, to, from)
+    def transfer_iq(transfer_to, to, from, timeout)
       iq = Blather::Stanza::Iq.new(:set, to)
       iq['from'] = from
       Nokogiri::XML::Builder.with(iq) do |xml|
-        xml.transfer("xmlns" => "urn:xmpp:ozone:transfer:1") {
-          transfer_to.each { |t| xml.to t }
+        transfer_options = {:xmlns => "urn:xmpp:ozone:transfer:1"}
+        transfer_options[:timeout] = timeout if timeout
+        xml.transfer(transfer_options) {
+          transfer_to.each { |t| xml.to t }          
         }
       end
 

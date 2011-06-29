@@ -44,7 +44,9 @@ module Connfu
             transfer sip_address, options
           end
         else
-          send_command Connfu::Commands::Transfer.new(:transfer_to => transfer_to, :to => server_address, :from => client_address)
+          command_options = {:transfer_to => transfer_to, :to => server_address, :from => client_address}
+          command_options[:timeout] = options[:timeout] * 1000 if options[:timeout]
+          send_command Connfu::Commands::Transfer.new(command_options)
           wait
         end
       end

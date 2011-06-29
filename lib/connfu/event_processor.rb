@@ -10,8 +10,8 @@ module Connfu
       end
     end
 
-    private 
-    
+    private
+
     def handler_for(event)
       if event.is_a?(Connfu::Event::Offer)
         handlers[event.call_id] = @handler_class.new(:from => event.presence_from, :to => event.presence_to)
