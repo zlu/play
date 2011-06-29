@@ -17,16 +17,44 @@ module Connfu
         @params[:from]
       end
 
+      def command
+        self.class.name.split("::").last.downcase
+      end
+
+      def to_iq
+        build_iq
+      end
+
       protected
 
       def params
         @params
+      end
+
+      def build_iq(attributes = {}, &block)
+        iq = Blather::Stanza::Iq.new(:set, to)
+        iq['from'] = from
+        Nokogiri::XML::Builder.with(iq) do |xml|
+          xml.send "#{command}_", {"xmlns" => "urn:xmpp:ozone:1"}.merge(attributes), &block
+        end
+
+        iq
       end
     end
 
     class Say < Base
       def text
         @params[:text]
+      end
+
+      def to_iq
+        build_iq :xmlns => "urn:xmpp:ozone:say:1" do |xml|
+          unless text.match(/^http:\/\/.*(.mp3|.wav)$/).nil?
+            xml.audio('src' => text)
+          else
+            xml.text text
+          end
+        end
       end
     end
 
@@ -46,15 +74,28 @@ module Connfu
       def redirect_to
         @params[:redirect_to]
       end
+
+      def to_iq
+        build_iq 'to' => redirect_to
+      end
     end
 
     class Transfer < Base
       def transfer_to
         @params[:transfer_to]
       end
-      
+
       def timeout
         @params[:timeout]
+      end
+
+      def to_iq
+        attributes = {:xmlns => "urn:xmpp:ozone:transfer:1"}
+        attributes[:timeout] = timeout if timeout
+
+        build_iq attributes do |xml|
+          transfer_to.each { |t| xml.to t }
+        end
       end
     end
   end
