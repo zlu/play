@@ -63,4 +63,16 @@ describe Connfu::Dsl do
       end
     end
   end
+
+  describe '#handle_event(event)' do
+    it "a result event" do
+      subject.should_not_receive(:continue)
+      subject.handle_event(Connfu::Event::Result.new)
+    end
+
+    it "a say complete" do
+      subject.should_receive(:continue)
+      subject.handle_event(Connfu::Event::SayComplete.new)
+    end
+  end
 end

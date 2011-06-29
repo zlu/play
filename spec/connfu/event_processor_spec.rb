@@ -2,24 +2,6 @@ require 'spec_helper'
 
 describe Connfu::EventProcessor do
   describe "#handle_event" do
-    before do
-      Connfu.handler = mock("call_handler")
-    end
-
-    subject do
-      Connfu::EventProcessor.new(mock('handler-class'))
-    end
-
-    it "a result event" do
-      Connfu.handler.should_not_receive(:continue)
-      subject.handle_event(Connfu::Event::Result.new)
-    end
-
-    it "a say complete" do
-      Connfu.handler.should_receive(:continue)
-      subject.handle_event(Connfu::Event::SayComplete.new)
-    end
-
     describe "when the handler waits and continues" do
       class HandlerWithWaits
         include Connfu::Dsl

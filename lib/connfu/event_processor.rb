@@ -12,24 +12,16 @@ module Connfu
         # to force it back to the latest call stack, or all manner
         # of strangeness can occur
         @latest_resume = resume
-        handle_event_without_resume(event)
+        handler_for(event).handle_event(event)
         @latest_resume.call
       end
     end
 
-    def handle_event_without_resume(event)
-      catch :waiting do
-        case event
-          when Connfu::Event::Offer
-            Connfu.handler = @handler_class.new(:from => event.presence_from, :to => event.presence_to)
-            Connfu.handler.run
-          when Connfu::Event::SayComplete
-            Connfu.handler.continue
-          when Connfu::Event::TransferSuccess
-            Connfu.handler.continue(true)
-          when Connfu::Event::TransferTimeout
-            Connfu.handler.continue(false)
-        end
+    def handler_for(event)
+      if event.is_a?(Connfu::Event::Offer)
+        Connfu.handler = @handler_class.new(:from => event.presence_from, :to => event.presence_to)
+      else
+        Connfu.handler
       end
     end
   end

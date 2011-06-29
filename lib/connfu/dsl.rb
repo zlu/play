@@ -49,6 +49,21 @@ module Connfu
         end
       end
 
+      def handle_event(event)
+        catch :waiting do
+          case event
+            when Connfu::Event::Offer
+              run
+            when Connfu::Event::SayComplete
+              continue
+            when Connfu::Event::TransferSuccess
+              continue(true)
+            when Connfu::Event::TransferTimeout
+              continue(false)
+          end
+        end
+      end
+
       private
 
       def send_command(command)
