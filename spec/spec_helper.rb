@@ -17,12 +17,6 @@ def create_stanza(presence_xml)
   Blather::Stanza::Presence.import(doc.root)
 end
 
-def run_fake_event_loop(*events, &block)
-  while event = events.shift do
-    Connfu::EventProcessor.handle_event(event)
-  end
-end
-
 RSpec::Matchers.define :be_stanzas do |expected_stanzas|
   match do |actual|
     actual.map { |x| x.to_s.gsub(/\n\s*/, "\n") } == expected_stanzas.map { |x| x.to_s.gsub(/\n\s*/, "\n") }

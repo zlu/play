@@ -11,7 +11,7 @@ describe "a call redirect" do
 
   before :each do
     Connfu.setup "testuser@testhost", "1"
-    Connfu.handler_class = RedirectExample
+    @processor = Connfu::EventProcessor.new(RedirectExample)
 
     Connfu.adaptor = TestConnection.new
 
@@ -22,7 +22,7 @@ describe "a call redirect" do
   end
 
   it "should send the redirect command" do
-    run_fake_event_loop Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
+    @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Redirect.new(:redirect_to => @redirect_to, :to => @server_address, :from => @client_address)
   end

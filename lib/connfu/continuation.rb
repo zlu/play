@@ -3,7 +3,7 @@ module Connfu
     def continue(result = nil)
       continuation = @continuation
       @continuation = nil
-      continuation.call result if continuation
+      continuation.call(result) if continuation
     end
 
     private

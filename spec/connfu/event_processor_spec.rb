@@ -6,14 +6,18 @@ describe Connfu::EventProcessor do
       Connfu.handler = mock("call_handler")
     end
 
+    subject do
+      Connfu::EventProcessor.new(mock('handler-class'))
+    end
+
     it "a result event" do
       Connfu.handler.should_not_receive(:continue)
-      Connfu::EventProcessor.handle_event(Connfu::Event::Result.new)
+      subject.handle_event(Connfu::Event::Result.new)
     end
 
     it "a say complete" do
       Connfu.handler.should_receive(:continue)
-      Connfu::EventProcessor.handle_event(Connfu::Event::SayComplete.new)
+      subject.handle_event(Connfu::Event::SayComplete.new)
     end
 
     describe "when the handler waits and continues" do
@@ -27,16 +31,15 @@ describe Connfu::EventProcessor do
       end
 
       before :each do
-        Connfu.setup "testuser@testhost", "1"
-        Connfu.handler_class = HandlerWithWaits
+        @event_processor = Connfu::EventProcessor.new(HandlerWithWaits)
         Connfu.adaptor = TestConnection.new
       end
 
       it "ensures execution resumes after the handle_event call" do
         called_count = 0
-        Connfu::EventProcessor.handle_event(Connfu::Event::Offer.new(:from => @server_address, :to => @client_address))
+        @event_processor.handle_event(Connfu::Event::Offer.new(:from => @server_address, :to => @client_address))
         called_count = called_count + 1
-        Connfu::EventProcessor.handle_event(Connfu::Event::SayComplete.new)
+        @event_processor.handle_event(Connfu::Event::SayComplete.new)
         called_count.should eql(1)
       end
     end

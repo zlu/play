@@ -1,6 +1,10 @@
 module Connfu
-  module EventProcessor
-    def self.handle_event(event)
+  class EventProcessor
+    def initialize(handler_class)
+      @handler_class = handler_class
+    end
+
+    def handle_event(event)
       callcc do |resume|
         # Because the event handling code uses continuations, when
         # it returns the call stack can be from a previous call to
@@ -13,11 +17,11 @@ module Connfu
       end
     end
 
-    def self.handle_event_without_resume(event)
+    def handle_event_without_resume(event)
       catch :waiting do
         case event
           when Connfu::Event::Offer
-            Connfu.handler = Connfu.handler_class.new(:from => event.presence_from, :to => event.presence_to)
+            Connfu.handler = @handler_class.new(:from => event.presence_from, :to => event.presence_to)
             Connfu.handler.run
           when Connfu::Event::SayComplete
             Connfu.handler.continue

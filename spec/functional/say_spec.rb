@@ -12,7 +12,7 @@ describe "say something on a call" do
 
   before :each do
     Connfu.setup "testuser@testhost", "1"
-    Connfu.handler_class = SayExample
+    @processor = Connfu::EventProcessor.new(SayExample)
 
     Connfu.adaptor = TestConnection.new
 
@@ -21,14 +21,13 @@ describe "say something on a call" do
   end
 
   it "should send first say command" do
-    run_fake_event_loop Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
-
+    @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
     Connfu.adaptor.commands.last.should == Connfu::Commands::Say.new(:text => 'hello, this is connfu', :to => @server_address, :from => @client_address)
   end
 
   it "should send the second say command once the first say command has completed" do
-    run_fake_event_loop Connfu::Event::Offer.new(:from => @server_address, :to => @client_address),
-                        Connfu::Event::SayComplete.new
+    @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
+    @processor.handle_event Connfu::Event::SayComplete.new
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Say.new(:text => 'http://www.phono.com/audio/troporocks.mp3', :to => @server_address, :from => @client_address)
   end

@@ -21,12 +21,14 @@ describe Connfu do
 
     it "should register iq handler for offer" do
       iq = mock('incoming_iq')
+      Connfu.event_processor = mock('event-processor', :handle_event => true)
       Connfu::Ozone::Parser.should_receive(:parse_event_from).with(iq)
       Connfu.connection.send :call_handler_for, :iq, iq
     end
 
     it 'should register presence handler' do
       presence = mock('presence')
+      Connfu.event_processor = mock('event-processor', :handle_event => true)
       Connfu::Ozone::Parser.should_receive(:parse_event_from).with(presence)
       Connfu.connection.send :call_handler_for, :presence, presence
     end

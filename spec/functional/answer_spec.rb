@@ -11,7 +11,7 @@ describe "answering a call" do
 
   before :each do
     Connfu.setup "testuser@testhost", "1"
-    Connfu.handler_class = AnswerExample
+    @processor = Connfu::EventProcessor.new(AnswerExample)
 
     Connfu.adaptor = TestConnection.new
 
@@ -20,7 +20,7 @@ describe "answering a call" do
   end
 
   it "should send an answer command" do
-    run_fake_event_loop Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
+    @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Answer.new(:to => @server_address, :from => @client_address)
   end

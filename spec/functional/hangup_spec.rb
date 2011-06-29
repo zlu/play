@@ -11,7 +11,7 @@ describe "hangup a call" do
 
   before :each do
     Connfu.setup "testuser@testhost", "1"
-    Connfu.handler_class = HangupExample
+    @processor = Connfu::EventProcessor.new(HangupExample)
 
     Connfu.adaptor = TestConnection.new
 
@@ -20,7 +20,7 @@ describe "hangup a call" do
   end
 
   it "should send the hangup command" do
-    run_fake_event_loop Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
+    @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Hangup.new(:to => @server_address, :from => @client_address)
   end
