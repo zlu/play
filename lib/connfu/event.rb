@@ -31,6 +31,9 @@ module Connfu
     class TransferRejected < Presence
     end
 
+    class TransferBusy < Presence
+    end
+
     class Result
       attr_reader :call_id
 

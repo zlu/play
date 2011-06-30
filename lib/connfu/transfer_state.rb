@@ -4,6 +4,10 @@ module Connfu
       new(:rejected)
     end
 
+    def self.busy
+      new(:busy)
+    end
+
     def self.answered
       new(:answered)
     end
@@ -18,6 +22,10 @@ module Connfu
 
     def rejected?
       @state == :rejected
+    end
+
+    def busy?
+      @state == :busy
     end
 
     def answered?
