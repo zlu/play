@@ -17,6 +17,11 @@ def create_stanza(presence_xml)
   Blather::Stanza::Presence.import(doc.root)
 end
 
+def create_iq(iq_xml)
+  doc = Nokogiri::XML.parse iq_xml
+  Blather::Stanza::Iq.import(doc.root)
+end
+
 RSpec::Matchers.define :be_stanzas do |expected_stanzas|
   match do |actual|
     actual.map { |x| x.to_s.gsub(/\n\s*/, "\n") } == expected_stanzas.map { |x| x.to_s.gsub(/\n\s*/, "\n") }
@@ -36,7 +41,19 @@ class TestConnection
 end
 
 def result_iq
-  "<iq type='result' id='blather000b' from='localhost' to='usera@localhost/voxeo'/>"
+  "<iq type='result' id='blather0008' from='4a3fe31a-0c2a-4a9a-ae98-f5b8afb55708@127.0.0.1' to='usera@127.0.0.1/voxeo'/>"
+end
+
+def error_iq
+  "<iq type='error' id='blather000c' from='4a3fe31a-0c2a-4a9a-ae98-f5b8afb55708@127.0.0.1' to='usera@127.0.0.1/voxeo'>
+    <transfer xmlns='urn:xmpp:ozone:transfer:1'>
+      <to>bollocks</to>
+    </transfer>
+    <error type='cancel'>
+      <bad-request xmlns='urn:ietf:params:xml:ns:xmpp-stanzas'/>
+      <text xmlns='urn:ietf:params:xml:ns:xmpp-stanzas' lang='en'>Unsupported format: bollocks</text>
+    </error>
+  </iq>"
 end
 
 def offer_presence(from='4a3fe31a-0c2a-4a9a-ae98-f5b8afb55708@127.0.0.1', to='usera@127.0.0.1/voxeo')

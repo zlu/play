@@ -27,6 +27,7 @@ describe "say something on a call" do
 
   it "should send the second say command once the first say command has completed" do
     @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
+    @processor.handle_event Connfu::Event::Result.new
     @processor.handle_event Connfu::Event::SayComplete.new
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Say.new(:text => 'http://www.phono.com/audio/troporocks.mp3', :to => @server_address, :from => @client_address)

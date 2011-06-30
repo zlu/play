@@ -61,6 +61,10 @@ module Connfu
             continue(true)
           when Connfu::Event::TransferTimeout
             continue(false)
+          when Connfu::Event::Result
+            continue
+          when Connfu::Event::Error
+            continue(:error)
         end
       end
 
@@ -68,6 +72,10 @@ module Connfu
 
       def send_command(command)
         Connfu.adaptor.send_command command
+        l.debug "Sent command: #{command}"
+        result = wait
+        l.debug "Result from command #{result}"
+        raise if result == :error
       end
     end
 

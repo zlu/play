@@ -24,7 +24,11 @@ describe "two simultaneous offers" do
 
   it "should handle each call independently" do
     @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @foo_address, :call_id => 'foo')
+    @processor.handle_event Connfu::Event::Result.new(:call_id => 'foo')
+    @processor.handle_event Connfu::Event::Result.new(:call_id => 'foo')
     @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @bar_address, :call_id => 'bar')
+    @processor.handle_event Connfu::Event::Result.new(:call_id => 'bar')
+    @processor.handle_event Connfu::Event::Result.new(:call_id => 'bar')
     @processor.handle_event Connfu::Event::SayComplete.new(:call_id => 'bar')
 
     Connfu.adaptor.commands = []

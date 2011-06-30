@@ -5,30 +5,22 @@ describe Connfu::Dsl do
     include Connfu::Dsl
   end
 
+  before do
+    Connfu.adaptor = TestConnection.new
+    subject.stub(:wait)
+  end
+
   subject {
     DslTest.new(:from => "server-address", :to => "client-address")
   }
 
   describe 'say' do
     it 'should send Say command to adaptor' do
-      allow_message_expectations_on_nil
       text = 'connfu is awesome'
       Connfu.adaptor.should_receive(:send_command).with(Connfu::Commands::Say.new(:text => text, :from => 'client-address', :to => 'server-address'))
       catch :waiting do
         subject.say(text)
       end
-    end
-  end
-
-  describe "answer" do
-    before do
-      Connfu.adaptor = mock('connection_adaptor')
-      Connfu.adaptor.stub(:send_command)
-    end
-
-    it "should not call wait" do
-      subject.should_not_receive(:wait)
-      subject.answer
     end
   end
 
@@ -76,7 +68,7 @@ describe Connfu::Dsl do
 
   describe '#handle_event(event)' do
     it "a result event" do
-      subject.should_not_receive(:continue)
+      subject.should_receive(:continue)
       subject.handle_event(Connfu::Event::Result.new)
     end
 

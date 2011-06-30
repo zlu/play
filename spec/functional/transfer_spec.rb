@@ -25,12 +25,15 @@ describe "a call transfer" do
 
   it "should send a transfer command" do
     @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
+    @processor.handle_event Connfu::Event::Result.new
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Transfer.new(:transfer_to => ['sip:userb@127.0.0.1'], :to => @server_address, :from => @client_address)
   end
 
   it "should indicate that the call has been transferred successfully" do
     @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
+    @processor.handle_event Connfu::Event::Result.new
+    @processor.handle_event Connfu::Event::Result.new
     @processor.handle_event Connfu::Event::TransferSuccess.new
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Say.new(:text => 'transfer was successful', :to => @server_address, :from => @client_address)
@@ -38,6 +41,8 @@ describe "a call transfer" do
 
   it "should indicate that the call transfer has been timed out" do
     @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
+    @processor.handle_event Connfu::Event::Result.new
+    @processor.handle_event Connfu::Event::Result.new
     @processor.handle_event Connfu::Event::TransferTimeout.new
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Say.new(:text => 'sorry nobody is available at the moment', :to => @server_address, :from => @client_address)
@@ -69,12 +74,15 @@ describe "a round-robin call transfer" do
 
   it "should send a transfer command for the first sip address" do
     @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
+    @processor.handle_event Connfu::Event::Result.new
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Transfer.new(:transfer_to => ['sip:userb@127.0.0.1'], :to => @server_address, :from => @client_address)
   end
 
   it "should continue to execute the next command if transfer to first sip address is successful" do
     @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
+    @processor.handle_event Connfu::Event::Result.new
+    @processor.handle_event Connfu::Event::Result.new
     @processor.handle_event Connfu::Event::TransferSuccess.new
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Say.new(:text => 'transfer was successful', :to => @server_address, :from => @client_address)
@@ -82,6 +90,8 @@ describe "a round-robin call transfer" do
 
   it "should send a transfer command for the second sip address if the first one times out" do
     @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
+    @processor.handle_event Connfu::Event::Result.new
+    @processor.handle_event Connfu::Event::Result.new
     @processor.handle_event Connfu::Event::TransferTimeout.new
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Transfer.new(:transfer_to => ['sip:userc@127.0.0.1'], :to => @server_address, :from => @client_address)
@@ -89,7 +99,10 @@ describe "a round-robin call transfer" do
 
   it "should indicate second transfer was successful" do
     @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
+    @processor.handle_event Connfu::Event::Result.new
+    @processor.handle_event Connfu::Event::Result.new
     @processor.handle_event Connfu::Event::TransferTimeout.new
+    @processor.handle_event Connfu::Event::Result.new
     @processor.handle_event Connfu::Event::TransferSuccess.new
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Say.new(:text => 'transfer was successful', :to => @server_address, :from => @client_address)
@@ -97,7 +110,10 @@ describe "a round-robin call transfer" do
 
   it "should indicate both transfers time out" do
     @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
+    @processor.handle_event Connfu::Event::Result.new
+    @processor.handle_event Connfu::Event::Result.new
     @processor.handle_event Connfu::Event::TransferTimeout.new
+    @processor.handle_event Connfu::Event::Result.new
     @processor.handle_event Connfu::Event::TransferTimeout.new
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Say.new(:text => 'sorry nobody is available at the moment', :to => @server_address, :from => @client_address)

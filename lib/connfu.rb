@@ -22,14 +22,18 @@ module Connfu
     @connection = Blather::Client.new.setup(host, password)
     @adaptor = Connfu::ConnectionAdaptor.new(@connection)
     @connection.register_handler(:ready, lambda { p 'Established @connection to Connfu Server' })
-    [:iq, :presence].each do |stanza|
-      @connection.register_handler(stanza) do |message|
-        l.debug "Receiving #{stanza} from server"
-        l.debug message
-        event = Connfu::Ozone::Parser.parse_event_from(message)
-        event_processor.handle_event(event)
+    [:iq, :presence].each do |stanza_type|
+      @connection.register_handler(stanza_type) do |stanza|
+        l.debug "Receiving #{stanza_type} from server"
+        handle_stanza(stanza)
       end
     end
+  end
+
+  def self.handle_stanza(stanza)
+    l.debug stanza
+    event = Connfu::Ozone::Parser.parse_event_from(stanza)
+    event_processor.handle_event(event)
   end
 
   def self.start(handler_class)

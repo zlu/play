@@ -29,6 +29,19 @@ module Connfu
     end
 
     class Result
+      attr_reader :call_id
+
+      def initialize(params = {})
+        @call_id = params[:call_id]
+      end
+    end
+
+    class Error
+      attr_reader :call_id
+
+      def initialize(params = {})
+        @call_id = params[:call_id]
+      end
     end
   end
 end

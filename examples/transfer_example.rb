@@ -12,7 +12,7 @@ class TransferExample
   on :offer do
     answer
     say 'please wait while we transfer your call'
-    transfer 'sip:zlu@sip2sip.info', 'sip:zhao@sip2sip.info'
+    transfer  'sip:zlu@iptel.org', 'sip:zhao@sip2sip.info', :timeout => 5, :mode => :round_robin
   end
 end
 

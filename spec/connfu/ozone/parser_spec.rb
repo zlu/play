@@ -36,6 +36,17 @@ describe Connfu::Ozone::Parser do
       end
     end
 
+    context "an error iq" do
+      before do
+        @node = create_stanza(error_iq)
+        @event = Connfu::Ozone::Parser.parse_event_from(@node)
+      end
+
+      it "should create an error event" do
+        @event.should be_instance_of Connfu::Event::Error
+      end
+    end
+
     context "a say complete iq" do
       before do
         @node = create_stanza(say_complete_success)

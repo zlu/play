@@ -14,7 +14,9 @@ module Connfu
         elsif node.xpath('//x:timeout', 'x' => 'urn:xmpp:ozone:transfer:complete:1').any?
           Connfu::Event::TransferTimeout.new(:call_id => node.from.node)
         elsif node.type == :result
-          Connfu::Event::Result.new
+          Connfu::Event::Result.new(:call_id => node.from.node)
+        elsif node.type == :error
+          Connfu::Event::Error.new(:call_id => node.from.node)
         end
       end
 
