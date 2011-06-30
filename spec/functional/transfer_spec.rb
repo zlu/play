@@ -120,3 +120,35 @@ describe "a round-robin call transfer" do
   end
 
 end
+
+describe "A transfer that was rejected" do
+  class TransferRejected
+    include Connfu::Dsl
+
+    on :offer do
+      answer
+      result = transfer('sip:userb@127.0.0.1')
+      if result.rejected?
+        say "transfer was rejected"
+      end
+    end
+  end
+
+  before do
+    @server_address = "34209dfiasdoaf@server.whatever"
+    @client_address = "usera@127.0.0.whatever"
+    Connfu.setup "@client_address", "1"
+    @processor = Connfu::EventProcessor.new(TransferRejected)
+
+    Connfu.adaptor = TestConnection.new
+  end
+
+  it "should indicate that the transfer was rejected by the end-point" do
+    @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
+    @processor.handle_event Connfu::Event::Result.new
+    @processor.handle_event Connfu::Event::Result.new
+    @processor.handle_event Connfu::Event::TransferRejected.new
+
+    Connfu.adaptor.commands.last.should == Connfu::Commands::Say.new(:text => 'transfer was rejected', :to => @server_address, :from => @client_address)
+  end
+end

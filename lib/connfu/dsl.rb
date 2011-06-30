@@ -61,6 +61,8 @@ module Connfu
             continue(true)
           when Connfu::Event::TransferTimeout
             continue(false)
+          when Connfu::Event::TransferRejected
+            continue(TransferState.rejected)
           when Connfu::Event::Result
             continue
           when Connfu::Event::Error
