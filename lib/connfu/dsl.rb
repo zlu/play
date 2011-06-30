@@ -40,9 +40,12 @@ module Connfu
       def transfer(*transfer_to)
         options = transfer_to.last.is_a?(Hash) ? transfer_to.pop : {}
         if options.delete(:mode) == :round_robin
-          transfer_to.detect do |sip_address|
-            transfer sip_address, options
+          result = nil
+          transfer_to.each do |sip_address|
+            result = transfer sip_address, options
+            break if result.answered?
           end
+          return result
         else
           command_options = {:transfer_to => transfer_to, :to => server_address, :from => client_address}
           command_options[:timeout] = options[:timeout] * 1000 if options[:timeout]
@@ -58,9 +61,9 @@ module Connfu
           when Connfu::Event::SayComplete
             continue
           when Connfu::Event::TransferSuccess
-            continue(true)
+            continue(TransferState.answered)
           when Connfu::Event::TransferTimeout
-            continue(false)
+            continue(TransferState.timeout)
           when Connfu::Event::TransferRejected
             continue(TransferState.rejected)
           when Connfu::Event::Result

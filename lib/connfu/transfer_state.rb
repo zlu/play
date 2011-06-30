@@ -4,12 +4,28 @@ module Connfu
       new(:rejected)
     end
 
+    def self.answered
+      new(:answered)
+    end
+
+    def self.timeout
+      new(:timeout)
+    end
+
     def initialize(state)
       @state = state
     end
 
     def rejected?
       @state == :rejected
+    end
+
+    def answered?
+      @state == :answered
+    end
+
+    def timeout?
+      @state == :timeout
     end
   end
 end

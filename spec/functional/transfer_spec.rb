@@ -6,11 +6,9 @@ describe "a call transfer" do
 
     on :offer do
       answer
-      if transfer('sip:userb@127.0.0.1')
-        say('transfer was successful')
-      else
-        say('sorry nobody is available at the moment')
-      end
+      result = transfer('sip:userb@127.0.0.1')
+      say('transfer was successful') if result.answered?
+      say('sorry nobody is available at the moment') if result.timeout?
     end
   end
 
@@ -55,11 +53,9 @@ describe "a round-robin call transfer" do
 
     on :offer do
       answer
-      if transfer('sip:userb@127.0.0.1', 'sip:userc@127.0.0.1', :mode => :round_robin)
-        say('transfer was successful')
-      else
-        say('sorry nobody is available at the moment')
-      end
+      result = transfer('sip:userb@127.0.0.1', 'sip:userc@127.0.0.1', :mode => :round_robin)
+      say('transfer was successful') if result.answered?
+      say('sorry nobody is available at the moment') if result.timeout?
     end
   end
 
