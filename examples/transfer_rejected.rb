@@ -11,9 +11,8 @@ class TransferRejected
 
   on :offer do
     answer
-    result = transfer('sip:user1@192.168.1.49', 'sip:user2@192.168.1.49', :timeout => 15)
-    p result
-    #puts "The transfer was rejected" if result.rejected?
+    result = transfer 'sip:zlu@213.192.59.75', :timeout => 15
+    puts "The transfer was rejected" if result.rejected?
   end
 end
 
