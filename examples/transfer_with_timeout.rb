@@ -11,9 +11,8 @@ class TransferExample
 
   on :offer do
     answer
-    unless transfer('sip:userb@127.0.0.1', :timeout => 15)
-      puts "The transfer timed out"
-    end
+    result = transfer('sip:userb@127.0.0.1', :timeout => 15)
+    puts "The transfer timed out" if result.timeout?
   end
 end
 
