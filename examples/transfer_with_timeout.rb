@@ -12,7 +12,7 @@ class TransferExample
   on :offer do
     answer
     unless transfer('sip:userb@127.0.0.1', :timeout => 15)
-      say "sorry about that but tom is drinking afternoon tea"
+      puts "The transfer timed out"
     end
   end
 end
