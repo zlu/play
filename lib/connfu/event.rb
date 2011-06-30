@@ -28,6 +28,9 @@ module Connfu
     class TransferTimeout < Presence
     end
 
+    class TransferRejected < Presence
+    end
+
     class Result
       attr_reader :call_id
 

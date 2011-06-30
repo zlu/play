@@ -7,6 +7,7 @@
   connfu/event
   connfu/event_processor
   connfu/dsl
+  connfu/transfer_state
   connfu/ozone/parser
   connfu/connection_adaptor
 ].each { |file| require file }

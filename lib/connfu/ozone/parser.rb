@@ -13,6 +13,8 @@ module Connfu
           Connfu::Event::TransferSuccess.new(:call_id => node.from.node)
         elsif node.xpath('//x:timeout', 'x' => 'urn:xmpp:ozone:transfer:complete:1').any?
           Connfu::Event::TransferTimeout.new(:call_id => node.from.node)
+        elsif node.xpath('//x:reject', 'x' => 'urn:xmpp:ozone:transfer:complete:1').any?
+          Connfu::Event::TransferRejected.new(:call_id => node.from.node)
         elsif node.type == :result
           Connfu::Event::Result.new(:call_id => node.from.node)
         elsif node.type == :error
