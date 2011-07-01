@@ -12,6 +12,12 @@ class MyTestClass
   include Connfu
 end
 
+def setup_connfu(handler_class)
+  Connfu.setup "testuser@testhost", "1"
+  Connfu.event_processor = Connfu::EventProcessor.new(handler_class)
+  Connfu.adaptor = TestConnection.new
+end
+
 def incoming(type, *args)
   stanza = if type.to_s =~ /_iq$/
     create_iq(send(type, *args))

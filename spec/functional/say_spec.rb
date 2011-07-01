@@ -11,10 +11,7 @@ describe "say something on a call" do
   end
 
   before :each do
-    Connfu.setup "testuser@testhost", "1"
-    Connfu.event_processor = Connfu::EventProcessor.new(SayExample)
-
-    Connfu.adaptor = TestConnection.new
+    setup_connfu SayExample
 
     @call_id = "34209dfiasdoaf"
     @server_address = "#{@call_id}@server.whatever"

@@ -15,8 +15,7 @@ describe "receiving an error from the server" do
   end
 
   before do
-    Connfu.adaptor = TestConnection.new
-    Connfu.event_processor = Connfu::EventProcessor.new(ErrorExample)
+    setup_connfu ErrorExample
   end
 
   it "should raise an exception if the server responds with an error" do

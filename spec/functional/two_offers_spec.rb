@@ -12,10 +12,7 @@ describe "two simultaneous offers" do
   end
 
   before :each do
-    Connfu.setup "testuser@testhost", "1"
-    Connfu.event_processor = Connfu::EventProcessor.new(TwoOffersExample)
-
-    Connfu.adaptor = TestConnection.new
+    setup_connfu TwoOffersExample
 
     @first_server_address = "foo@server.whatever"
     @second_server_address = "bar@server.whatever"

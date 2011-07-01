@@ -10,10 +10,7 @@ describe "answering a call" do
   end
 
   before :each do
-    Connfu.setup "testuser@testhost", "1"
-    Connfu.event_processor = Connfu::EventProcessor.new(AnswerExample)
-
-    Connfu.adaptor = TestConnection.new
+    setup_connfu AnswerExample
 
     @server_address = "34209dfiasdoaf@server.whatever"
     @client_address = "usera@127.0.0.whatever/voxeo"
