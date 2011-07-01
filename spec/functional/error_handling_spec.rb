@@ -1,12 +1,13 @@
 require "spec_helper"
 
-describe "a call transfer" do
+describe "receiving an error from the server" do
   class ErrorExample
     include Connfu::Dsl
 
     on :offer do
-      begin 
+      begin
         answer
+        do_something
       rescue Object => e
         error_caught!
       end
@@ -14,16 +15,13 @@ describe "a call transfer" do
   end
 
   before do
-    Connfu.adaptor = TestConnection.new
+    setup_connfu ErrorExample
   end
-  
-  subject do
-    ErrorExample.new :from => 'a', :to => 'b'
-  end
-  
+
   it "should raise an exception if the server responds with an error" do
-    subject.start
-    subject.should_receive(:error_caught!)
-    subject.handle_event Connfu::Event::Error.new
+    ErrorExample.any_instance.should_receive(:error_caught!)
+
+    incoming :offer_presence
+    incoming :error_iq
   end
 end
