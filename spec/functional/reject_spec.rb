@@ -20,7 +20,7 @@ describe "a call reject" do
   end
 
   it "should send the reject command" do
-    Connfu.handle_stanza(create_stanza(offer_presence(@server_address, @client_address)))
+    incoming :offer_presence, @server_address, @client_address
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Reject.new(:to => @server_address, :from => @client_address)
   end

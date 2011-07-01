@@ -22,15 +22,15 @@ describe "say something on a call" do
   end
 
   it "should send first say command" do
-    Connfu.handle_stanza(create_stanza(offer_presence(@server_address, @client_address)))
+    incoming :offer_presence, @server_address, @client_address
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Say.new(:text => 'hello, this is connfu', :to => @server_address, :from => @client_address)
   end
 
   it "should send the second say command once the first say command has completed" do
-    Connfu.handle_stanza(create_stanza(offer_presence(@server_address, @client_address)))
-    Connfu.handle_stanza(create_iq(result_iq(@call_id)))
-    Connfu.handle_stanza(create_stanza(say_complete_success(@call_id)))
+    incoming :offer_presence, @server_address, @client_address
+    incoming :result_iq, @call_id
+    incoming :say_complete_success, @call_id
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Say.new(:text => 'http://www.phono.com/audio/troporocks.mp3', :to => @server_address, :from => @client_address)
   end

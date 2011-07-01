@@ -24,18 +24,17 @@ describe "two simultaneous offers" do
   end
 
   it "should handle each call independently" do
-    Connfu.handle_stanza(create_stanza(offer_presence(@first_server_address, @foo_address)))
-    Connfu.handle_stanza(create_iq(result_iq("foo")))
-    Connfu.handle_stanza(create_iq(result_iq("foo")))
+    incoming :offer_presence, @first_server_address, @foo_address
+    incoming :result_iq, "foo"
+    incoming :result_iq, "foo"
 
-    Connfu.handle_stanza(create_stanza(offer_presence(@second_server_address, @bar_address)))
-    Connfu.handle_stanza(create_iq(result_iq("bar")))
-    Connfu.handle_stanza(create_iq(result_iq("bar")))
+    incoming :offer_presence, @second_server_address, @bar_address
+    incoming :result_iq, "bar"
+    incoming :result_iq, "bar"
 
-    Connfu.handle_stanza(create_stanza(say_complete_success("bar")))
-
+    incoming :say_complete_success, "bar"
     Connfu.adaptor.commands = []
-    Connfu.handle_stanza(create_stanza(say_complete_success("foo")))
+    incoming :say_complete_success, "foo"
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Say.new(:text => 'this is the second say', :to => @first_server_address, :from => @foo_address)
   end

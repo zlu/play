@@ -20,7 +20,7 @@ describe "answering a call" do
   end
 
   it "should send an answer command" do
-    Connfu.handle_stanza(create_stanza(offer_presence(@server_address, @client_address)))
+    incoming :offer_presence, @server_address, @client_address
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Answer.new(:to => @server_address, :from => @client_address)
   end

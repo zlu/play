@@ -22,7 +22,7 @@ describe "a call redirect" do
   end
 
   it "should send the redirect command" do
-    Connfu.handle_stanza(create_stanza(offer_presence(@server_address, @client_address)))
+    incoming :offer_presence, @server_address, @client_address
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Redirect.new(:redirect_to => @redirect_to, :to => @server_address, :from => @client_address)
   end
