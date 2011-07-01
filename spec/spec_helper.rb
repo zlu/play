@@ -89,7 +89,7 @@ def say_complete_success
   </presence>"
 end
 
-def transfer_timeout_iq
+def transfer_timeout_presence
   "<presence to='16577@app.ozone.net/1' from='9f00061@call.ozone.net/fgh4590'>
     <complete xmlns='urn:xmpp:ozone:ext:1'>
       <timeout xmlns='urn:xmpp:ozone:transfer:complete:1' />
@@ -97,7 +97,7 @@ def transfer_timeout_iq
   </presence>"
 end
 
-def transfer_success_iq
+def transfer_success_presence
   "<presence to='16577@app.ozone.net/1' from='9f00061@call.ozone.net/fgh4590'>
     <complete xmlns='urn:xmpp:ozone:ext:1'>
       <success xmlns='urn:xmpp:ozone:transfer:complete:1' />

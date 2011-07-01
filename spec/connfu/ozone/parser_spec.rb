@@ -62,9 +62,9 @@ describe Connfu::Ozone::Parser do
       end
     end
 
-    context "a transfer success iq" do
+    context "a transfer success presence" do
       before do
-        @node = create_stanza(transfer_success_iq)
+        @node = create_stanza(transfer_success_presence)
         @event = Connfu::Ozone::Parser.parse_event_from(@node)
       end
 
@@ -77,9 +77,9 @@ describe Connfu::Ozone::Parser do
       end
     end
 
-    context "a transfer timeout iq" do
+    context "a transfer timeout presence" do
       before do
-        @node = create_stanza(transfer_timeout_iq)
+        @node = create_stanza(transfer_timeout_presence)
         @event = Connfu::Ozone::Parser.parse_event_from(@node)
       end
 
