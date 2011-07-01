@@ -104,3 +104,11 @@ def transfer_success_iq
     </complete>
   </presence>"
 end
+
+def transfer_busy_presence
+  %{<presence from="c82737e4-f70c-466d-b839-924f69be57bd@127.0.0.1/7d858f27-e961-4aa2-ae9f-ecaffd4c841e" to="usera@127.0.0.1/voxeo">
+    <complete xmlns="urn:xmpp:ozone:ext:1">
+      <busy xmlns="urn:xmpp:ozone:transfer:complete:1"/>
+    </complete>
+  </presence>}
+end

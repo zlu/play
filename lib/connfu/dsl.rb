@@ -55,6 +55,7 @@ module Connfu
       end
 
       def handle_event(event)
+        l.debug "Handling event: #{event.inspect}"
         case event
           when Connfu::Event::Offer
             start

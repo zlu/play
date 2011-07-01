@@ -91,6 +91,21 @@ describe Connfu::Ozone::Parser do
         @event.call_id.should eq @node.from.node
       end
     end
+
+    context "a transfer busy presence" do
+      before do
+        @node = create_stanza(transfer_busy_presence)
+        @event = Connfu::Ozone::Parser.parse_event_from(@node)
+      end
+
+      it "should create a TransferBusy event" do
+        @event.should be_instance_of Connfu::Event::TransferBusy
+      end
+
+      it "should determine the call_id value of the transfer busy presence" do
+        @event.call_id.should eq @node.from.node
+      end
+    end
   end
 
 end
