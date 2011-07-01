@@ -1,9 +1,8 @@
 require "spec_helper"
 
 describe "two simultaneous offers" do
-  class TwoOffersExample
-    include Connfu::Dsl
 
+  testing_dsl do
     on :offer do
       answer
       say 'this is the first say'
@@ -12,8 +11,6 @@ describe "two simultaneous offers" do
   end
 
   before :each do
-    setup_connfu TwoOffersExample
-
     @first_server_address = "foo@server.whatever"
     @second_server_address = "bar@server.whatever"
     @foo_address = "foo@clientfoo.com"

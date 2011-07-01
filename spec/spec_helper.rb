@@ -2,8 +2,18 @@ require 'bundler/setup'
 require 'rspec'
 require 'connfu'
 
+module ConnfuTestDsl
+  def testing_dsl(&block)
+    dsl_class = Class.new
+    dsl_class.send(:include, Connfu::Dsl)
+    dsl_class.class_eval(&block)
+    before(:each) { setup_connfu(dsl_class) }
+  end
+end
+
 RSpec.configure do |config|
   config.include RSpec::Matchers
+  config.extend ConnfuTestDsl
 end
 
 l.level = Logger::WARN

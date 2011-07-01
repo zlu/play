@@ -1,17 +1,14 @@
 require "spec_helper"
 
 describe "hangup a call" do
-  class HangupExample
-    include Connfu::Dsl
 
+  testing_dsl do
     on :offer do
       hangup
     end
   end
 
   before :each do
-    setup_connfu HangupExample
-
     @server_address = "34209dfiasdoaf@server.whatever"
     @client_address = "usera@127.0.0.whatever/voxeo"
   end

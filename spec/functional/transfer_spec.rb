@@ -1,9 +1,8 @@
 require "spec_helper"
 
 describe "a call transfer" do
-  class TransferExample
-    include Connfu::Dsl
 
+  testing_dsl do
     on :offer do
       answer
       result = transfer('sip:userb@127.0.0.1')
@@ -16,7 +15,6 @@ describe "a call transfer" do
     @call_id = "34209dfiasdoaf"
     @server_address = "#{@call_id}@server.whatever"
     @client_address = "usera@127.0.0.whatever"
-    setup_connfu TransferExample
   end
 
   it "should send a transfer command" do
@@ -46,9 +44,8 @@ describe "a call transfer" do
 end
 
 describe "a round-robin call transfer" do
-  class RoundRobinTransferExample
-    include Connfu::Dsl
 
+  testing_dsl do
     on :offer do
       answer
       result = transfer('sip:userb@127.0.0.1', 'sip:userc@127.0.0.1', :mode => :round_robin)
@@ -61,7 +58,6 @@ describe "a round-robin call transfer" do
     @call_id = "34209dfiasdoaf"
     @server_address = "#{@call_id}@server.whatever"
     @client_address = "usera@127.0.0.whatever"
-    setup_connfu RoundRobinTransferExample
   end
 
   it "should send a transfer command for the first sip address" do
@@ -114,9 +110,8 @@ describe "a round-robin call transfer" do
 end
 
 describe "A transfer that was rejected" do
-  class TransferRejected
-    include Connfu::Dsl
 
+  testing_dsl do
     on :offer do
       answer
       result = transfer('sip:userb@127.0.0.1')
@@ -130,7 +125,6 @@ describe "A transfer that was rejected" do
     @call_id = "34209dfiasdoaf"
     @server_address = "#{@call_id}@server.whatever"
     @client_address = "usera@127.0.0.whatever"
-    setup_connfu TransferRejected
   end
 
   it "should indicate that the transfer was rejected by the end-point" do
@@ -144,9 +138,8 @@ describe "A transfer that was rejected" do
 end
 
 describe "A transfer that was rejected because far end is busy" do
-  class TransferRejectedForBusy
-    include Connfu::Dsl
 
+  testing_dsl do
     on :offer do
       answer
       result = transfer('sip:userb@127.0.0.1')
@@ -160,7 +153,6 @@ describe "A transfer that was rejected because far end is busy" do
     @call_id = "34209dfiasdoaf"
     @server_address = "#{@call_id}@server.whatever"
     @client_address = "usera@127.0.0.whatever"
-    setup_connfu TransferRejectedForBusy
   end
 
   it "should indicate that the transfer was rejected because far-end is busy" do

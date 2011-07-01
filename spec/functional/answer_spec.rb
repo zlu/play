@@ -1,17 +1,14 @@
 require "spec_helper"
 
 describe "answering a call" do
-  class AnswerExample
-    include Connfu::Dsl
 
+  testing_dsl do
     on :offer do
       answer
     end
   end
 
   before :each do
-    setup_connfu AnswerExample
-
     @server_address = "34209dfiasdoaf@server.whatever"
     @client_address = "usera@127.0.0.whatever/voxeo"
   end

@@ -1,9 +1,8 @@
 require "spec_helper"
 
 describe "say something on a call" do
-  class SayExample
-    include Connfu::Dsl
 
+  testing_dsl do
     on :offer do
       say('hello, this is connfu')
       say('http://www.phono.com/audio/troporocks.mp3')
@@ -11,8 +10,6 @@ describe "say something on a call" do
   end
 
   before :each do
-    setup_connfu SayExample
-
     @call_id = "34209dfiasdoaf"
     @server_address = "#{@call_id}@server.whatever"
     @client_address = "usera@127.0.0.whatever/voxeo"

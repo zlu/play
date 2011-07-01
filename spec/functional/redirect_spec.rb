@@ -1,17 +1,14 @@
 require "spec_helper"
 
 describe "a call redirect" do
-  class RedirectExample
-    include Connfu::Dsl
 
+  testing_dsl do
     on :offer do
       redirect('sip:another@connfu.com')
     end
   end
 
   before :each do
-    setup_connfu RedirectExample
-
     @server_address = "34209dfiasdoaf@server.whatever"
     @client_address = "usera@127.0.0.whatever/voxeo"
 

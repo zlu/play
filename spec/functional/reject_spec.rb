@@ -1,17 +1,14 @@
 require "spec_helper"
 
 describe "a call reject" do
-  class RejectExample
-    include Connfu::Dsl
 
+  testing_dsl do
     on :offer do
       reject
     end
   end
 
   before :each do
-    setup_connfu RejectExample
-
     @server_address = "34209dfiasdoaf@server.whatever"
     @client_address = "usera@127.0.0.whatever/voxeo"
   end
