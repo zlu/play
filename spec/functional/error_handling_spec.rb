@@ -1,9 +1,8 @@
 require "spec_helper"
 
 describe "receiving an error from the server" do
-  class ErrorExample
-    include Connfu::Dsl
 
+  testing_dsl do
     on :offer do
       begin
         answer
@@ -14,12 +13,8 @@ describe "receiving an error from the server" do
     end
   end
 
-  before do
-    setup_connfu ErrorExample
-  end
-
   it "should raise an exception if the server responds with an error" do
-    ErrorExample.any_instance.should_receive(:error_caught!)
+    dsl_instance.should_receive(:error_caught!)
 
     incoming :offer_presence
     incoming :error_iq
