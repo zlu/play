@@ -11,7 +11,7 @@ describe "answering a call" do
 
   before :each do
     Connfu.setup "testuser@testhost", "1"
-    @processor = Connfu::EventProcessor.new(AnswerExample)
+    Connfu.event_processor = Connfu::EventProcessor.new(AnswerExample)
 
     Connfu.adaptor = TestConnection.new
 
@@ -20,7 +20,7 @@ describe "answering a call" do
   end
 
   it "should send an answer command" do
-    @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
+    Connfu.handle_stanza(create_stanza(offer_presence(@server_address, @client_address)))
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Answer.new(:to => @server_address, :from => @client_address)
   end

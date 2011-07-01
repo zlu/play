@@ -11,7 +11,7 @@ describe "hangup a call" do
 
   before :each do
     Connfu.setup "testuser@testhost", "1"
-    @processor = Connfu::EventProcessor.new(HangupExample)
+    Connfu.event_processor = Connfu::EventProcessor.new(HangupExample)
 
     Connfu.adaptor = TestConnection.new
 
@@ -20,7 +20,7 @@ describe "hangup a call" do
   end
 
   it "should send the hangup command" do
-    @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
+    Connfu.handle_stanza(create_stanza(offer_presence(@server_address, @client_address)))
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Hangup.new(:to => @server_address, :from => @client_address)
   end

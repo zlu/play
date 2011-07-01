@@ -13,35 +13,36 @@ describe "a call transfer" do
   end
 
   before do
-    @server_address = "34209dfiasdoaf@server.whatever"
+    @call_id = "34209dfiasdoaf"
+    @server_address = "#{@call_id}@server.whatever"
     @client_address = "usera@127.0.0.whatever"
     Connfu.setup "@client_address", "1"
-    @processor = Connfu::EventProcessor.new(TransferExample)
+    Connfu.event_processor = Connfu::EventProcessor.new(TransferExample)
 
     Connfu.adaptor = TestConnection.new
   end
 
   it "should send a transfer command" do
-    @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
-    @processor.handle_event Connfu::Event::Result.new
+    Connfu.handle_stanza(create_stanza(offer_presence(@server_address, @client_address)))
+    Connfu.handle_stanza(create_iq(result_iq(@call_id)))
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Transfer.new(:transfer_to => ['sip:userb@127.0.0.1'], :to => @server_address, :from => @client_address)
   end
 
   it "should indicate that the call has been transferred successfully" do
-    @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
-    @processor.handle_event Connfu::Event::Result.new
-    @processor.handle_event Connfu::Event::Result.new
-    @processor.handle_event Connfu::Event::TransferSuccess.new
+    Connfu.handle_stanza(create_stanza(offer_presence(@server_address, @client_address)))
+    Connfu.handle_stanza(create_iq(result_iq(@call_id)))
+    Connfu.handle_stanza(create_iq(result_iq(@call_id)))
+    Connfu.handle_stanza(create_stanza(transfer_success_presence(@call_id)))
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Say.new(:text => 'transfer was successful', :to => @server_address, :from => @client_address)
   end
 
   it "should indicate that the call transfer has been timed out" do
-    @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
-    @processor.handle_event Connfu::Event::Result.new
-    @processor.handle_event Connfu::Event::Result.new
-    @processor.handle_event Connfu::Event::TransferTimeout.new
+    Connfu.handle_stanza(create_stanza(offer_presence(@server_address, @client_address)))
+    Connfu.handle_stanza(create_iq(result_iq(@call_id)))
+    Connfu.handle_stanza(create_iq(result_iq(@call_id)))
+    Connfu.handle_stanza(create_stanza(transfer_timeout_presence(@call_id)))
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Say.new(:text => 'sorry nobody is available at the moment', :to => @server_address, :from => @client_address)
   end
@@ -60,57 +61,58 @@ describe "a round-robin call transfer" do
   end
 
   before do
-    @server_address = "34209dfiasdoaf@server.whatever"
+    @call_id = "34209dfiasdoaf"
+    @server_address = "#{@call_id}@server.whatever"
     @client_address = "usera@127.0.0.whatever"
     Connfu.setup "@client_address", "1"
-    @processor = Connfu::EventProcessor.new(RoundRobinTransferExample)
+    Connfu.event_processor = Connfu::EventProcessor.new(RoundRobinTransferExample)
 
     Connfu.adaptor = TestConnection.new
   end
 
   it "should send a transfer command for the first sip address" do
-    @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
-    @processor.handle_event Connfu::Event::Result.new
+    Connfu.handle_stanza(create_stanza(offer_presence(@server_address, @client_address)))
+    Connfu.handle_stanza(create_iq(result_iq(@call_id)))
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Transfer.new(:transfer_to => ['sip:userb@127.0.0.1'], :to => @server_address, :from => @client_address)
   end
 
   it "should continue to execute the next command if transfer to first sip address is successful" do
-    @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
-    @processor.handle_event Connfu::Event::Result.new
-    @processor.handle_event Connfu::Event::Result.new
-    @processor.handle_event Connfu::Event::TransferSuccess.new
+    Connfu.handle_stanza(create_stanza(offer_presence(@server_address, @client_address)))
+    Connfu.handle_stanza(create_iq(result_iq(@call_id)))
+    Connfu.handle_stanza(create_iq(result_iq(@call_id)))
+    Connfu.handle_stanza(create_stanza(transfer_success_presence(@call_id)))
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Say.new(:text => 'transfer was successful', :to => @server_address, :from => @client_address)
   end
 
   it "should send a transfer command for the second sip address if the first one times out" do
-    @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
-    @processor.handle_event Connfu::Event::Result.new
-    @processor.handle_event Connfu::Event::Result.new
-    @processor.handle_event Connfu::Event::TransferTimeout.new
+    Connfu.handle_stanza(create_stanza(offer_presence(@server_address, @client_address)))
+    Connfu.handle_stanza(create_iq(result_iq(@call_id)))
+    Connfu.handle_stanza(create_iq(result_iq(@call_id)))
+    Connfu.handle_stanza(create_stanza(transfer_timeout_presence(@call_id)))
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Transfer.new(:transfer_to => ['sip:userc@127.0.0.1'], :to => @server_address, :from => @client_address)
   end
 
   it "should indicate second transfer was successful" do
-    @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
-    @processor.handle_event Connfu::Event::Result.new
-    @processor.handle_event Connfu::Event::Result.new
-    @processor.handle_event Connfu::Event::TransferTimeout.new
-    @processor.handle_event Connfu::Event::Result.new
-    @processor.handle_event Connfu::Event::TransferSuccess.new
+    Connfu.handle_stanza(create_stanza(offer_presence(@server_address, @client_address)))
+    Connfu.handle_stanza(create_iq(result_iq(@call_id)))
+    Connfu.handle_stanza(create_iq(result_iq(@call_id)))
+    Connfu.handle_stanza(create_stanza(transfer_timeout_presence(@call_id)))
+    Connfu.handle_stanza(create_iq(result_iq(@call_id)))
+    Connfu.handle_stanza(create_stanza(transfer_success_presence(@call_id)))
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Say.new(:text => 'transfer was successful', :to => @server_address, :from => @client_address)
   end
 
   it "should indicate both transfers time out" do
-    @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
-    @processor.handle_event Connfu::Event::Result.new
-    @processor.handle_event Connfu::Event::Result.new
-    @processor.handle_event Connfu::Event::TransferTimeout.new
-    @processor.handle_event Connfu::Event::Result.new
-    @processor.handle_event Connfu::Event::TransferTimeout.new
+    Connfu.handle_stanza(create_stanza(offer_presence(@server_address, @client_address)))
+    Connfu.handle_stanza(create_iq(result_iq(@call_id)))
+    Connfu.handle_stanza(create_iq(result_iq(@call_id)))
+    Connfu.handle_stanza(create_stanza(transfer_timeout_presence(@call_id)))
+    Connfu.handle_stanza(create_iq(result_iq(@call_id)))
+    Connfu.handle_stanza(create_stanza(transfer_timeout_presence(@call_id)))
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Say.new(:text => 'sorry nobody is available at the moment', :to => @server_address, :from => @client_address)
   end
@@ -131,19 +133,20 @@ describe "A transfer that was rejected" do
   end
 
   before do
-    @server_address = "34209dfiasdoaf@server.whatever"
+    @call_id = "34209dfiasdoaf"
+    @server_address = "#{@call_id}@server.whatever"
     @client_address = "usera@127.0.0.whatever"
     Connfu.setup "@client_address", "1"
-    @processor = Connfu::EventProcessor.new(TransferRejected)
+    Connfu.event_processor = Connfu::EventProcessor.new(TransferRejected)
 
     Connfu.adaptor = TestConnection.new
   end
 
   it "should indicate that the transfer was rejected by the end-point" do
-    @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
-    @processor.handle_event Connfu::Event::Result.new
-    @processor.handle_event Connfu::Event::Result.new
-    @processor.handle_event Connfu::Event::TransferRejected.new
+    Connfu.handle_stanza(create_stanza(offer_presence(@server_address, @client_address)))
+    Connfu.handle_stanza(create_iq(result_iq(@call_id)))
+    Connfu.handle_stanza(create_iq(result_iq(@call_id)))
+    Connfu.handle_stanza(create_stanza(transfer_rejected_presence(@call_id)))
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Say.new(:text => 'transfer was rejected', :to => @server_address, :from => @client_address)
   end
@@ -163,19 +166,20 @@ describe "A transfer that was rejected because far end is busy" do
   end
 
   before do
-    @server_address = "34209dfiasdoaf@server.whatever"
+    @call_id = "34209dfiasdoaf"
+    @server_address = "#{@call_id}@server.whatever"
     @client_address = "usera@127.0.0.whatever"
     Connfu.setup "@client_address", "1"
-    @processor = Connfu::EventProcessor.new(TransferRejectedForBusy)
+    Connfu.event_processor = Connfu::EventProcessor.new(TransferRejectedForBusy)
 
     Connfu.adaptor = TestConnection.new
   end
 
   it "should indicate that the transfer was rejected because far-end is busy" do
-    @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @client_address)
-    @processor.handle_event Connfu::Event::Result.new
-    @processor.handle_event Connfu::Event::Result.new
-    @processor.handle_event Connfu::Event::TransferBusy.new
+    Connfu.handle_stanza(create_stanza(offer_presence(@server_address, @client_address)))
+    Connfu.handle_stanza(create_iq(result_iq(@call_id)))
+    Connfu.handle_stanza(create_iq(result_iq(@call_id)))
+    Connfu.handle_stanza(create_stanza(transfer_busy_presence(@call_id)))
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Say.new(:text => 'transfer was rejected because far-end is busy', :to => @server_address, :from => @client_address)
   end

@@ -13,28 +13,31 @@ describe "two simultaneous offers" do
 
   before :each do
     Connfu.setup "testuser@testhost", "1"
-    @processor = Connfu::EventProcessor.new(TwoOffersExample)
+    Connfu.event_processor = Connfu::EventProcessor.new(TwoOffersExample)
 
     Connfu.adaptor = TestConnection.new
 
-    @server_address = "34209dfiasdoaf@server.whatever"
+    @first_server_address = "foo@server.whatever"
+    @second_server_address = "bar@server.whatever"
     @foo_address = "foo@clientfoo.com"
     @bar_address = "bar@clientbar.com"
   end
 
   it "should handle each call independently" do
-    @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @foo_address, :call_id => 'foo')
-    @processor.handle_event Connfu::Event::Result.new(:call_id => 'foo')
-    @processor.handle_event Connfu::Event::Result.new(:call_id => 'foo')
-    @processor.handle_event Connfu::Event::Offer.new(:from => @server_address, :to => @bar_address, :call_id => 'bar')
-    @processor.handle_event Connfu::Event::Result.new(:call_id => 'bar')
-    @processor.handle_event Connfu::Event::Result.new(:call_id => 'bar')
-    @processor.handle_event Connfu::Event::SayComplete.new(:call_id => 'bar')
+    Connfu.handle_stanza(create_stanza(offer_presence(@first_server_address, @foo_address)))
+    Connfu.handle_stanza(create_iq(result_iq("foo")))
+    Connfu.handle_stanza(create_iq(result_iq("foo")))
+
+    Connfu.handle_stanza(create_stanza(offer_presence(@second_server_address, @bar_address)))
+    Connfu.handle_stanza(create_iq(result_iq("bar")))
+    Connfu.handle_stanza(create_iq(result_iq("bar")))
+
+    Connfu.handle_stanza(create_stanza(say_complete_success("bar")))
 
     Connfu.adaptor.commands = []
-    @processor.handle_event Connfu::Event::SayComplete.new(:call_id => 'foo')
+    Connfu.handle_stanza(create_stanza(say_complete_success("foo")))
 
-    Connfu.adaptor.commands.last.should == Connfu::Commands::Say.new(:text => 'this is the second say', :to => @server_address, :from => @foo_address)
+    Connfu.adaptor.commands.last.should == Connfu::Commands::Say.new(:text => 'this is the second say', :to => @first_server_address, :from => @foo_address)
   end
 
 end

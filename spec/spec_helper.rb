@@ -40,12 +40,12 @@ class TestConnection
   end
 end
 
-def result_iq
-  "<iq type='result' id='blather0008' from='4a3fe31a-0c2a-4a9a-ae98-f5b8afb55708@127.0.0.1' to='usera@127.0.0.1/voxeo'/>"
+def result_iq(call_id='4a3fe31a-0c2a-4a9a-ae98-f5b8afb55708')
+  "<iq type='result' id='blather0008' from='#{call_id}@127.0.0.1' to='usera@127.0.0.1/voxeo'/>"
 end
 
-def error_iq
-  "<iq type='error' id='blather000c' from='4a3fe31a-0c2a-4a9a-ae98-f5b8afb55708@127.0.0.1' to='usera@127.0.0.1/voxeo'>
+def error_iq(call_id='4a3fe31a-0c2a-4a9a-ae98-f5b8afb55708')
+  "<iq type='error' id='blather000c' from='#{call_id}@127.0.0.1' to='usera@127.0.0.1/voxeo'>
     <transfer xmlns='urn:xmpp:ozone:transfer:1'>
       <to>bollocks</to>
     </transfer>
@@ -75,40 +75,48 @@ def offer_presence(from='4a3fe31a-0c2a-4a9a-ae98-f5b8afb55708@127.0.0.1', to='us
   </presence>"
 end
 
-def answer_iq
-  %{<iq type="set" to="9c011b43-b9be-4322-9adf-3d18e3af2f1b@127.0.0.1" id="blather000a" from="usera@127.0.0.1/voxeo">
+def answer_iq(call_id="9c011b43-b9be-4322-9adf-3d18e3af2f1b")
+  %{<iq type="set" to="#{call_id}@127.0.0.1" id="blather000a" from="usera@127.0.0.1/voxeo">
     <answer xmlns="urn:xmpp:ozone:1"/>
   </iq>}
 end
 
-def say_complete_success
-  "<presence from='7bc6c7d5-1428-421d-bb40-22f58cdcd2ec@127.0.0.1/a1b45d70-6df2-4460-b172-4bd077e8966d' to='usera@127.0.0.1/voxeo'>
+def say_complete_success(call_id='7bc6c7d5-1428-421d-bb40-22f58cdcd2ec')
+  "<presence from='#{call_id}@127.0.0.1/a1b45d70-6df2-4460-b172-4bd077e8966d' to='usera@127.0.0.1/voxeo'>
     <complete xmlns='urn:xmpp:ozone:ext:1'>
       <success xmlns='urn:xmpp:ozone:say:complete:1'/>
     </complete>
   </presence>"
 end
 
-def transfer_timeout_presence
-  "<presence to='16577@app.ozone.net/1' from='9f00061@call.ozone.net/fgh4590'>
+def transfer_timeout_presence(call_id='9f00061')
+  "<presence to='16577@app.ozone.net/1' from='#{call_id}@call.ozone.net/fgh4590'>
     <complete xmlns='urn:xmpp:ozone:ext:1'>
       <timeout xmlns='urn:xmpp:ozone:transfer:complete:1' />
     </complete>
   </presence>"
 end
 
-def transfer_success_presence
-  "<presence to='16577@app.ozone.net/1' from='9f00061@call.ozone.net/fgh4590'>
+def transfer_success_presence(call_id='9f00061')
+  "<presence to='16577@app.ozone.net/1' from='#{call_id}@call.ozone.net/fgh4590'>
     <complete xmlns='urn:xmpp:ozone:ext:1'>
       <success xmlns='urn:xmpp:ozone:transfer:complete:1' />
     </complete>
   </presence>"
 end
 
-def transfer_busy_presence
-  %{<presence from="c82737e4-f70c-466d-b839-924f69be57bd@127.0.0.1/7d858f27-e961-4aa2-ae9f-ecaffd4c841e" to="usera@127.0.0.1/voxeo">
+def transfer_busy_presence(call_id="c82737e4-f70c-466d-b839-924f69be57bd")
+  %{<presence from="#{call_id}@127.0.0.1/7d858f27-e961-4aa2-ae9f-ecaffd4c841e" to="usera@127.0.0.1/voxeo">
     <complete xmlns="urn:xmpp:ozone:ext:1">
       <busy xmlns="urn:xmpp:ozone:transfer:complete:1"/>
+    </complete>
+  </presence>}
+end
+
+def transfer_rejected_presence(call_id="c82737e4-f70c-466d-b839-924f69be57bd")
+  %{<presence from="#{call_id}@127.0.0.1/7d858f27-e961-4aa2-ae9f-ecaffd4c841e" to="usera@127.0.0.1/voxeo">
+    <complete xmlns="urn:xmpp:ozone:ext:1">
+      <reject xmlns="urn:xmpp:ozone:transfer:complete:1"/>
     </complete>
   </presence>}
 end
