@@ -33,12 +33,12 @@ def incoming(type, *args)
   stanza = if type.to_s =~ /_iq$/
     create_iq(send(type, *args))
   else
-    create_stanza(send(type, *args))
+    create_presence(send(type, *args))
   end
   Connfu.handle_stanza(stanza)
 end
 
-def create_stanza(presence_xml)
+def create_presence(presence_xml)
   doc = Nokogiri::XML.parse presence_xml
   Blather::Stanza::Presence.import(doc.root)
 end

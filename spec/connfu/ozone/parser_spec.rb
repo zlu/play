@@ -4,7 +4,7 @@ describe Connfu::Ozone::Parser do
   describe "#parse_event_from" do
     context 'an offer iq' do
       before do
-        @node = create_stanza(offer_presence)
+        @node = create_presence(offer_presence)
         @event = Connfu::Ozone::Parser.parse_event_from(@node)
       end
 
@@ -27,7 +27,7 @@ describe Connfu::Ozone::Parser do
 
     context "a result iq" do
       before do
-        @node = create_stanza(result_iq)
+        @node = create_presence(result_iq)
         @event = Connfu::Ozone::Parser.parse_event_from(@node)
       end
 
@@ -38,7 +38,7 @@ describe Connfu::Ozone::Parser do
 
     context "an error iq" do
       before do
-        @node = create_stanza(error_iq)
+        @node = create_presence(error_iq)
         @event = Connfu::Ozone::Parser.parse_event_from(@node)
       end
 
@@ -49,7 +49,7 @@ describe Connfu::Ozone::Parser do
 
     context "a say complete iq" do
       before do
-        @node = create_stanza(say_complete_success)
+        @node = create_presence(say_complete_success)
         @event = Connfu::Ozone::Parser.parse_event_from(@node)
       end
 
@@ -64,7 +64,7 @@ describe Connfu::Ozone::Parser do
 
     context "a transfer success presence" do
       before do
-        @node = create_stanza(transfer_success_presence)
+        @node = create_presence(transfer_success_presence)
         @event = Connfu::Ozone::Parser.parse_event_from(@node)
       end
 
@@ -79,7 +79,7 @@ describe Connfu::Ozone::Parser do
 
     context "a transfer timeout presence" do
       before do
-        @node = create_stanza(transfer_timeout_presence)
+        @node = create_presence(transfer_timeout_presence)
         @event = Connfu::Ozone::Parser.parse_event_from(@node)
       end
 
@@ -94,7 +94,7 @@ describe Connfu::Ozone::Parser do
 
     context "a transfer busy presence" do
       before do
-        @node = create_stanza(transfer_busy_presence)
+        @node = create_presence(transfer_busy_presence)
         @event = Connfu::Ozone::Parser.parse_event_from(@node)
       end
 
