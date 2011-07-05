@@ -29,15 +29,6 @@ module Connfu
         node.xpath("//x:#{kind}", 'x' => 'urn:xmpp:ozone:transfer:complete:1').any?
       end
 
-      def self.transfer_complete2?(kind, node)
-        nodes = node.xpath("//x:#{kind}", 'x' => 'urn:xmpp:ozone:transfer:complete:1')
-        if nodes.any?
-          node.first.from.node
-        else
-          nil
-        end
-      end
-
     end
   end
 end
