@@ -22,18 +22,6 @@ module Connfu
     class SayComplete < Presence
     end
 
-    class TransferSuccess < Presence
-    end
-
-    class TransferTimeout < Presence
-    end
-
-    class TransferRejected < Presence
-    end
-
-    class TransferBusy < Presence
-    end
-
     class Result
       attr_reader :call_id
 

@@ -6,6 +6,7 @@
   connfu/commands
   connfu/event
   connfu/event_processor
+  connfu/transfer_event
   connfu/dsl
   connfu/transfer_state
   connfu/ozone/parser
