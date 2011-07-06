@@ -20,22 +20,11 @@ module Connfu
       end
 
       def self.transfer_complete?(node)
-        self.transfer_map.each do |k, v|
+        Connfu::TransferState.event_map.each do |k, v|
           if node.xpath("//x:#{k}", 'x' => 'urn:xmpp:ozone:transfer:complete:1').any?
             return v.new(:call_id => node.from.node)
           end
         end
-      end
-
-      private
-
-      def self.transfer_map
-        {
-            :success => Connfu::Event::TransferSuccess,
-            :timeout => Connfu::Event::TransferTimeout,
-            :reject => Connfu::Event::TransferRejected,
-            :busy => Connfu::Event::TransferBusy,
-        }
       end
     end
   end

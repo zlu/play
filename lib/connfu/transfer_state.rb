@@ -35,5 +35,16 @@ module Connfu
     def timeout?
       @state == :timeout
     end
+
+    protected
+
+    def self.event_map
+      {
+          :success => Connfu::Event::TransferSuccess,
+          :timeout => Connfu::Event::TransferTimeout,
+          :reject => Connfu::Event::TransferRejected,
+          :busy => Connfu::Event::TransferBusy,
+      }
+    end
   end
 end
