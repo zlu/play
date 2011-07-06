@@ -71,30 +71,18 @@ module Connfu
     end
 
     class Redirect < Base
-      def redirect_to
-        @params[:redirect_to]
-      end
-
       def to_iq
-        build_iq 'to' => redirect_to
+        build_iq 'to' => @params[:redirect_to]
       end
     end
 
     class Transfer < Base
-      def transfer_to
-        @params[:transfer_to]
-      end
-
-      def timeout
-        @params[:timeout]
-      end
-
       def to_iq
         attributes = {:xmlns => "urn:xmpp:ozone:transfer:1"}
-        attributes[:timeout] = timeout if timeout
+        attributes[:timeout] = @params[:timeout] if @params[:timeout]
 
         build_iq attributes do |xml|
-          transfer_to.each { |t| xml.to t }
+          @params[:transfer_to].each { |t| xml.to t }
         end
       end
     end
