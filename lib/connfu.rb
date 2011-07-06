@@ -10,6 +10,7 @@
   connfu/dsl
   connfu/transfer_state
   connfu/ozone/parser
+  connfu/ozone/iq_builder
   connfu/connection_adaptor
 ].each { |file| require file }
 

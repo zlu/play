@@ -1,6 +1,6 @@
 module Connfu
   module Commands
-    class Base
+    module Base
       def initialize(params)
         @params = params
       end
@@ -32,17 +32,12 @@ module Connfu
       end
 
       def build_iq(attributes = {}, &block)
-        iq = Blather::Stanza::Iq.new(:set, to)
-        iq['from'] = from
-        Nokogiri::XML::Builder.with(iq) do |xml|
-          xml.send "#{command}_", {"xmlns" => "urn:xmpp:ozone:1"}.merge(attributes), &block
-        end
-
-        iq
+        Connfu::Ozone::IqBuilder.build_iq(to, from, command, attributes, &block)
       end
     end
 
-    class Say < Base
+    class Say
+      include Base
       def text
         @params[:text]
       end
@@ -58,25 +53,33 @@ module Connfu
       end
     end
 
-    class Answer < Base
+    class Answer
+      include Base
     end
 
-    class Accept < Base
+    class Accept
+      include Base
     end
 
-    class Reject < Base
+    class Reject
+      include Base
     end
 
-    class Hangup < Base
+    class Hangup
+      include Base
     end
 
-    class Redirect < Base
+    class Redirect
+      include Base
+
       def to_iq
         build_iq 'to' => @params[:redirect_to]
       end
     end
 
-    class Transfer < Base
+    class Transfer
+      include Base
+
       def to_iq
         attributes = {:xmlns => "urn:xmpp:ozone:transfer:1"}
         attributes[:timeout] = @params[:timeout] if @params[:timeout]
