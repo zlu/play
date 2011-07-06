@@ -10,25 +10,33 @@ module Connfu
           Connfu::Event::Offer.new(:from => p_attrs['from'].value, :to => p_attrs['to'].value, :call_id => call_id)
         elsif node.xpath('//x:success', 'x' => 'urn:xmpp:ozone:say:complete:1').any?
           Connfu::Event::SayComplete.new(:call_id => call_id)
-        elsif transfer_complete?(:success, node)
-          Connfu::Event::TransferSuccess.new(:call_id => call_id)
-        elsif transfer_complete?(:timeout, node)
-          Connfu::Event::TransferTimeout.new(:call_id => call_id)
-        elsif transfer_complete?(:reject, node)
-          Connfu::Event::TransferRejected.new(:call_id => call_id)
-        elsif transfer_complete?(:busy, node)
-          Connfu::Event::TransferBusy.new(:call_id => call_id)
         elsif node.type == :result
           Connfu::Event::Result.new(:call_id => call_id)
         elsif node.type == :error
           Connfu::Event::Error.new(:call_id => call_id)
+        else
+          self.transfer_complete?(node)
         end
       end
 
-      def self.transfer_complete?(kind, node)
-        node.xpath("//x:#{kind}", 'x' => 'urn:xmpp:ozone:transfer:complete:1').any?
+      def self.transfer_complete?(node)
+        self.transfer_map.each do |k, v|
+          if node.xpath("//x:#{k}", 'x' => 'urn:xmpp:ozone:transfer:complete:1').any?
+            return v.new(:call_id => node.from.node)
+          end
+        end
       end
 
+      private
+
+      def self.transfer_map
+        {
+            :success => Connfu::Event::TransferSuccess,
+            :timeout => Connfu::Event::TransferTimeout,
+            :reject => Connfu::Event::TransferRejected,
+            :busy => Connfu::Event::TransferBusy,
+        }
+      end
     end
   end
 end
