@@ -1,4 +1,4 @@
-require 'spec_helper'
+require_relative '../../spec_helper'
 
 describe Connfu::Ozone::Parser do
   describe "#parse_event_from" do

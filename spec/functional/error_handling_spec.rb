@@ -1,4 +1,4 @@
-require "spec_helper"
+require_relative "../spec_helper"
 
 describe "receiving an error from the server" do
 
