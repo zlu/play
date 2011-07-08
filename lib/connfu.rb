@@ -21,8 +21,8 @@ module Connfu
     attr_accessor :adaptor
   end
 
-  def self.setup(host, password)
-    @connection = Blather::Client.new.setup(host, password)
+  def self.setup(jid, password)
+    @connection = Blather::Client.new.setup(jid, password)
     @adaptor = Connfu::ConnectionAdaptor.new(@connection)
     @connection.register_handler(:ready, lambda { p 'Established @connection to Connfu Server' })
     [:iq, :presence].each do |stanza_type|
@@ -34,7 +34,6 @@ module Connfu
   end
 
   def self.handle_stanza(stanza)
-    l.debug stanza
     event = Connfu::Ozone::Parser.parse_event_from(stanza)
     event_processor.handle_event(event)
   end

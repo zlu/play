@@ -64,6 +64,10 @@ class TestConnection
   def send_command(command)
     @commands << command
   end
+
+  def jid
+    Blather::JID.new('zlu', 'openvoice.org', '1')
+  end
 end
 
 def result_iq(call_id='4a3fe31a-0c2a-4a9a-ae98-f5b8afb55708')

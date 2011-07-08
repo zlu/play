@@ -3,8 +3,8 @@ require 'rubygems'
 require 'bundler/setup'
 require 'connfu'
 
-#Connfu.setup "usera@127.0.0.1", "1"
-Connfu.setup "usera@ec2-79-125-61-218.eu-west-1.compute.amazonaws.com", "1"
+Connfu.setup "usera@127.0.0.1", "1"
+#Connfu.setup "usera@46.137.85.52", "1"
 
 class AnswerExample
   include Connfu::Dsl

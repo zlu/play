@@ -13,6 +13,13 @@ module Connfu
       def on(context, &block)
         define_method(:run, &block)
       end
+
+      def dial(params={})
+        block = lambda {
+          Connfu.connection.write Connfu::Commands::Dial.new(params).to_iq
+        }
+        Connfu.connection.register_handler :ready, &block
+      end
     end
 
     module InstanceMethods
