@@ -32,6 +32,7 @@ module Connfu
     [:iq, :presence].each do |stanza_type|
       @connection.register_handler(stanza_type) do |stanza|
         l.debug "Receiving #{stanza_type} from server"
+        l.debug stanza.inspect
         handle_stanza(stanza)
       end
     end

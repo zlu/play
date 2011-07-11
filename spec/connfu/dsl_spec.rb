@@ -54,7 +54,7 @@ describe Connfu::Dsl do
         subject.transfer(transfer_to)
       end
     end
-    
+
     it 'should send Transfer command with optional timeout' do
       transfer_to = 'sip:1652@connfu.com'
       timeout_in_seconds = 5
@@ -62,7 +62,21 @@ describe Connfu::Dsl do
       Connfu.adaptor.should_receive(:send_command).with(cmd)
       catch :waiting do
         subject.transfer(transfer_to, :timeout => timeout_in_seconds)
-      end      
+      end
+    end
+  end
+
+  describe 'recording' do
+    it 'should send a start command to adaptor' do
+      Connfu.adaptor.should_receive(:send_command).with(Connfu::Commands::Recording::Start.new(
+        :from => 'client-address', :to => 'server-address', :record_to => "destination-uri"
+      ))
+      subject.start_recording("destination-uri")
+    end
+
+    it 'should send a stop command to adaptor' do
+      Connfu.adaptor.should_receive(:send_command).with(Connfu::Commands::Recording::Stop.new(:from => 'client-address', :to => 'server-address'))
+      subject.stop_recording
     end
   end
 

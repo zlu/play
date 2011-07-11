@@ -61,6 +61,14 @@ module Connfu
         end
       end
 
+      def start_recording(record_to)
+        send_command Connfu::Commands::Recording::Start.new(:record_to => record_to,:to => server_address, :from => client_address)
+      end
+
+      def stop_recording
+        send_command Connfu::Commands::Recording::Stop.new(:to => server_address, :from => client_address)
+      end
+
       def handle_event(event)
         l.debug "Handling event: #{event.inspect}"
         case event
