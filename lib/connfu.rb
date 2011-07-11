@@ -3,7 +3,6 @@
 
   connfu/logger
   connfu/continuation
-  connfu/commands
   connfu/event
   connfu/event_processor
   connfu/transfer_event
@@ -12,7 +11,12 @@
   connfu/ozone/parser
   connfu/ozone/iq_builder
   connfu/connection_adaptor
+  connfu/commands/base
 ].each { |file| require file }
+
+Dir[File.expand_path("../connfu/commands/**/*.rb", __FILE__)].each do |f|
+  require f
+end
 
 module Connfu
   class << self
