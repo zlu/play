@@ -4,6 +4,9 @@ module Connfu
 
       def self.parse_event_from(node)
         call_id = node.from.node
+        to = node.from.to_s
+        from = node.to.to_s
+
         if node.xpath('//x:offer', 'x' => 'urn:xmpp:ozone:1').any?
           presence_node = node.xpath('/presence').first
           p_attrs = presence_node.attributes
@@ -18,6 +21,10 @@ module Connfu
           end
         elsif node.type == :error
           Connfu::Event::Error.new(:call_id => call_id)
+        elsif node.xpath('//x:ringing', 'x' => 'urn:xmpp:ozone:1').any?
+          Connfu::Event::Ringing.new(:call_id => call_id, :to => from, :from => to)
+        elsif node.xpath('//x:answered', 'x' => 'urn:xmpp:ozone:1').any?
+          Connfu::Event::Answered.new(:call_id => call_id)
         else
           self.transfer_complete?(node)
         end

@@ -38,5 +38,21 @@ module Connfu
         @call_id = params[:call_id]
       end
     end
+
+    class Ringing < Presence
+      attr_reader :presence_from, :presence_to
+
+      def initialize(params)
+        @presence_from = params[:from]
+        @presence_to = params[:to]
+        @call_id = params[:call_id]
+      end
+    end
+
+    class Answered < Presence
+    end
+
+    class Hangup < Presence
+    end
   end
 end

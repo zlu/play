@@ -118,6 +118,36 @@ describe Connfu::Ozone::Parser do
         @event.call_id.should eq @node.from.node
       end
     end
+
+    context "an outgoing call ringing presence" do
+      before do
+        @node = create_presence(outgoing_call_ringing_presence("call-id"))
+        @event = Connfu::Ozone::Parser.parse_event_from(@node)
+      end
+
+      it "should create a Ringing event" do
+        @event.should be_instance_of Connfu::Event::Ringing
+      end
+
+      it "should determine the call_id value of a Ringing event" do
+        @event.call_id.should eq "call-id"
+      end
+    end
+
+    context "an outgoing call answered presence" do
+      before do
+        @node = create_presence(outgoing_call_answered_presence("call-id"))
+        @event = Connfu::Ozone::Parser.parse_event_from(@node)
+      end
+
+      it "should create a Ringing event" do
+        @event.should be_instance_of Connfu::Event::Answered
+      end
+
+      it "should determine the call_id value of a Answered event" do
+        @event.call_id.should eq "call-id"
+      end
+    end
   end
 
 end

@@ -9,12 +9,14 @@ Connfu.setup "usera@127.0.0.1", "1"
 class DialExample
   include Connfu::Dsl
 
-  current_call = dial 'sip:userb@127.0.0.1'
+  dial :to => 'sip:kalv@213.192.59.75', :from => "sip:usera@127.0.0.1"
 
-#  (1..10).each do
-#    p Connfu.outbound_calls.values.first.state
-#    sleep 5
-#  end
+  on :answer do
+    p "****Call Answered ****"
+    sleep 1
+    hangup
+  end
+
 end
 
 Connfu.start DialExample

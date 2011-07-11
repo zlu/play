@@ -156,3 +156,15 @@ def recording_result_iq(call_id="a0565638-90f8-416e-b26f-636f1aa684d0", id="f3c1
     <ref xmlns="urn:xmpp:ozone:1" id="#{id}"/>
   </iq>}
 end
+
+def outgoing_call_ringing_presence(call_id="ebe45dbf-2a8b-4f1c-9aa0-1f1b39d1e821")
+  %{<presence from="#{call_id}@127.0.0.1" to="usera@127.0.0.1/voxeo">
+    <ringing xmlns="urn:xmpp:ozone:1"/>
+  </presence>}
+end
+
+def outgoing_call_answered_presence(call_id="ebe45dbf-2a8b-4f1c-9aa0-1f1b39d1e821")
+  %{<presence from="#{call_id}@127.0.0.1" to="usera@127.0.0.1/voxeo">
+    <answered xmlns="urn:xmpp:ozone:1"/>
+  </presence>}
+end

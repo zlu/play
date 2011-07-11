@@ -16,7 +16,7 @@ module Connfu
 
       def dial(params={})
         block = lambda {
-          Connfu.connection.write Connfu::Commands::Dial.new(params).to_iq
+          Connfu.adaptor.send_command Connfu::Commands::Dial.new(params)
         }
         Connfu.connection.register_handler :ready, &block
       end
@@ -74,6 +74,8 @@ module Connfu
         l.debug "Handling event: #{event.inspect}"
         case event
           when Connfu::Event::Offer
+            start
+          when Connfu::Event::Answered
             start
           when Connfu::Event::SayComplete
             continue
