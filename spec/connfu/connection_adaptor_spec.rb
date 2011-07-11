@@ -1,4 +1,4 @@
-require_relative "../spec_helper"
+require "spec_helper"
 
 describe Connfu::ConnectionAdaptor do
   it "should write XMPP versions of commands to its underlying connection" do

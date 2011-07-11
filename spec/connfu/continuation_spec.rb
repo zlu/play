@@ -1,4 +1,4 @@
-require_relative '../spec_helper'
+require 'spec_helper'
 
 describe Connfu::Continuation do
   describe "A dsl using continuation" do
