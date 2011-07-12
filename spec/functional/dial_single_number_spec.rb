@@ -2,10 +2,11 @@ require 'spec_helper'
 
 describe "Dialing a single number" do
   testing_dsl do
-    dial :to => "someone-remote", :from => "my-number"
-
-    on :answer do
-      say 'something'
+    dial :to => "someone-remote", :from => "my-number" do |call|
+      call.on_answer do
+        say 'something'
+        say 'another thing'
+      end
     end
   end
 
@@ -24,4 +25,14 @@ describe "Dialing a single number" do
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Say.new(:text => 'something', :to => "#{@call_id}@#{PRISM_HOST}", :from => "#{PRISM_JID}/voxeo")
   end
+
+  it 'should only invoke the second say once the first has completed' do
+    incoming :outgoing_call_ringing_presence, @call_id
+    incoming :outgoing_call_answered_presence, @call_id
+    incoming :result_iq, @call_id
+    incoming :say_complete_success, @call_id
+
+    Connfu.adaptor.commands.last.should == Connfu::Commands::Say.new(:text => 'another thing', :to => "#{@call_id}@#{PRISM_HOST}", :from => "#{PRISM_JID}/voxeo")
+  end
+
 end

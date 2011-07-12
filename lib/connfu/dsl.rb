@@ -9,19 +9,32 @@ module Connfu
       end
     end
 
+    class CallBehaviour
+      def on_answer(&block)
+        @on_answer = block if block_given?
+        @on_answer
+      end
+    end
+
     module ClassMethods
       def on(context, &block)
         define_method(:run, &block)
       end
 
-      def dial(params={})
+      def dial(params={}, &block)
         self.class.send(:define_method, :on_ready) do
           Connfu.adaptor.send_command Connfu::Commands::Dial.new(params)
         end
+        call_behaviour = CallBehaviour.new
+        yield call_behaviour
+        define_method(:call_behaviour) { call_behaviour }
       end
     end
 
     module InstanceMethods
+      def run
+      end
+
       def say(text)
         send_command Connfu::Commands::Say.new(:text => text, :to => server_address, :from => client_address)
         wait
@@ -75,7 +88,7 @@ module Connfu
           when Connfu::Event::Offer
             start
           when Connfu::Event::Answered
-            start
+            start { instance_eval(&call_behaviour.on_answer) }
           when Connfu::Event::SayComplete
             continue
           when Connfu::Event::TransferSuccess

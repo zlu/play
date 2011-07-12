@@ -1,7 +1,11 @@
 module Connfu
   module Continuation
-    def start
-      continue_with lambda {run}
+    def start(&block)
+      if block_given?
+        continue_with block
+      else
+        continue_with lambda {run}
+      end
     end
 
     def continue(result = nil)
