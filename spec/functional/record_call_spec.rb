@@ -18,7 +18,7 @@ describe "Recording a call" do
   it "should send first record start command" do
     incoming :offer_presence, @server_address, @client_address
 
-    Connfu.adaptor.commands.last.should == Connfu::Commands::Recording::Start.new(:record_to => 'file://tmp/recording.mp3', :to => @server_address, :from => @client_address)
+    Connfu.adaptor.commands.last.should == Connfu::Commands::Recording::Start.new(:record_to => 'file:///tmp/recording.mp3', :to => @server_address, :from => @client_address)
   end
 
   it "should send the stop recording command when start recording has been sent" do

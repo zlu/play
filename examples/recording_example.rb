@@ -11,7 +11,7 @@ class RecordingExample
 
   on :offer do
     answer
-    start_recording("file://tmp/recording.mp3")
+    start_recording("file:///tmp/recording.mp3")
 
     sleep 5
 
