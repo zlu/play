@@ -4,7 +4,7 @@ describe "Recording a call" do
 
   testing_dsl do
     on :offer do
-      start_recording("file://tmp/recording.mp3")
+      start_recording("file:///tmp/recording.mp3")
       stop_recording
     end
   end
