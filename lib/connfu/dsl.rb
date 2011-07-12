@@ -43,6 +43,10 @@ module Connfu
       def run
       end
 
+      def finished?
+        @finished == true
+      end
+
       def say(text)
         send_command Connfu::Commands::Say.new(:text => text, :to => server_address, :from => client_address)
         wait
@@ -58,6 +62,7 @@ module Connfu
 
       def hangup
         send_command Connfu::Commands::Hangup.new(:to => server_address, :from => client_address)
+        wait
       end
 
       def redirect(redirect_to)
@@ -120,6 +125,8 @@ module Connfu
             continue
           when Connfu::Event::Hangup
             run_any_call_behaviour_for(:hangup)
+            @finished = true
+            continue
           when Connfu::Event::Error
             continue(:error)
           when Connfu::Event::RecordingStopComplete
@@ -130,6 +137,7 @@ module Connfu
       private
 
       def send_command(command)
+        return if @finished
         Connfu.adaptor.send_command command
         l.debug "Sent command: #{command}"
         result = wait

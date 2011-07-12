@@ -8,6 +8,7 @@ module Connfu
       if event && event.respond_to?(:call_id) && h = handler_for(event)
         h.handle_event(event)
       end
+      remove_finished_handlers
     end
 
     private
@@ -24,6 +25,16 @@ module Connfu
 
     def handlers
       @handlers ||= {}
+    end
+
+    def remove_finished_handlers
+      handlers.keys.each do |call_id|
+        h = handlers[call_id]
+        if h.finished?
+          l.debug "Removing handler for call_id #{call_id}"
+          handlers.delete(call_id)
+        end
+      end
     end
   end
 end
