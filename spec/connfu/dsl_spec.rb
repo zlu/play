@@ -69,9 +69,9 @@ describe Connfu::Dsl do
   describe 'recording' do
     it 'should send a start command to adaptor' do
       Connfu.adaptor.should_receive(:send_command).with(Connfu::Commands::Recording::Start.new(
-        :from => 'client-address', :to => 'server-address', :record_to => "destination-uri"
+        :from => 'client-address', :to => 'server-address'
       ))
-      subject.start_recording("destination-uri")
+      subject.start_recording
     end
 
     it 'should send a stop command to adaptor' do
