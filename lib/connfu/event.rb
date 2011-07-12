@@ -54,5 +54,8 @@ module Connfu
 
     class Hangup < Presence
     end
+
+    class RecordingStopComplete < Presence
+    end
   end
 end

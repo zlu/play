@@ -37,6 +37,17 @@ describe Connfu::Ozone::Parser do
       end
     end
 
+    context "a recording stop complete presence" do
+      before do
+        @node = create_presence(recording_stop_presence)
+        @event = Connfu::Ozone::Parser.parse_event_from(@node)
+      end
+
+      it "should be an instance of RecordingStopComplete" do
+        @event.should be_instance_of Connfu::Event::RecordingStopComplete
+      end
+    end
+
     context "a normal result iq" do
       before do
         @node = create_presence(result_iq)
@@ -148,6 +159,7 @@ describe Connfu::Ozone::Parser do
         @event.call_id.should eq "call-id"
       end
     end
+
   end
 
 end

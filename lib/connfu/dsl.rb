@@ -122,6 +122,8 @@ module Connfu
             run_any_call_behaviour_for(:hangup)
           when Connfu::Event::Error
             continue(:error)
+          when Connfu::Event::RecordingStopComplete
+            continue
         end
       end
 

@@ -6,6 +6,7 @@ describe "Recording a call" do
     on :offer do
       start_recording("file:///tmp/recording.mp3")
       stop_recording
+      hangup
     end
   end
 
@@ -29,4 +30,14 @@ describe "Recording a call" do
     Connfu.adaptor.commands.last.should == Connfu::Commands::Recording::Stop.new(:to => @server_address, :from => @client_address, :ref_id => recording_ref_id)
   end
 
+  it "should hangup once we know the recording was complete" do
+    recording_ref_id = "abc123"
+    recording_path = "file:///tmp/recording.mp3"
+    incoming :offer_presence, @server_address, @client_address
+    incoming :recording_result_iq, @call_id, recording_ref_id
+    incoming :result_iq, @call_id
+    incoming :recording_stop_presence, @call_id, recording_ref_id, recording_path
+
+    Connfu.adaptor.commands.last.should == Connfu::Commands::Hangup.new(:to => @server_address, :from => @client_address)
+  end
 end
