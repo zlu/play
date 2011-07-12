@@ -90,9 +90,9 @@ module Connfu
         wait
       end
 
-      def call_behaviour_for(event)
+      def run_any_call_behaviour_for(event)
         if respond_to?(:call_behaviour) && behaviour = call_behaviour.send("on_#{event}")
-          lambda { instance_eval(&behaviour) }
+          start { instance_eval(&behaviour) }
         end
       end
 
@@ -102,9 +102,9 @@ module Connfu
           when Connfu::Event::Offer
             start
           when Connfu::Event::Ringing
-            start &call_behaviour_for(:ringing)
+            run_any_call_behaviour_for(:ringing)
           when Connfu::Event::Answered
-            start &call_behaviour_for(:answer)
+            run_any_call_behaviour_for(:answer)
           when Connfu::Event::SayComplete
             continue
           when Connfu::Event::TransferSuccess
@@ -119,7 +119,7 @@ module Connfu
             @ref_id = event.ref_id
             continue
           when Connfu::Event::Hangup
-            start &call_behaviour_for(:hangup)
+            run_any_call_behaviour_for(:hangup)
           when Connfu::Event::Error
             continue(:error)
         end
