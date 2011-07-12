@@ -10,6 +10,10 @@ module Connfu
     end
 
     class CallBehaviour
+      def on_ringing(&block)
+        @on_ringing = block if block_given?
+        @on_ringing
+      end
       def on_answer(&block)
         @on_answer = block if block_given?
         @on_answer
@@ -87,6 +91,8 @@ module Connfu
         case event
           when Connfu::Event::Offer
             start
+          when Connfu::Event::Ringing
+            start { instance_eval(&call_behaviour.on_ringing) }
           when Connfu::Event::Answered
             start { instance_eval(&call_behaviour.on_answer) }
           when Connfu::Event::SayComplete
