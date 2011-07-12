@@ -7,7 +7,10 @@ module ConnfuTestDsl
     dsl_class = Class.new
     dsl_class.send(:include, Connfu::Dsl)
     dsl_class.class_eval(&block)
-    before(:each) { setup_connfu(dsl_class) }
+    before(:each) do
+      @dsl_class = dsl_class
+      setup_connfu(@dsl_class)
+    end
     let(:dsl_instance) { dsl_class.any_instance }
   end
 end

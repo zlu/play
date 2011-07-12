@@ -44,6 +44,11 @@ module Connfu
   end
 
   def self.start(handler_class)
+    if handler_class.respond_to?(:on_ready)
+      Connfu.connection.register_handler :ready do
+        handler_class.on_ready
+      end
+    end
     self.event_processor ||= EventProcessor.new(handler_class)
     EM.run { @connection.run }
   end

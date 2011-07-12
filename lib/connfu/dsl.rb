@@ -15,10 +15,9 @@ module Connfu
       end
 
       def dial(params={})
-        block = lambda {
+        self.class.send(:define_method, :on_ready) do
           Connfu.adaptor.send_command Connfu::Commands::Dial.new(params)
-        }
-        Connfu.connection.register_handler :ready, &block
+        end
       end
     end
 
