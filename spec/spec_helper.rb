@@ -150,3 +150,9 @@ def transfer_rejected_presence(call_id="c82737e4-f70c-466d-b839-924f69be57bd")
     </complete>
   </presence>}
 end
+
+def recording_result_iq(call_id="a0565638-90f8-416e-b26f-636f1aa684d0", id="f3c1b8c4-bb4f-4f7c-a063-87ee9bac0980")
+  %{<iq type="result" id="blather000a" from="#{call_id}@127.0.0.1" to="usera@127.0.0.1/voxeo">
+    <ref xmlns="urn:xmpp:ozone:1" id="#{id}"/>
+  </iq>}
+end

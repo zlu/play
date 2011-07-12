@@ -66,7 +66,8 @@ module Connfu
       end
 
       def stop_recording
-        send_command Connfu::Commands::Recording::Stop.new(:to => server_address, :from => client_address)
+        send_command Connfu::Commands::Recording::Stop.new(:to => server_address, :from => client_address, :ref_id => @ref_id)
+        wait
       end
 
       def handle_event(event)
@@ -85,6 +86,7 @@ module Connfu
           when Connfu::Event::TransferBusy
             continue(TransferState.busy)
           when Connfu::Event::Result
+            @ref_id = event.ref_id
             continue
           when Connfu::Event::Error
             continue(:error)

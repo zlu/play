@@ -75,7 +75,8 @@ describe Connfu::Dsl do
     end
 
     it 'should send a stop command to adaptor' do
-      Connfu.adaptor.should_receive(:send_command).with(Connfu::Commands::Recording::Stop.new(:from => 'client-address', :to => 'server-address'))
+      subject.instance_eval { @ref_id = 'foo' }
+      Connfu.adaptor.should_receive(:send_command).with(Connfu::Commands::Recording::Stop.new(:from => 'client-address', :to => 'server-address', :ref_id => 'foo'))
       subject.stop_recording
     end
   end

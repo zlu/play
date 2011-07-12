@@ -21,11 +21,12 @@ describe "Recording a call" do
     Connfu.adaptor.commands.last.should == Connfu::Commands::Recording::Start.new(:record_to => 'file:///tmp/recording.mp3', :to => @server_address, :from => @client_address)
   end
 
-  it "should send the stop recording command when start recording has been sent" do
+  it "should send the stop recording command with the recording ID when start recording has been sent" do
+    recording_ref_id = "abc123"
     incoming :offer_presence, @server_address, @client_address
-    incoming :result_iq, @call_id
+    incoming :recording_result_iq, @call_id, recording_ref_id
 
-    Connfu.adaptor.commands.last.should == Connfu::Commands::Recording::Stop.new(:to => @server_address, :from => @client_address)
+    Connfu.adaptor.commands.last.should == Connfu::Commands::Recording::Stop.new(:to => @server_address, :from => @client_address, :ref_id => recording_ref_id)
   end
 
 end

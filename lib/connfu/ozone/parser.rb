@@ -11,7 +11,11 @@ module Connfu
         elsif node.xpath('//x:success', 'x' => 'urn:xmpp:ozone:say:complete:1').any?
           Connfu::Event::SayComplete.new(:call_id => call_id)
         elsif node.type == :result
-          Connfu::Event::Result.new(:call_id => call_id)
+          if (ref = node.xpath('x:ref', 'x' => 'urn:xmpp:ozone:1').first)
+            Connfu::Event::Result.new(:call_id => call_id, :ref_id => ref.attributes['id'].value)
+          else
+            Connfu::Event::Result.new(:call_id => call_id)
+          end
         elsif node.type == :error
           Connfu::Event::Error.new(:call_id => call_id)
         else

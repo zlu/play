@@ -25,7 +25,19 @@ describe Connfu::Ozone::Parser do
       end
     end
 
-    context "a result iq" do
+    context 'a recording result iq' do
+      before do
+        @node = create_presence(recording_result_iq('call-id', 'ref-id'))
+        @event = Connfu::Ozone::Parser.parse_event_from(@node)
+      end
+
+      it "should create a result event that contains the id from ref node" do
+        @event.should be_instance_of Connfu::Event::Result
+        @event.ref_id.should == 'ref-id'
+      end
+    end
+
+    context "a normal result iq" do
       before do
         @node = create_presence(result_iq)
         @event = Connfu::Ozone::Parser.parse_event_from(@node)

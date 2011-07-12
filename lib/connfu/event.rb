@@ -23,10 +23,11 @@ module Connfu
     end
 
     class Result
-      attr_reader :call_id
+      attr_reader :call_id, :ref_id
 
       def initialize(params = {})
         @call_id = params[:call_id]
+        @ref_id = params[:ref_id]
       end
     end
 
