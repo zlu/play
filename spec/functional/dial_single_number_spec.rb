@@ -59,3 +59,30 @@ describe "Dialing a single number" do
     incoming :hangup_presence, @call_id
   end
 end
+
+
+describe "Dialing when no behaviour is specified" do
+  testing_dsl do
+    dial :to => "someone-remote", :from => "my-number" do |call|
+    end
+  end
+
+  before :each do
+    @call_id = 'outbound_call_id'
+    @dsl_class.on_ready
+  end
+
+  it 'should not crash when receiving a ringing event' do
+    incoming :outgoing_call_ringing_presence, @call_id
+  end
+
+  it 'should not crash when receiving an answered event' do
+    incoming :outgoing_call_ringing_presence, @call_id
+    incoming :outgoing_call_answered_presence, @call_id
+  end
+
+  it 'should not crash when receiving a hangup event' do
+    incoming :outgoing_call_ringing_presence, @call_id
+    incoming :hangup_presence, @call_id
+  end
+end

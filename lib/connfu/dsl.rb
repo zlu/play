@@ -96,9 +96,9 @@ module Connfu
           when Connfu::Event::Offer
             start
           when Connfu::Event::Ringing
-            start { instance_eval(&call_behaviour.on_ringing) }
+            start { instance_eval(&call_behaviour.on_ringing) } if call_behaviour.on_ringing
           when Connfu::Event::Answered
-            start { instance_eval(&call_behaviour.on_answer) }
+            start { instance_eval(&call_behaviour.on_answer) } if call_behaviour.on_answer
           when Connfu::Event::SayComplete
             continue
           when Connfu::Event::TransferSuccess
@@ -113,7 +113,7 @@ module Connfu
             @ref_id = event.ref_id
             continue
           when Connfu::Event::Hangup
-            start { instance_eval(&call_behaviour.on_hangup) }
+            start { instance_eval(&call_behaviour.on_hangup) } if call_behaviour.on_hangup
           when Connfu::Event::Error
             continue(:error)
         end
