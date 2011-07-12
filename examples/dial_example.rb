@@ -23,6 +23,9 @@ class DialExample
       say "Though I am but a robot, my love for you is real."
       hangup
     end
+    c.on_hangup do
+      update_status "The phone was hung up"
+    end
   end
 end
 

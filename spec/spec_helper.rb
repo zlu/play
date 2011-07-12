@@ -175,3 +175,11 @@ def outgoing_call_answered_presence(call_id="ebe45dbf-2a8b-4f1c-9aa0-1f1b39d1e82
     <answered xmlns="urn:xmpp:ozone:1"/>
   </presence>}
 end
+
+def hangup_presence(call_id="abc")
+  %{<presence from="#{call_id}@#{PRISM_HOST}" to="#{PRISM_JID}/voxeo">
+    <end xmlns="urn:xmpp:ozone:1">
+      <hangup/>
+    </end>
+  </presence>}
+end

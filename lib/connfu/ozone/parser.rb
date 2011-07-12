@@ -25,6 +25,8 @@ module Connfu
           Connfu::Event::Ringing.new(:call_id => call_id, :to => from, :from => to)
         elsif node.xpath('//x:answered', 'x' => 'urn:xmpp:ozone:1').any?
           Connfu::Event::Answered.new(:call_id => call_id)
+        elsif node.xpath("//x:hangup", 'x' => "urn:xmpp:ozone:1").any?
+          Connfu::Event::Hangup.new(:call_id => call_id)
         else
           self.transfer_complete?(node)
         end

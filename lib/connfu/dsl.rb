@@ -18,6 +18,10 @@ module Connfu
         @on_answer = block if block_given?
         @on_answer
       end
+      def on_hangup(&block)
+        @on_hangup = block if block_given?
+        @on_hangup
+      end
     end
 
     module ClassMethods
@@ -108,6 +112,8 @@ module Connfu
           when Connfu::Event::Result
             @ref_id = event.ref_id
             continue
+          when Connfu::Event::Hangup
+            start { instance_eval(&call_behaviour.on_hangup) }
           when Connfu::Event::Error
             continue(:error)
         end
