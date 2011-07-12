@@ -9,7 +9,8 @@ describe "hangup a call" do
   end
 
   before :each do
-    @server_address = "34209dfiasdoaf@server.whatever"
+    @call_id = '34209dfiasdoaf'
+    @server_address = "#{@call_id}@server.whatever"
     @client_address = "usera@127.0.0.whatever/voxeo"
   end
 
@@ -17,5 +18,10 @@ describe "hangup a call" do
     incoming :offer_presence, @server_address, @client_address
 
     Connfu.adaptor.commands.last.should == Connfu::Commands::Hangup.new(:to => @server_address, :from => @client_address)
+  end
+
+  it "should handle the hangup event that will come back from the server" do
+    incoming :offer_presence, @server_address, @client_address
+    incoming :hangup_presence, @call_id
   end
 end

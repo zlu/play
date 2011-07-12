@@ -90,15 +90,21 @@ module Connfu
         wait
       end
 
+      def call_behaviour_for(event)
+        if respond_to?(:call_behaviour) && behaviour = call_behaviour.send("on_#{event}")
+          lambda { instance_eval(&behaviour) }
+        end
+      end
+
       def handle_event(event)
         l.debug "Handling event: #{event.inspect}"
         case event
           when Connfu::Event::Offer
             start
           when Connfu::Event::Ringing
-            start { instance_eval(&call_behaviour.on_ringing) } if call_behaviour.on_ringing
+            start &call_behaviour_for(:ringing)
           when Connfu::Event::Answered
-            start { instance_eval(&call_behaviour.on_answer) } if call_behaviour.on_answer
+            start &call_behaviour_for(:answer)
           when Connfu::Event::SayComplete
             continue
           when Connfu::Event::TransferSuccess
@@ -113,7 +119,7 @@ module Connfu
             @ref_id = event.ref_id
             continue
           when Connfu::Event::Hangup
-            start { instance_eval(&call_behaviour.on_hangup) } if call_behaviour.on_hangup
+            start &call_behaviour_for(:hangup)
           when Connfu::Event::Error
             continue(:error)
         end
