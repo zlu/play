@@ -86,8 +86,8 @@ module Connfu
         end
       end
 
-      def start_recording(record_to)
-        send_command Connfu::Commands::Recording::Start.new(:record_to => record_to,:to => server_address, :from => client_address)
+      def start_recording
+        send_command Connfu::Commands::Recording::Start.new(:to => server_address, :from => client_address)
       end
 
       def stop_recording

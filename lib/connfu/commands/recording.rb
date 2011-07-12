@@ -5,7 +5,7 @@ module Connfu
         include Connfu::Commands::Base
 
         def to_iq
-          build_iq :xmlns => "urn:xmpp:ozone:record:1", "start-beep" => "true", :to => @params[:record_to]
+          build_iq :xmlns => "urn:xmpp:ozone:record:1", "start-beep" => "true"
         end
 
         def command

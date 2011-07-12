@@ -4,9 +4,8 @@ describe Connfu::Commands::Recording do
 
   describe "generating XMPP iq for a Start command" do
     subject do
-      @record_to_uri = "file://tmp/recording.mp3"
       Connfu::Commands::Recording::Start.new(
-        :to => 'server-address', :from => 'client-address', :record_to => @record_to_uri
+        :to => 'server-address', :from => 'client-address'
       ).to_iq
     end
 
@@ -29,7 +28,6 @@ describe Connfu::Commands::Recording do
     it 'should have correct iq attributes for recording type' do
       node = subject.xpath("//x:record", "x" => "urn:xmpp:ozone:record:1").first
       node.attributes['start-beep'].value.should eq 'true'
-      node.attributes['to'].value.should eq @record_to_uri
     end
   end
 
