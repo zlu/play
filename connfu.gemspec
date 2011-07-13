@@ -20,14 +20,14 @@ Gem::Specification.new do |s|
   s.rdoc_options = %w{--charset=UTF-8}
   s.extra_rdoc_files = %w{README.md}
 
-  s.add_dependency("blather", ["0.5.3"])
+  s.add_dependency("blather", "0.5.3")
 
-  s.add_development_dependency("rake", ["0.9.2"])
-  s.add_development_dependency("rspec", [">2.5.0"])
-  s.add_development_dependency("flog", ["2.5.1"])
-  s.add_development_dependency("flay", ["1.4.2"])
-  s.add_development_dependency("roodi", ["2.1.0"])
-  s.add_development_dependency("reek", ["1.2.8"])
-  s.add_development_dependency("Saikuro", ["1.1.0"])
-  s.add_development_dependency("rcov", ["0.9.9"])
+  s.add_development_dependency("rake", "0.9.2")
+  s.add_development_dependency("rspec", ">2.5.0")
+  s.add_development_dependency("flog", "2.5.1")
+  s.add_development_dependency("flay", "1.4.2")
+  s.add_development_dependency("roodi", "2.1.0")
+  s.add_development_dependency("reek", "1.2.8")
+  s.add_development_dependency("Saikuro", "1.1.0")
+  s.add_development_dependency("rcov", "0.9.9")
 end
