@@ -96,7 +96,8 @@ end
 
 def offer_presence(from="4a3fe31a-0c2a-4a9a-ae98-f5b8afb55708@#{PRISM_HOST}", to="#{PRISM_JID}/voxeo", options={})
   offer_options = {
-    :from => "<sip:16508983130@#{PRISM_HOST}>;tag=34ccaa4d"
+    :from => "<sip:16508983130@#{PRISM_HOST}>;tag=34ccaa4d",
+    :to => "<sip:#{PRISM_JID}:5060>"
   }.merge(options)
   "<presence from='#{from}' to='#{to}'>
     <offer xmlns='urn:xmpp:ozone:1' to='sip:#{PRISM_JID}:5060' from='sip:16508983130@#{PRISM_HOST}'>
@@ -105,7 +106,7 @@ def offer_presence(from="4a3fe31a-0c2a-4a9a-ae98-f5b8afb55708@#{PRISM_HOST}", to
       <header name='Contact' value='&lt;sip:16508983130@#{PRISM_HOST}:21702&gt;'/>
       <header name='Supported' value='replaces'/>
       <header name='Allow' value='INVITE'/>
-      <header name='To' value='&lt;sip:#{PRISM_JID}:5060&gt;'/>
+      <header name='To' value='#{CGI.escapeHTML(offer_options[:to])}'/>
       <header name='CSeq' value='1 INVITE'/>
       <header name='User-Agent' value='Bria 3 release 3.2 stamp 61503'/>
       <header name='Via' value='SIP/2.0/UDP #{PRISM_HOST}:21702;branch=z9hG4bK-d8754z-ab966854f39bb612-1---d8754z-;rport=21702'/>

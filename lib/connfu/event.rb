@@ -11,13 +11,14 @@ module Connfu
     class Offer < Presence
 
       attr_reader :presence_from, :presence_to
-      attr_reader :from
+      attr_reader :from, :to
 
       def initialize(params)
         @presence_from = params[:presence_from]
         @presence_to = params[:presence_to]
         @call_id = params[:call_id]
         @from = params[:from]
+        @to = params[:to]
       end
     end
 

@@ -47,8 +47,9 @@ module Connfu
         p_attrs = presence_node.attributes
         offer = node.xpath('//x:offer', 'x' => 'urn:xmpp:ozone:1').first
         from = offer.xpath('x:header[@name="From"]', 'x' => 'urn:xmpp:ozone:1').first["value"]
+        to = offer.xpath('x:header[@name="To"]', 'x' => 'urn:xmpp:ozone:1').first["value"]
         {:presence_from => p_attrs['from'].value, :presence_to => p_attrs['to'].value,
-         :from => from}
+         :from => from, :to => to}
       end
     end
   end
