@@ -1,6 +1,7 @@
 require 'bundler/setup'
 require 'rspec'
 require 'connfu'
+require 'cgi'
 
 module ConnfuTestDsl
   def testing_dsl(&block)
@@ -93,7 +94,10 @@ def error_iq(call_id='4a3fe31a-0c2a-4a9a-ae98-f5b8afb55708')
   </iq>"
 end
 
-def offer_presence(from="4a3fe31a-0c2a-4a9a-ae98-f5b8afb55708@#{PRISM_HOST}", to="#{PRISM_JID}/voxeo")
+def offer_presence(from="4a3fe31a-0c2a-4a9a-ae98-f5b8afb55708@#{PRISM_HOST}", to="#{PRISM_JID}/voxeo", options={})
+  offer_options = {
+    :from => "<sip:16508983130@#{PRISM_HOST}>;tag=34ccaa4d"
+  }.merge(options)
   "<presence from='#{from}' to='#{to}'>
     <offer xmlns='urn:xmpp:ozone:1' to='sip:#{PRISM_JID}:5060' from='sip:16508983130@#{PRISM_HOST}'>
       <header name='Max-Forwards' value='70'/>
@@ -107,7 +111,7 @@ def offer_presence(from="4a3fe31a-0c2a-4a9a-ae98-f5b8afb55708@#{PRISM_HOST}", to
       <header name='Via' value='SIP/2.0/UDP #{PRISM_HOST}:21702;branch=z9hG4bK-d8754z-ab966854f39bb612-1---d8754z-;rport=21702'/>
       <header name='Call-ID' value='MGRkMWJiOTVmM2ViMGM4NWNiYmFhZDk5NGMwMDcwOTE.'/>
       <header name='Content-Type' value='application/sdp'/>
-      <header name='From' value='&lt;sip:16508983130@#{PRISM_HOST}&gt;;tag=34ccaa4d'/>
+      <header name='From' value='#{CGI.escapeHTML(offer_options[:from])}'/>
     </offer>
   </presence>"
 end

@@ -8,9 +8,7 @@ module Connfu
         from = node.to.to_s
 
         if node.xpath('//x:offer', 'x' => 'urn:xmpp:ozone:1').any?
-          presence_node = node.xpath('/presence').first
-          p_attrs = presence_node.attributes
-          Connfu::Event::Offer.new(:from => p_attrs['from'].value, :to => p_attrs['to'].value, :call_id => call_id)
+          Connfu::Event::Offer.new(offer_params(node).merge(:call_id => call_id))
         elsif node.xpath('//x:success', 'x' => 'urn:xmpp:ozone:say:complete:1').any?
           Connfu::Event::SayComplete.new(:call_id => call_id)
         elsif node.type == :result
@@ -40,6 +38,17 @@ module Connfu
             return v.new(:call_id => node.from.node)
           end
         end
+      end
+
+      private
+
+      def self.offer_params(node)
+        presence_node = node.xpath('/presence').first
+        p_attrs = presence_node.attributes
+        offer = node.xpath('//x:offer', 'x' => 'urn:xmpp:ozone:1').first
+        from = offer.xpath('x:header[@name="From"]', 'x' => 'urn:xmpp:ozone:1').first["value"]
+        {:presence_from => p_attrs['from'].value, :presence_to => p_attrs['to'].value,
+         :from => from}
       end
     end
   end

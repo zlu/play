@@ -105,7 +105,7 @@ module Connfu
         l.debug "Handling event: #{event.inspect}"
         case event
           when Connfu::Event::Offer
-            start
+            start(event)
           when Connfu::Event::Ringing
             run_any_call_behaviour_for(:ringing)
           when Connfu::Event::Answered

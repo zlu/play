@@ -4,7 +4,7 @@ describe Connfu::Ozone::Parser do
   describe "#parse_event_from" do
     context 'an offer iq' do
       before do
-        @node = create_presence(offer_presence)
+        @node = create_presence(offer_presence('from-value', 'to-value', :from => "offer-from"))
         @event = Connfu::Ozone::Parser.parse_event_from(@node)
       end
 
@@ -12,16 +12,20 @@ describe Connfu::Ozone::Parser do
         @event.should be_instance_of Connfu::Event::Offer
       end
 
-      it "should determine the from value of the offer" do
-        @event.presence_from.should eq @node.attributes['from'].value
+      it "should determine the from value of the presence" do
+        @event.presence_from.should eq 'from-value'
       end
 
-      it "should determine the to value of the offer" do
-        @event.presence_to.should eq @node.attributes['to'].value
+      it "should determine the to value of the presence" do
+        @event.presence_to.should eq 'to-value'
       end
 
       it "should determine the call_id value of the offer" do
         @event.call_id.should eq @node.from.node
+      end
+
+      it "should determine the from value of the offer" do
+        @event.from.should eq "offer-from"
       end
     end
 
