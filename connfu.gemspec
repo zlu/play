@@ -22,7 +22,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency("blather", ["0.5.3"])
 
-  s.add_development_dependency("bundler", ["~>1.0.13"])
   s.add_development_dependency("rake", ["0.9.2"])
   s.add_development_dependency("rspec", [">2.5.0"])
   s.add_development_dependency("flog", ["2.5.1"])
