@@ -4,7 +4,7 @@ describe Connfu::Commands::Transfer do
 
   describe "generating XMPP iq" do
     subject do
-      @transfer_to = 'sip:1324@connfu.com'
+      @transfer_to = ['sip:1324@connfu.com']
       Connfu::Commands::Transfer.new(:to => 'server-address', :from => 'client-address', :transfer_to => @transfer_to).to_iq
     end
 
@@ -31,7 +31,7 @@ describe Connfu::Commands::Transfer do
 
     context 'with a timeout parameter' do
       subject do
-        @transfer_to = 'sip:1324@connfu.com'
+        @transfer_to = ['sip:1324@connfu.com']
         Connfu::Commands::Transfer.new(:to => 'server-address', :from => 'client-address', :transfer_to => @transfer_to, :timeout => 5000).to_iq
       end
 
@@ -45,7 +45,7 @@ describe Connfu::Commands::Transfer do
       it "should contain a 'transfer_to' node" do
         transfer_to_node = subject.xpath("//x:to", "x" => "urn:xmpp:ozone:transfer:1").first
         transfer_to_node.name.should eq 'to'
-        transfer_to_node.text.should eq @transfer_to
+        transfer_to_node.text.should eq @transfer_to.first
       end
     end
 

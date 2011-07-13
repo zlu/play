@@ -28,7 +28,7 @@ module Connfu
   def self.setup(jid, password)
     @connection = Blather::Client.new.setup(jid, password)
     @adaptor = Connfu::ConnectionAdaptor.new(@connection)
-    @connection.register_handler(:ready, lambda { p 'Established @connection to Connfu Server' })
+
     [:iq, :presence].each do |stanza_type|
       @connection.register_handler(stanza_type) do |stanza|
         l.debug "Receiving #{stanza_type} from server"
@@ -44,11 +44,11 @@ module Connfu
   end
 
   def self.start(handler_class)
-    if handler_class.respond_to?(:on_ready)
-      Connfu.connection.register_handler :ready do
-        handler_class.on_ready
-      end
+    @connection.register_handler(:ready) do |stanza|
+      p 'Established @connection to Connfu Server'
+      handler_class.on_ready if handler_class.respond_to?(:on_ready)
     end
+
     self.event_processor ||= EventProcessor.new(handler_class)
     EM.run { @connection.run }
   end

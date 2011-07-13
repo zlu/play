@@ -14,11 +14,6 @@ describe Connfu do
       @connection.should be_setup
     end
 
-    it "should register ready handler that prints out connection message" do
-      Connfu.should_receive(:p).with('Established @connection to Connfu Server')
-      Connfu.connection.send :call_handler_for, :ready, ''
-    end
-
     it "should register iq handler for offer" do
       iq = mock('incoming_iq')
       Connfu.event_processor = mock('event-processor', :handle_event => true)

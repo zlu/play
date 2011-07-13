@@ -1,10 +1,12 @@
+require 'continuation' if RUBY_VERSION == "1.9.2"
+
 module Connfu
   module Continuation
     def start(&block)
       if block_given?
         continue_with block
       else
-        continue_with lambda {run}
+        continue_with lambda {|result| run}
       end
     end
 
