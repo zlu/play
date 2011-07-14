@@ -130,7 +130,7 @@ module Connfu
           when Connfu::Event::Error
             continue(:error)
           when Connfu::Event::RecordingStopComplete
-            continue
+            continue(event.uri)
         end
       end
 
