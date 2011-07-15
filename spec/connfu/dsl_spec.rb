@@ -85,7 +85,7 @@ describe Connfu::Dsl do
       Connfu.adaptor.should_receive(:send_command).with(Connfu::Commands::Recording::Start.new(
         :from => 'client-address', :to => 'server-address', :max_length => (max_length_in_seconds * 1000)
       ))
-      subject.start_recording(:max_length => max_length_in_seconds)
+      subject.record_for(max_length_in_seconds)
     end
 
     it 'should send a stop command to adaptor' do

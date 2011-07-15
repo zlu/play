@@ -12,7 +12,7 @@ class RecordingExample
 
   on :offer do |call|
     answer
-    start_recording :max_length => 5
+    record_for 5
 
     sleep 10
 

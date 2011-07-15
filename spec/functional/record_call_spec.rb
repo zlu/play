@@ -59,7 +59,7 @@ describe "Recording a call" do
 
     testing_dsl do
       on :offer do
-        start_recording :max_length => 5
+        record_for 5
         hangup
         do_something(recordings)
       end
