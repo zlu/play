@@ -63,6 +63,7 @@ module Connfu
       def hangup
         send_command Connfu::Commands::Hangup.new(:to => server_address, :from => client_address)
         wait_for Connfu::Event::Hangup
+        @finished = true
       end
 
       def redirect(redirect_to)
