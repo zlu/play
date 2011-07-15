@@ -4,8 +4,8 @@ require 'rubygems'
 require 'bundler/setup'
 require 'connfu'
 
-#Connfu.setup "usera@127.0.0.1", "1"
-Connfu.setup "usera@46.137.85.52", "1"
+Connfu.setup "usera@127.0.0.1", "1"
+#Connfu.setup "usera@46.137.85.52", "1"
 
 class RecordingExample
   include Connfu::Dsl
@@ -16,7 +16,7 @@ class RecordingExample
 
     sleep 10
 
-    stop_recording
+    p stop_recording
 
     sleep 5
     hangup

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    connfu (0.0.1)
+    connfu (0.0.3)
       blather (= 0.5.3)
 
 GEM
