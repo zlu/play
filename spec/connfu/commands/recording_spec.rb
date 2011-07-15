@@ -10,7 +10,6 @@ describe Connfu::Commands::Recording do
     end
 
     it "should generate a record iq" do
-      flunk "intentionally break the build to check email notification"
       subject.xpath("//x:record", "x" => "urn:xmpp:ozone:record:1").should_not be_empty
     end
 
