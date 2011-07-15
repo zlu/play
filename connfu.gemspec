@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.name        = "connfu"
   s.version     = Connfu::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["Zhao Lu"]
+  s.authors     = ["Zhao Lu, James Mead, James Adam, Tom Wards, Kalvir Sandhu"]
   s.email       = %q{zlu@me.com}
   s.date        = %q{2011-05-06}
   s.homepage    = "http://github.com/zlu/play"
@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = %w{README.md}
 
   s.add_dependency("blather", "0.5.3")
+  s.add_dependency("resque", "1.17.1")
 
   s.add_development_dependency("rake", "0.9.2")
   s.add_development_dependency("rspec", ">2.5.0")
