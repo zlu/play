@@ -10,8 +10,10 @@ else
   printf "ERROR: An RVM installation was not found.\n"
 fi
 
-echo `rvm 1.9.2 exec bundle config`
+rvm use 1.9.2
 
-echo "Running build script as `whoami`" && mkdir -p .build && rvm 1.9.2 exec bundle install --path .build/gems && rvm 1.9.2 exec bundle exec rake --trace | tee .build/output
+echo `bundle config`
+
+echo "Running build script as `whoami`" && mkdir -p .build && bundle install --path .build/gems && bundle exec rake --trace | tee .build/output
 
 exit $pipestatus[1]
