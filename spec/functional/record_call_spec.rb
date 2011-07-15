@@ -13,7 +13,7 @@ describe "Recording a call" do
   describe "with explicit stop command" do
 
     testing_dsl do
-      on :offer do
+      on :offer do |call|
         start_recording
         stop_recording
         do_something(recordings)
@@ -58,7 +58,7 @@ describe "Recording a call" do
   describe "without explicit stop command" do
 
     testing_dsl do
-      on :offer do
+      on :offer do |call|
         record_for 5
         hangup
         do_something(recordings)
