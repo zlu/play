@@ -112,14 +112,8 @@ module Connfu
             run_any_call_behaviour_for(:answer)
           when Connfu::Event::SayComplete
             continue
-          when Connfu::Event::TransferSuccess
-            continue(TransferState.answered)
-          when Connfu::Event::TransferTimeout
-            continue(TransferState.timeout)
-          when Connfu::Event::TransferRejected
-            continue(TransferState.rejected)
-          when Connfu::Event::TransferBusy
-            continue(TransferState.busy)
+          when Connfu::Event::TransferEvent
+            continue event.state
           when Connfu::Event::Result
             @ref_id = event.ref_id
             continue
