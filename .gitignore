@@ -2,3 +2,4 @@
 .bundle
 .build
 Gemfile.lock
+.rvmrc
