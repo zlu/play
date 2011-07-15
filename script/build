@@ -10,11 +10,7 @@ else
   printf "ERROR: An RVM installation was not found.\n"
 fi
 
-echo `bundle config`
-
-rvm use ree-1.8.7-2011.03
-
-echo `ruby -v`
+echo `rvm 1.9.2 exec bundle config`
 
 echo "Running build script as `whoami`" && mkdir -p .build && rvm 1.9.2 exec bundle install --path .build/gems && rvm 1.9.2 exec bundle exec rake --trace | tee .build/output
 
