@@ -37,6 +37,12 @@ module Connfu
         yield call_behaviour
         define_method(:call_behaviour) { call_behaviour }
       end
+
+      def handle_any_outgoing_call(&block)
+        call_behaviour = CallBehaviour.new
+        yield call_behaviour
+        define_method(:call_behaviour) { call_behaviour }
+      end
     end
 
     module InstanceMethods
