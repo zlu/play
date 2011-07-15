@@ -12,14 +12,16 @@ class RecordingExample
 
   on :offer do |call|
     answer
-    start_recording
+    start_recording :max_length => 5
 
     sleep 10
 
-    p stop_recording
-
+    start_recording
     sleep 5
+    stop_recording
+
     hangup
+    p recordings
   end
 end
 

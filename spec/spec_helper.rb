@@ -177,6 +177,14 @@ def recording_stop_presence(call_id="abc123", id="def456", path="file:///tmp/rec
   </presence>}
 end
 
+def recording_error_presence(call_id="abc123", id="def456", path="file:///tmp/recording.mp3")
+  %{<presence from="#{call_id}@#{PRISM_HOST}/#{id}" to="#{PRISM_JID}/voxeo">
+    <complete xmlns="urn:xmpp:ozone:ext:1">
+      <error xmlns="urn:xmpp:ozone:ext:complete:1" uri="#{path}"/>
+    </complete>
+  </presence>}
+end
+
 def outgoing_call_ringing_presence(call_id="ebe45dbf-2a8b-4f1c-9aa0-1f1b39d1e821")
   %{<presence from="#{call_id}@#{PRISM_HOST}" to="#{PRISM_JID}/voxeo">
     <ringing xmlns="urn:xmpp:ozone:1"/>

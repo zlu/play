@@ -5,7 +5,9 @@ module Connfu
         include Connfu::Commands::Base
 
         def to_iq
-          build_iq "xmlns" => "urn:xmpp:ozone:record:1", "start-beep" => "true"
+          attributes = { "xmlns" => "urn:xmpp:ozone:record:1", "start-beep" => "true" }
+          attributes["max-length"] = @params[:max_length] if @params[:max_length]
+          build_iq(attributes)
         end
 
         def command

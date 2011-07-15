@@ -40,6 +40,7 @@ module Connfu
     end
 
     module InstanceMethods
+
       def run
       end
 
@@ -88,14 +89,21 @@ module Connfu
         end
       end
 
-      def start_recording
-        result = send_command Connfu::Commands::Recording::Start.new(:to => server_address, :from => client_address)
+      def recordings
+        @recordings ||= []
+      end
+
+      def start_recording(options = {})
+        command_options = { :to => server_address, :from => client_address }
+        command_options[:max_length] = options[:max_length] * 1000 if options[:max_length]
+        result = send_command Connfu::Commands::Recording::Start.new(command_options)
         @ref_id = result.ref_id
       end
 
       def stop_recording
         send_command Connfu::Commands::Recording::Stop.new(:to => server_address, :from => client_address, :ref_id => @ref_id)
-        wait_for(Connfu::Event::RecordingStopComplete).uri
+        event = wait_for(Connfu::Event::RecordingStopComplete)
+        recordings << event.uri
       end
 
       def run_any_call_behaviour_for(event)
@@ -120,6 +128,8 @@ module Connfu
             when Connfu::Event::Hangup
               run_any_call_behaviour_for(:hangup)
               @finished = true
+            when Connfu::Event::RecordingErrorComplete
+              recordings << event.uri
           end
         end
       end
@@ -143,7 +153,7 @@ module Connfu
         l.debug "Sent command: #{command}"
         result = wait_for Connfu::Event::Result, Connfu::Event::Error
         l.debug "Result from command #{result}"
-        if result.is_a? Connfu::Event::Error
+        if result.is_a?(Connfu::Event::Error)
           raise
         else
           result
