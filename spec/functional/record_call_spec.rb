@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "Recording a call" do
 
   testing_dsl do
-    on :offer do
+    on :offer do |call|
       start_recording
       recording_uri = stop_recording
       do_something(recording_uri)
