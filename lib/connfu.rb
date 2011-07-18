@@ -53,23 +53,21 @@ module Connfu
 
     self.event_processor ||= EventProcessor.new(handler_class)
     EM.run do
-      EventMachine::add_periodic_timer(1) do
-        p "checking for a job"
-          if job = Resque::Job.reserve(Connfu::Jobs::Dial.queue)
-            puts "Performing job..."
-            job.perform
-            puts "...done."
-          else
-            puts "No job found."
-          end
-        end
-
-        @connection.run
+      EventMachine::add_periodic_timer(1, DialQueueProcessor.new)
+      @connection.run
     end
   end
 
   def self.redis_uri=(redis_uri)
     uri = URI.parse(redis_uri)
     Resque.redis = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password)
+  end
+
+  class DialQueueProcessor
+    def call
+      if job = Resque::Job.reserve(Connfu::Jobs::Dial.queue)
+        job.perform
+      end
+    end
   end
 end
