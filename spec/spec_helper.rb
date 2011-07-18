@@ -131,6 +131,17 @@ def say_complete_success(call_id='7bc6c7d5-1428-421d-bb40-22f58cdcd2ec')
   </presence>"
 end
 
+def ask_complete_success(call_id="9f00061", catpured_input="1234")
+  "<presence to='16577@app.ozone.net/1' from='#{call_id}@call.ozone.net/fgh4590'>
+    <complete xmlns='urn:xmpp:ozone:ext:1'>
+      <success mode='speech' confidence='0.45' xmlns='urn:xmpp:ozone:ask:complete:1'>
+        <interpretation>#{catpured_input}</interpretation>
+        <utterance>one two three four</utterance>
+      </success>
+    </complete>
+  </presence>"
+end
+
 def transfer_timeout_presence(call_id='9f00061')
   "<presence to='16577@app.ozone.net/1' from='#{call_id}@call.ozone.net/fgh4590'>
     <complete xmlns='urn:xmpp:ozone:ext:1'>

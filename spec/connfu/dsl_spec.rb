@@ -95,4 +95,18 @@ describe Connfu::Dsl do
       subject.stop_recording
     end
   end
+
+  describe 'say' do
+    it 'should send Ask command to adaptor and respond with captured input' do
+      text = 'enter your pin number'
+      digits = 4
+      caller_input = "9812"
+      subject.stub(:wait_for).and_return(Connfu::Event::AskComplete.new(:call_id => "call-id", :captured_input => caller_input))
+      Connfu.adaptor.should_receive(:send_command).with(Connfu::Commands::Ask.new(:prompt => text, :from => 'client-address', :to => 'server-address', :digits => digits))
+      catch :waiting do
+        captured_input = subject.ask(:prompt => text, :digits => digits)
+        captured_input.should eq "9812"
+      end
+    end
+  end
 end

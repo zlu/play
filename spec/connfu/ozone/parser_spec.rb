@@ -97,6 +97,25 @@ describe Connfu::Ozone::Parser do
       end
     end
 
+    context "an ask complete iq" do
+      before do
+        @node = create_presence(ask_complete_success)
+        @event = Connfu::Ozone::Parser.parse_event_from(@node)
+      end
+
+      it "should create an AskComplete event" do
+        @event.should be_instance_of Connfu::Event::AskComplete
+      end
+
+      it "should determine the call_id value" do
+        @event.call_id.should eq @node.from.node
+      end
+
+      it "should determine the result digits" do
+        @event.captured_input.should eq "1234"
+      end
+    end
+
     context "a transfer success presence" do
       before do
         @node = create_presence(transfer_success_presence)

@@ -9,12 +9,12 @@ Connfu.setup "usera@127.0.0.1", "1"
 class AskExample
   include Connfu::Dsl
 
-  raise '-------------- currently disabled --------------'
   on :offer do |call|
     answer
-    ask('please enter your four digit pin') do |result|
-      say 'your input is ' + result
-    end
+    captured_input = ask(:prompt => 'please enter your four digit pin', :digits => 4)
+    p "******************* #{captured_input} ********************"
+    say 'your input is ' + captured_input
+    hangup
   end
 end
 

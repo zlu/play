@@ -25,6 +25,15 @@ module Connfu
     class SayComplete < Presence
     end
 
+    class AskComplete < Presence
+      attr_reader :captured_input
+
+      def initialize(params = {})
+        @call_id = params[:call_id]
+        @captured_input = params[:captured_input]
+      end
+    end
+
     class Result
       attr_reader :call_id, :ref_id
 

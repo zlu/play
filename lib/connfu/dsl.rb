@@ -53,6 +53,12 @@ module Connfu
         wait_for Connfu::Event::SayComplete
       end
 
+      def ask(options)
+        send_command Connfu::Commands::Ask.new(:prompt => options[:prompt], :digits => options[:digits], :from => client_address, :to => server_address)
+        ask_complete = wait_for Connfu::Event::AskComplete
+        ask_complete.captured_input
+      end
+
       def answer
         send_command Connfu::Commands::Answer.new(:to => server_address, :from => client_address)
       end

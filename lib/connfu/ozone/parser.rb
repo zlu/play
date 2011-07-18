@@ -29,6 +29,9 @@ module Connfu
           Connfu::Event::RecordingStopComplete.new(:call_id => call_id, :uri => stop.attributes['uri'].value)
         elsif error = node.xpath('//x:error', 'x' => 'urn:xmpp:ozone:ext:complete:1').first
           Connfu::Event::RecordingErrorComplete.new(:call_id => call_id, :uri => error.attributes['uri'].value)
+        elsif complete = node.xpath('//x:success', 'x' => 'urn:xmpp:ozone:ask:complete:1').first
+          captured_input = complete.xpath('//x:interpretation', 'x' => 'urn:xmpp:ozone:ask:complete:1').first.inner_text
+          Connfu::Event::AskComplete.new(:call_id => call_id, :captured_input => captured_input)
         else
           self.transfer_complete?(node)
         end
