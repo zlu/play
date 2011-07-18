@@ -19,7 +19,7 @@ describe "Handling any outgoing call" do
     def hangup_happened
     end
 
-    handle_any_outgoing_call do |call|
+    on :outgoing_call do |call|
       call.on_ringing do
         ringing_happened
       end

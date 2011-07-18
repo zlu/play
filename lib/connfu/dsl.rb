@@ -14,10 +14,12 @@ module Connfu
         @on_ringing = block if block_given?
         @on_ringing
       end
+
       def on_answer(&block)
         @on_answer = block if block_given?
         @on_answer
       end
+
       def on_hangup(&block)
         @on_hangup = block if block_given?
         @on_hangup
@@ -26,19 +28,21 @@ module Connfu
 
     module ClassMethods
       def on(context, &block)
-        define_method(:run, &block)
+        case context
+          when :offer
+            define_method(:run, &block)
+          when :outgoing_call
+            call_behaviour = CallBehaviour.new
+            yield call_behaviour
+            define_method(:call_behaviour) { call_behaviour }
+        end
+
       end
 
       def dial(params={})
         self.class.send(:define_method, :on_ready) do
           Connfu.adaptor.send_command Connfu::Commands::Dial.new(params)
         end
-      end
-
-      def handle_any_outgoing_call(&block)
-        call_behaviour = CallBehaviour.new
-        yield call_behaviour
-        define_method(:call_behaviour) { call_behaviour }
       end
     end
 

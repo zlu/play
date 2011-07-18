@@ -16,7 +16,7 @@ class DialExample
 
   dial :to => 'sip:zlu@213.192.59.75', :from => "sip:usera@127.0.0.1"
 
-  handle_any_outgoing_call do |c|
+  on :outgoing_call do |c|
     c.on_ringing do
       update_status "The phone is ringing!"
     end
