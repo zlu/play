@@ -1,13 +1,25 @@
 require 'spec_helper'
 
-describe "Dialing a single number" do
+describe "Dialing a single number from within the DSL" do
+  testing_dsl do
+    dial :to => "someone-remote", :from => "my-number" do |call|
+    end
+  end
+
+  it "should send a dial command when Connfu starts" do
+    @dsl_class.on_ready
+    Connfu.adaptor.commands.last.should == Connfu::Commands::Dial.new(:to => 'someone-remote', :from => "my-number")
+  end
+end
+
+describe "Handling any outgoing call" do
   testing_dsl do
     def ringing_happened
     end
     def hangup_happened
     end
 
-    dial :to => "someone-remote", :from => "my-number" do |call|
+    handle_any_outgoing_call do |call|
       call.on_ringing do
         ringing_happened
       end
@@ -23,11 +35,6 @@ describe "Dialing a single number" do
 
   before :each do
     @call_id = 'outbound_call_id'
-    @dsl_class.on_ready
-  end
-
-  it "should send a dial command when Connfu starts" do
-    Connfu.adaptor.commands.last.should == Connfu::Commands::Dial.new(:to => 'someone-remote', :from => "my-number")
   end
 
   it 'should run the ringing behaviour when the call starts ringing' do
@@ -69,7 +76,6 @@ describe "Dialing when no behaviour is specified" do
 
   before :each do
     @call_id = 'outbound_call_id'
-    @dsl_class.on_ready
   end
 
   it 'should not crash when receiving a ringing event' do
