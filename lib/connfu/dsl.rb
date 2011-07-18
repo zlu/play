@@ -29,13 +29,10 @@ module Connfu
         define_method(:run, &block)
       end
 
-      def dial(params={}, &block)
+      def dial(params={})
         self.class.send(:define_method, :on_ready) do
           Connfu.adaptor.send_command Connfu::Commands::Dial.new(params)
         end
-        call_behaviour = CallBehaviour.new
-        yield call_behaviour
-        define_method(:call_behaviour) { call_behaviour }
       end
 
       def handle_any_outgoing_call(&block)
