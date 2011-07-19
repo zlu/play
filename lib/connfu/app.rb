@@ -1,7 +1,7 @@
 module Connfu
   module App
     def self.dial(options)
-      Resque.enqueue(Jobs::Dial, options)
+      Queue.enqueue(Jobs::Dial, options)
     end
   end
 

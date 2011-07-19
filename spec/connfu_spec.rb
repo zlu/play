@@ -44,19 +44,19 @@ describe Connfu do
 
   describe 'DialQueueProcessor' do
     it "should grab the next job from the dial queue" do
-      Resque::Job.should_receive(:reserve).with(Connfu::Jobs::Dial.queue)
+      Connfu::Queue.should_receive(:reserve).with(Connfu::Jobs::Dial.queue)
       Connfu::DialQueueProcessor.new.call
     end
 
     it "should process the next job from the dial queue" do
       job = Connfu::Jobs::Dial
       job.should_receive(:perform)
-      Resque::Job.stub(:reserve).and_return(job)
+      Connfu::Queue.stub(:reserve).and_return(job)
       Connfu::DialQueueProcessor.new.call
     end
 
     it 'should not error if there are no jobs to be processed' do
-      Resque::Job.stub(:reserve).and_return(nil)
+      Connfu::Queue.stub(:reserve).and_return(nil)
       lambda { Connfu::DialQueueProcessor.new.call }.should_not raise_error
     end
   end

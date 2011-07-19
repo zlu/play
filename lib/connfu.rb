@@ -13,6 +13,9 @@
   connfu/ozone/iq_builder
   connfu/connection_adaptor
   connfu/commands/base
+  connfu/queue
+  connfu/queue/in_process
+  connfu/queue/resque
   connfu/app
 ].each { |file| require file }
 
@@ -72,7 +75,7 @@ module Connfu
 
   class DialQueueProcessor
     def call
-      if job = Resque::Job.reserve(Connfu::Jobs::Dial.queue)
+      if job = Queue.reserve(Connfu::Jobs::Dial.queue)
         job.perform
       end
     end
