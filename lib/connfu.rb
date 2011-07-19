@@ -34,6 +34,7 @@ module Connfu
   end
 
   def self.setup(jid, password)
+    @jid = jid
     @connection = Blather::Client.new.setup(jid, password)
     @adaptor = Connfu::ConnectionAdaptor.new(@connection)
 
@@ -53,7 +54,7 @@ module Connfu
 
   def self.start(handler_class)
     @connection.register_handler(:ready) do |stanza|
-      p 'Established @connection to Connfu Server'
+      p "Established @connection to Connfu Server with JID: #{@jid}"
       handler_class.on_ready if handler_class.respond_to?(:on_ready)
     end
 
