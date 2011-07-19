@@ -12,7 +12,7 @@ class RecordingExample
 
   on :offer do |call|
     answer
-    start_recording
+    start_recording(:beep => true)
     sleep 5
     stop_recording
 

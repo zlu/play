@@ -106,12 +106,12 @@ module Connfu
         @recordings ||= []
       end
 
-      def start_recording
-        send_start_recording
+      def start_recording(options = {})
+        send_start_recording(options)
       end
 
-      def record_for(max_length)
-        send_start_recording(:max_length => max_length)
+      def record_for(max_length, options = {})
+        send_start_recording(options.merge(:max_length => max_length))
         event = wait_for(Connfu::Event::RecordingStopComplete)
         recordings << event.uri
       end
@@ -155,6 +155,7 @@ module Connfu
       def send_start_recording(options = {})
         command_options = { :to => server_address, :from => client_address }
         command_options[:max_length] = options[:max_length] * 1000 if options[:max_length]
+        command_options[:beep] = options[:beep] if options.has_key?(:beep)
         result = send_command Connfu::Commands::Recording::Start.new(command_options)
         @ref_id = result.ref_id
       end

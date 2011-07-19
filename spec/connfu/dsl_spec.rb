@@ -79,6 +79,14 @@ describe Connfu::Dsl do
       subject.start_recording
     end
 
+    it 'should send a start command to adaptor with optional beep parameter' do
+      subject.stub(:wait_for).and_return(Connfu::Event::Result.new)
+      Connfu.adaptor.should_receive(:send_command).with(Connfu::Commands::Recording::Start.new(
+        :from => 'client-address', :to => 'server-address', :beep => false
+      ))
+      subject.start_recording(:beep => false)
+    end
+
     it 'should send a start command to adaptor with optional timeout in milliseconds' do
       max_length_in_seconds = 25
       subject.stub(:wait_for).and_return(Connfu::Event::Result.new, Connfu::Event::RecordingStopComplete.new)
@@ -86,6 +94,15 @@ describe Connfu::Dsl do
         :from => 'client-address', :to => 'server-address', :max_length => (max_length_in_seconds * 1000)
       ))
       subject.record_for(max_length_in_seconds)
+    end
+
+    it 'should send a start command to adaptor with optional timeout in milliseconds and beep parameter' do
+      max_length_in_seconds = 25
+      subject.stub(:wait_for).and_return(Connfu::Event::Result.new, Connfu::Event::RecordingStopComplete.new)
+      Connfu.adaptor.should_receive(:send_command).with(Connfu::Commands::Recording::Start.new(
+        :from => 'client-address', :to => 'server-address', :max_length => (max_length_in_seconds * 1000), :beep => false
+      ))
+      subject.record_for(max_length_in_seconds, :beep => false)
     end
 
     it 'should send a stop command to adaptor' do

@@ -31,16 +31,31 @@ describe Connfu::Commands::Recording do
     end
   end
 
-  describe "generating XMPP iq for a Start command with optional max length parameter" do
-    subject do
-      Connfu::Commands::Recording::Start.new(
-        :to => 'server-address', :from => 'client-address', :max_length => 25000
-      ).to_iq
+  describe "generating XMPP iq for a Start command" do
+    describe "with optional max length parameter" do
+      subject do
+        Connfu::Commands::Recording::Start.new(
+          :to => 'server-address', :from => 'client-address', :max_length => 25000
+        ).to_iq
+      end
+
+      it 'should have max length set correctly' do
+        node = subject.xpath("//x:record", "x" => "urn:xmpp:ozone:record:1").first
+        node.attributes['max-length'].value.should eq '25000'
+      end
     end
 
-    it 'should have max length set correctly' do
-      node = subject.xpath("//x:record", "x" => "urn:xmpp:ozone:record:1").first
-      node.attributes['max-length'].value.should eq '25000'
+    describe "with optional beep parameter" do
+      subject do
+        Connfu::Commands::Recording::Start.new(
+          :to => 'server-address', :from => 'client-address', :beep => false
+        ).to_iq
+      end
+
+      it 'should have max length set correctly' do
+        node = subject.xpath("//x:record", "x" => "urn:xmpp:ozone:record:1").first
+        node.attributes['start-beep'].value.should eq 'false'
+      end
     end
   end
 
