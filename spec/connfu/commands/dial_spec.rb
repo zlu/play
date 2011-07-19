@@ -10,7 +10,12 @@ describe Connfu::Commands::Dial do
       end
 
       subject do
-        Connfu::Commands::Dial.new(:to => 'zlu@iptel.org', :from => 'admin@openvoice.org').to_iq
+        Connfu::Commands::Dial.new(
+          :to => 'zlu@iptel.org',
+          :from => 'admin@openvoice.org',
+          :headers => {
+            "x-jaja-charging" => '123'
+          }).to_iq
       end
 
       it "should be an iq of type 'set'" do
@@ -35,6 +40,19 @@ describe Connfu::Commands::Dial do
           node.attributes['to'].value.should eq 'zlu@iptel.org'
           node.attributes['from'].value.should eq 'admin@openvoice.org'
         end
+
+        describe 'header node' do
+          it 'should exist' do
+            subject.xpath("//x:dial/x:header", "x" => "urn:xmpp:ozone:1").size.should eq 1
+          end
+
+          it 'should have the correct attributes' do
+            node = subject.xpath("//x:dial/x:header", "x" => "urn:xmpp:ozone:1").first
+            node.attributes['name'].value.should eq "x-jaja-charging"
+            node.attributes['value'].value.should eq "123"
+          end
+        end
+
       end
     end
   end

@@ -12,6 +12,18 @@ describe "Dialing a single number from within the DSL" do
   end
 end
 
+describe 'Dialing a single number from within the DSL passing custom headers' do
+  testing_dsl do
+    dial :to => "someone-remote", :from => "my-number", :headers => { 'foo' => 'bar' } do |call|
+    end
+  end
+
+  it "should pass the supplied headers to the command" do
+    @dsl_class.on_ready
+    Connfu.adaptor.commands.last.should == Connfu::Commands::Dial.new(:to => 'someone-remote', :from => "my-number", :headers => { 'foo' => 'bar' })
+  end
+end
+
 describe "Handling any outgoing call" do
   testing_dsl do
     def ringing_happened
