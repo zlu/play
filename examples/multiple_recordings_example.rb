@@ -7,18 +7,17 @@ require 'connfu'
 #Connfu.setup "usera@127.0.0.1", "1"
 Connfu.setup "usera@46.137.85.52", "1"
 
-class RecordingExample
+class MultipleRecordingsExample
   include Connfu::Dsl
 
   on :offer do |call|
     answer
-    start_recording
-    sleep 5
-    stop_recording
-
+    record_for 5
+    record_for 10
     hangup
+
     p recordings
   end
 end
 
-Connfu.start RecordingExample
+Connfu.start MultipleRecordingsExample

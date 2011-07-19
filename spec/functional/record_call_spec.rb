@@ -60,19 +60,16 @@ describe "Recording a call" do
     testing_dsl do
       on :offer do |call|
         record_for 5
-        hangup
         do_something(recordings)
       end
     end
 
-    it "should be able to access the recording URI once the recording is complete and another command (e.g. hangup) has been issued" do
+    it "should be able to access the recording URI once the recording is complete" do
       dsl_instance.should_receive(:do_something).with([@recording_path])
 
       incoming :offer_presence, @server_address, @client_address
       incoming :recording_result_iq, @call_id, @recording_ref_id
-      incoming :recording_error_presence, @call_id, @recording_ref_id, @recording_path
-      incoming :result_iq, @call_id
-      incoming :hangup_presence, @call_id
+      incoming :recording_stop_presence, @call_id, @recording_ref_id, @recording_path
     end
   end
 end

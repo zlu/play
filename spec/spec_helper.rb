@@ -183,15 +183,8 @@ end
 def recording_stop_presence(call_id="abc123", id="def456", path="file:///tmp/recording.mp3")
   %{<presence from="#{call_id}@#{PRISM_HOST}/#{id}" to="#{PRISM_JID}/voxeo">
     <complete xmlns="urn:xmpp:ozone:ext:1">
-      <stop xmlns="urn:xmpp:ozone:ext:complete:1" uri="#{path}"/>
-    </complete>
-  </presence>}
-end
-
-def recording_error_presence(call_id="abc123", id="def456", path="file:///tmp/recording.mp3")
-  %{<presence from="#{call_id}@#{PRISM_HOST}/#{id}" to="#{PRISM_JID}/voxeo">
-    <complete xmlns="urn:xmpp:ozone:ext:1">
-      <error xmlns="urn:xmpp:ozone:ext:complete:1" uri="#{path}"/>
+      <stop xmlns="urn:xmpp:ozone:ext:complete:1"/>
+      <recording uri="#{path}"/>
     </complete>
   </presence>}
 end

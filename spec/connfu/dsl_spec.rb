@@ -81,7 +81,7 @@ describe Connfu::Dsl do
 
     it 'should send a start command to adaptor with optional timeout in milliseconds' do
       max_length_in_seconds = 25
-      subject.stub(:wait_for).and_return(Connfu::Event::Result.new)
+      subject.stub(:wait_for).and_return(Connfu::Event::Result.new, Connfu::Event::RecordingStopComplete.new)
       Connfu.adaptor.should_receive(:send_command).with(Connfu::Commands::Recording::Start.new(
         :from => 'client-address', :to => 'server-address', :max_length => (max_length_in_seconds * 1000)
       ))
