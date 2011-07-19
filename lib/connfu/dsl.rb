@@ -40,7 +40,7 @@ module Connfu
       end
 
       def dial(params={})
-        self.class.send(:define_method, :on_ready) do
+        self.metaclass.send(:define_method, :on_ready) do
           Connfu.adaptor.send_command Connfu::Commands::Dial.new(params)
         end
       end

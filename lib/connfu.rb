@@ -20,6 +20,12 @@ Dir[File.expand_path("../connfu/commands/**/*.rb", __FILE__)].each do |f|
   require f
 end
 
+class Class
+  def metaclass
+    class << self; self; end
+  end
+end
+
 module Connfu
   class << self
     attr_accessor :event_processor
