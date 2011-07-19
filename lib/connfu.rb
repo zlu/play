@@ -54,7 +54,7 @@ module Connfu
 
   def self.start(handler_class)
     @connection.register_handler(:ready) do |stanza|
-      p "Established @connection to Connfu Server with JID: #{@jid}"
+      l.debug "Established @connection to Connfu Server with JID: #{@jid}"
       handler_class.on_ready if handler_class.respond_to?(:on_ready)
     end
 
