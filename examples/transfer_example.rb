@@ -1,11 +1,5 @@
 #!/usr/bin/env ruby
-
-require 'rubygems'
-require 'bundler/setup'
-require 'connfu'
-
-Connfu.setup "usera@127.0.0.1", "1"
-#Connfu.setup "usera@ec2-79-125-61-218.eu-west-1.compute.amazonaws.com", "1"
+require File.expand_path('../environment', __FILE__)
 
 class TransferExample
   include Connfu::Dsl
