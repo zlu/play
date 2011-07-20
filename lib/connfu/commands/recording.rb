@@ -2,11 +2,20 @@ module Connfu
   module Commands
     module Recording
       FORMATS = {
-        :gsm => "GSM",
-        :wav => "WAV"
+        :gsm => {
+          :name => "GSM",
+          :codecs => [:gsm]
+        },
+        :wav => {
+          :name => "WAV",
+          :codecs => [
+            :linear_16bit_128k, :linear_16bit_256k, :alaw_pcm_64k, :mulaw_pcm_64k,
+            :adpcm_32k, :adpcm_32k_oki, :g723_1b, :amr, :amr_wb, :g729_a, :evrc
+          ]
+        }
       }
 
-      class FormatNotSupported < StandardError; end
+      class InvalidEncoding < StandardError; end
 
       class Start
         include Connfu::Commands::Base
@@ -18,10 +27,24 @@ module Connfu
 
           if @params.has_key?(:format)
             if FORMATS.has_key?(@params[:format])
-              attributes["format"] = FORMATS[@params[:format]]
+              format = FORMATS[@params[:format]]
+              attributes["format"] = format[:name]
+
+              if @params.has_key?(:codec)
+                if format[:codecs].include?(@params[:codec])
+                  attributes["codec"] = @params[:codec].to_s.upcase
+                else
+                  raise InvalidEncoding, "Codec #{@params[:codec]} not supported for #{@params[:format]} format"
+                end
+              end
+
             else
-              raise FormatNotSupported
+              raise InvalidEncoding, "Format #{@params[:format]} not supported"
             end
+          end
+
+          if @params.has_key?(:codec) && !@params.has_key?(:format)
+            raise InvalidEncoding, "Please supply :format when specifying :codec"
           end
 
           build_iq(attributes)

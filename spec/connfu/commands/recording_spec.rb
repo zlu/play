@@ -90,7 +90,40 @@ describe Connfu::Commands::Recording do
           Connfu::Commands::Recording::Start.new(
             :to => 'server-address', :from => 'client-address', :format => :unknown_format
           ).to_iq
-         }.should raise_error(Connfu::Commands::Recording::FormatNotSupported)
+        }.should raise_error(Connfu::Commands::Recording::InvalidEncoding, "Format unknown_format not supported")
+      end
+    end
+
+    describe "with recording format and supported format codec" do
+      subject do
+        Connfu::Commands::Recording::Start.new(
+          :to => 'server-address', :from => 'client-address', :format => :wav, :codec => :mulaw_pcm_64k
+        ).to_iq
+      end
+
+      it 'should have format set correctly' do
+        node = subject.xpath("//x:record", "x" => "urn:xmpp:ozone:record:1").first
+        node.attributes['codec'].value.should eq 'MULAW_PCM_64K'
+      end
+    end
+
+    describe "with recording format and unsupported format codec" do
+      it 'should raise exception' do
+        lambda {
+          Connfu::Commands::Recording::Start.new(
+            :to => 'server-address', :from => 'client-address', :format => :wav, :codec => :unknowncodec
+          ).to_iq
+        }.should raise_error(Connfu::Commands::Recording::InvalidEncoding, "Codec unknowncodec not supported for wav format")
+      end
+    end
+
+    describe "passing format codec without specifying the format" do
+      it 'should raise exception' do
+        lambda {
+          Connfu::Commands::Recording::Start.new(
+            :to => 'server-address', :from => 'client-address', :codec => :mulaw_pcm_64k
+          ).to_iq
+        }.should raise_error(Connfu::Commands::Recording::InvalidEncoding, "Please supply :format when specifying :codec")
       end
     end
 

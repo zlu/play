@@ -95,6 +95,15 @@ describe Connfu::Dsl do
       subject.start_recording(:format => :wav)
     end
 
+    it 'should send a start command to adaptor with optional format and encoding parameters' do
+      subject.stub(:wait_for).and_return(Connfu::Event::Result.new)
+      Connfu.adaptor.should_receive(:send_command).with(Connfu::Commands::Recording::Start.new(
+        :from => 'client-address', :to => 'server-address', :format => :wav, :codec => :mulaw_pcm_64k
+
+      ))
+      subject.start_recording(:format => :wav, :codec => :mulaw_pcm_64k)
+    end
+
     it 'should send a start command to adaptor with optional timeout in milliseconds' do
       max_length_in_seconds = 25
       subject.stub(:wait_for).and_return(Connfu::Event::Result.new, Connfu::Event::RecordingStopComplete.new)
@@ -120,6 +129,15 @@ describe Connfu::Dsl do
         :from => 'client-address', :to => 'server-address', :max_length => (max_length_in_seconds * 1000), :format => :wav
       ))
       subject.record_for(max_length_in_seconds, :format => :wav)
+    end
+
+    it 'should send a start command to adaptor with optional timeout in milliseconds and format parameter and encoding codec' do
+      max_length_in_seconds = 25
+      subject.stub(:wait_for).and_return(Connfu::Event::Result.new, Connfu::Event::RecordingStopComplete.new)
+      Connfu.adaptor.should_receive(:send_command).with(Connfu::Commands::Recording::Start.new(
+        :from => 'client-address', :to => 'server-address', :max_length => (max_length_in_seconds * 1000), :format => :wav, :codec => :mulaw_pcm_64k
+      ))
+      subject.record_for(max_length_in_seconds, :format => :wav, :codec => :mulaw_pcm_64k)
     end
 
     it 'should send a stop command to adaptor' do
