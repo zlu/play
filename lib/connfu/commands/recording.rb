@@ -24,15 +24,28 @@ module Connfu
           attributes = { "xmlns" => "urn:xmpp:ozone:record:1", "start-beep" => "true" }
           attributes["max-length"] = @params[:max_length] if @params[:max_length]
           attributes["start-beep"] = @params[:beep] if @params.has_key?(:beep)
+          attributes.merge!(valid_encoding_attributes)
+
+          build_iq(attributes)
+        end
+
+        def command
+          "record"
+        end
+
+        def valid_encoding_attributes
+          valid_attributes = {}
+          if @params.has_key?(:codec) && !@params.has_key?(:format)
+            raise InvalidEncoding, "Please supply :format when specifying :codec"
+          end
 
           if @params.has_key?(:format)
-            if FORMATS.has_key?(@params[:format])
-              format = FORMATS[@params[:format]]
-              attributes["format"] = format[:name]
+            if format = FORMATS[@params[:format]]
+              valid_attributes["format"] = format[:name]
 
               if @params.has_key?(:codec)
                 if format[:codecs].include?(@params[:codec])
-                  attributes["codec"] = @params[:codec].to_s.upcase
+                  valid_attributes["codec"] = @params[:codec].to_s.upcase
                 else
                   raise InvalidEncoding, "Codec #{@params[:codec]} not supported for #{@params[:format]} format"
                 end
@@ -43,16 +56,9 @@ module Connfu
             end
           end
 
-          if @params.has_key?(:codec) && !@params.has_key?(:format)
-            raise InvalidEncoding, "Please supply :format when specifying :codec"
-          end
-
-          build_iq(attributes)
+          return valid_attributes
         end
 
-        def command
-          "record"
-        end
       end
 
       class Stop
