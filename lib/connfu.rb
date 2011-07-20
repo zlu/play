@@ -13,6 +13,7 @@
   connfu/connection_adaptor
   connfu/commands/base
   connfu/queue
+  connfu/queue/worker
   connfu/queue/in_process
   connfu/jobs
 ].each { |file| require file }
@@ -50,21 +51,14 @@ module Connfu
   def self.start(handler_class)
     @connection.register_handler(:ready) do |stanza|
       l.debug "Established @connection to Connfu Server with JID: #{@jid}"
-      l.debug "Queue implementation: #{Connfu::Queue.implementation.inspect}"
+      l.debug "Queue implementation: #{Queue.implementation.inspect}"
     end
 
     self.event_processor ||= EventProcessor.new(handler_class)
     EM.run do
-      EventMachine::add_periodic_timer(1, DialQueueProcessor.new)
+      EventMachine::add_periodic_timer(1, Queue::Worker.new(Jobs::Dial.queue))
       @connection.run
     end
   end
 
-  class DialQueueProcessor
-    def call
-      if job = Queue.reserve(Connfu::Jobs::Dial.queue)
-        job.perform
-      end
-    end
-  end
 end
