@@ -39,10 +39,8 @@ module Connfu
 
       end
 
-      def dial(params={})
-        self.metaclass.send(:define_method, :on_ready) do
-          Connfu.adaptor.send_command Connfu::Commands::Dial.new(params)
-        end
+      def dial(options={})
+        Queue.enqueue(Jobs::Dial, options)
       end
     end
 

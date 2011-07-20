@@ -2,25 +2,44 @@ require 'spec_helper'
 
 describe "Dialing a single number from within the DSL" do
   testing_dsl do
-    dial :to => "someone-remote", :from => "my-number" do |call|
-    end
+    # intentionally left blank
   end
 
-  it "should send a dial command when Connfu starts" do
-    @dsl_class.on_ready
-    Connfu.adaptor.commands.last.should == Connfu::Commands::Dial.new(:to => 'someone-remote', :from => "my-number")
+  before do
+    Connfu::Queue.clear
+    @dsl_class.dial(:to => 'sip-to', :from => 'sip-from')
+  end
+
+  it 'should add a dial job in the dial queue' do
+    Connfu::Queue.size(Connfu::Jobs::Dial.queue).should == 1
+  end
+
+  it "should pass the to & from options to the command" do
+    job = Connfu::Queue.reserve(Connfu::Jobs::Dial.queue)
+    job.args.first['to'].should == 'sip-to'
+    job.args.first['from'].should == 'sip-from'
+  end
+
+  it "should send dial command with the supplied options" do
+    job = Connfu::Queue.reserve(Connfu::Jobs::Dial.queue)
+    Connfu.adaptor.should_receive(:send_command).with(Connfu::Commands::Dial.new(:to => 'sip-to', :from => 'sip-from'))
+    job.perform
   end
 end
 
 describe 'Dialing a single number from within the DSL passing custom headers' do
   testing_dsl do
-    dial :to => "someone-remote", :from => "my-number", :headers => { 'foo' => 'bar' } do |call|
-    end
+    # intentionally left blank
+  end
+
+  before do
+    Connfu::Queue.clear
+    @dsl_class.dial(:to => 'sip-to', :from => 'sip-from', :headers => { 'foo' => 'bar' })
   end
 
   it "should pass the supplied headers to the command" do
-    @dsl_class.on_ready
-    Connfu.adaptor.commands.last.should == Connfu::Commands::Dial.new(:to => 'someone-remote', :from => "my-number", :headers => { 'foo' => 'bar' })
+    job = Connfu::Queue.reserve(Connfu::Jobs::Dial.queue)
+    job.args.first['headers'].should == { 'foo' => 'bar' }
   end
 end
 
@@ -79,28 +98,36 @@ describe "Handling any outgoing call" do
   end
 end
 
-
 describe "Dialing when no behaviour is specified" do
   testing_dsl do
-    dial :to => "someone-remote", :from => "my-number" do |call|
-    end
+    # intentionally left blank
   end
 
   before :each do
     @call_id = 'outbound_call_id'
+    Connfu::Queue.clear
+    @dsl_class.dial :to => "someone-remote", :from => "my-number"
+    job = Connfu::Queue.reserve(Connfu::Jobs::Dial.queue)
+    job.perform
   end
 
   it 'should not crash when receiving a ringing event' do
-    incoming :outgoing_call_ringing_presence, @call_id
+    lambda {
+      incoming :outgoing_call_ringing_presence, @call_id
+    }.should_not raise_error
   end
 
   it 'should not crash when receiving an answered event' do
-    incoming :outgoing_call_ringing_presence, @call_id
-    incoming :outgoing_call_answered_presence, @call_id
+    lambda {
+      incoming :outgoing_call_ringing_presence, @call_id
+      incoming :outgoing_call_answered_presence, @call_id
+    }.should_not raise_error
   end
 
   it 'should not crash when receiving a hangup event' do
-    incoming :outgoing_call_ringing_presence, @call_id
-    incoming :hangup_presence, @call_id
+    lambda {
+      incoming :outgoing_call_ringing_presence, @call_id
+      incoming :hangup_presence, @call_id
+    }.should_not raise_error
   end
 end

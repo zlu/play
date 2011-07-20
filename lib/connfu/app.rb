@@ -1,10 +1,4 @@
 module Connfu
-  module App
-    def self.dial(options)
-      Queue.enqueue(Jobs::Dial, options)
-    end
-  end
-
   module Jobs
     class Dial
       class << self

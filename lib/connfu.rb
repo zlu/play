@@ -23,12 +23,6 @@ Dir[File.expand_path("../connfu/commands/**/*.rb", __FILE__)].each do |f|
   require f
 end
 
-class Class
-  def metaclass
-    class << self; self; end
-  end
-end
-
 module Connfu
   class << self
     attr_accessor :event_processor
@@ -58,7 +52,6 @@ module Connfu
   def self.start(handler_class)
     @connection.register_handler(:ready) do |stanza|
       l.debug "Established @connection to Connfu Server with JID: #{@jid}"
-      handler_class.on_ready if handler_class.respond_to?(:on_ready)
     end
 
     self.event_processor ||= EventProcessor.new(handler_class)

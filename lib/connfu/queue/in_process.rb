@@ -4,6 +4,8 @@ module Connfu
   module Queue
     class InProcess
       class Job
+        attr_reader :args
+
         def initialize(klass, *args)
           @klass, @args = klass, JSON.parse(args.to_json)
         end
