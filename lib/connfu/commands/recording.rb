@@ -3,8 +3,7 @@ module Connfu
     module Recording
       FORMATS = {
         :gsm => "GSM",
-        :wav => "WAV",
-        :mp3 => "INFERRED"
+        :wav => "WAV"
       }
 
       class FormatNotSupported < StandardError; end
