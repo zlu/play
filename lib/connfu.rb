@@ -1,6 +1,5 @@
 %w[
   blather/client/client
-  resque
 
   connfu/logger
   connfu/continuation

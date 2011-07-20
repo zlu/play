@@ -1,3 +1,5 @@
+require "resque"
+
 module Connfu
   module Queue
     module Resque
@@ -9,3 +11,5 @@ module Connfu
     end
   end
 end
+
+Connfu::Queue.implementation = Connfu::Queue::Resque

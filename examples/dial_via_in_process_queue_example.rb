@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 require File.expand_path('../environment', __FILE__)
 
-class DialExample
+class DialViaInProcessQueueExample
   include Connfu::Dsl
 
   def update_status(status)
@@ -17,6 +17,7 @@ class DialExample
     c.on_answer do
       update_status "The phone was answered!"
 
+      sleep 2 # avoid known prism/tropo bug
       say "Though I am but a robot, my love for you is real."
       hangup
     end
@@ -26,4 +27,4 @@ class DialExample
   end
 end
 
-Connfu.start DialExample
+Connfu.start DialViaInProcessQueueExample
