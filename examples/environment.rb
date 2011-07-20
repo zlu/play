@@ -14,4 +14,3 @@ CONNFU_CONFIG['amazon'] = CONNFU_CONFIG['default'].merge(:jid => 'usera@46.137.8
 CONNFU_ENV = ENV['CONNFU_ENV'] || 'default'
 
 Connfu.setup CONNFU_CONFIG[CONNFU_ENV][:jid], CONNFU_CONFIG[CONNFU_ENV][:password]
-Connfu.redis_uri = CONNFU_CONFIG[CONNFU_ENV][:redis_url]

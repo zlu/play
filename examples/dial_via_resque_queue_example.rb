@@ -2,6 +2,7 @@
 require File.expand_path('../environment', __FILE__)
 
 require 'connfu/queue/resque'
+Resque.redis = CONNFU_CONFIG[CONNFU_ENV][:redis_url]
 
 class DialViaResqueQueueExample
   include Connfu::Dsl

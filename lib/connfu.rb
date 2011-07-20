@@ -14,7 +14,6 @@
   connfu/commands/base
   connfu/queue
   connfu/queue/in_process
-  connfu/queue/resque
   connfu/jobs
 ].each { |file| require file }
 
@@ -51,6 +50,7 @@ module Connfu
   def self.start(handler_class)
     @connection.register_handler(:ready) do |stanza|
       l.debug "Established @connection to Connfu Server with JID: #{@jid}"
+      l.debug "Queue implementation: #{Connfu::Queue.implementation.inspect}"
     end
 
     self.event_processor ||= EventProcessor.new(handler_class)
@@ -58,11 +58,6 @@ module Connfu
       EventMachine::add_periodic_timer(1, DialQueueProcessor.new)
       @connection.run
     end
-  end
-
-  def self.redis_uri=(redis_uri)
-    uri = URI.parse(redis_uri)
-    Resque.redis = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password)
   end
 
   class DialQueueProcessor
