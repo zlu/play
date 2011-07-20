@@ -1,6 +1,6 @@
 module Connfu
   module Queue
-    class Resque
+    module Resque
       extend ::Resque
 
       def self.clear
