@@ -52,7 +52,7 @@ describe Connfu::Commands::Recording do
         ).to_iq
       end
 
-      it 'should have max length set correctly' do
+      it 'should have start-beep set correctly' do
         node = subject.xpath("//x:record", "x" => "urn:xmpp:ozone:record:1").first
         node.attributes['start-beep'].value.should eq 'false'
       end
