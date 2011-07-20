@@ -57,6 +57,56 @@ describe Connfu::Commands::Recording do
         node.attributes['start-beep'].value.should eq 'false'
       end
     end
+
+    describe "with recording format passed as :wav" do
+      subject do
+        Connfu::Commands::Recording::Start.new(
+          :to => 'server-address', :from => 'client-address', :format => :wav
+        ).to_iq
+      end
+
+      it 'should have format set correctly' do
+        node = subject.xpath("//x:record", "x" => "urn:xmpp:ozone:record:1").first
+        node.attributes['format'].value.should eq 'WAV'
+      end
+    end
+
+    describe "with recording format passed as :gsm" do
+      subject do
+        Connfu::Commands::Recording::Start.new(
+          :to => 'server-address', :from => 'client-address', :format => :gsm
+        ).to_iq
+      end
+
+      it 'should have format set correctly' do
+        node = subject.xpath("//x:record", "x" => "urn:xmpp:ozone:record:1").first
+        node.attributes['format'].value.should eq 'GSM'
+      end
+    end
+
+    describe "with recording format passed as :mp3" do
+      subject do
+        Connfu::Commands::Recording::Start.new(
+          :to => 'server-address', :from => 'client-address', :format => :mp3
+        ).to_iq
+      end
+
+      it 'should have format set correctly' do
+        node = subject.xpath("//x:record", "x" => "urn:xmpp:ozone:record:1").first
+        node.attributes['format'].value.should eq 'INFERRED'
+      end
+    end
+
+    describe "with recording format passed as unsupported format" do
+      it 'should raise exception' do
+        lambda {
+          Connfu::Commands::Recording::Start.new(
+            :to => 'server-address', :from => 'client-address', :format => :unknown_format
+          ).to_iq
+         }.should raise_error(Connfu::Commands::Recording::FormatNotSupported)
+      end
+    end
+
   end
 
   describe "generating XMPP iq for a Stop command" do

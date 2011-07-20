@@ -156,6 +156,7 @@ module Connfu
         command_options = { :to => server_address, :from => client_address }
         command_options[:max_length] = options[:max_length] * 1000 if options[:max_length]
         command_options[:beep] = options[:beep] if options.has_key?(:beep)
+        command_options[:format] = options[:format] if options.has_key?(:format)
         result = send_command Connfu::Commands::Recording::Start.new(command_options)
         @ref_id = result.ref_id
       end
