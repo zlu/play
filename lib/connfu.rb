@@ -16,7 +16,7 @@
   connfu/queue
   connfu/queue/in_process
   connfu/queue/resque
-  connfu/app
+  connfu/jobs
 ].each { |file| require file }
 
 Dir[File.expand_path("../connfu/commands/**/*.rb", __FILE__)].each do |f|
