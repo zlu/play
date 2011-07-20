@@ -3,7 +3,7 @@ require "json"
 module Connfu
   module Queue
     class InProcess
-      class Job
+      class Message
         attr_reader :args
 
         def initialize(klass, *args)
@@ -24,7 +24,7 @@ module Connfu
       end
 
       def enqueue(klass, *args)
-        @queues[klass.queue].unshift(Job.new(klass, *args))
+        @queues[klass.queue].unshift(Message.new(klass, *args))
       end
 
       def reserve(queue)
