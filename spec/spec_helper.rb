@@ -36,7 +36,7 @@ PRISM_URI = "jid://#{PRISM_USER}:#{PRISM_PASSWORD}@#{PRISM_HOST}"
 def setup_connfu(handler_class)
   Connfu.setup PRISM_URI
   Connfu.event_processor = Connfu::EventProcessor.new(handler_class)
-  Connfu.adaptor = TestConnection.new
+  Connfu.connection = TestConnection.new
 end
 
 def incoming(type, *args)

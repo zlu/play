@@ -173,7 +173,7 @@ module Connfu
 
       def send_command(command)
         return if @finished
-        Connfu.adaptor.send_command command
+        Connfu.connection.send_command command
         l.debug "Sent command: #{command}"
         result = wait_for Connfu::Event::Result, Connfu::Event::Error
         l.debug "Result from command #{result}"

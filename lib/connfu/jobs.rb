@@ -8,7 +8,7 @@ module Connfu
 
         def perform(*args)
           l.debug "Dialing #{args.inspect}"
-          Connfu.adaptor.send_command Connfu::Commands::Dial.new(:to => args.first["to"], :from =>args.first["from"])
+          Connfu.connection.send_command Connfu::Commands::Dial.new(:to => args.first["to"], :from =>args.first["from"])
         end
       end
     end

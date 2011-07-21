@@ -10,7 +10,7 @@
   connfu/transfer_state
   connfu/ozone/parser
   connfu/ozone/iq_builder
-  connfu/connection_adaptor
+  connfu/logging_connection_proxy
   connfu/commands/base
   connfu/queue
   connfu/queue/worker
@@ -26,7 +26,6 @@ module Connfu
   class << self
     attr_accessor :event_processor
     attr_accessor :connection
-    attr_accessor :adaptor
   end
 
   def self.setup(connfu_uri)
@@ -47,15 +46,13 @@ module Connfu
   end
 
   def self.connection
-    @connection ||= build_connection
+    @connection ||= LoggingConnectionProxy.new(build_connection)
   end
 
   def self.build_connection
     uri = URI.parse(@connfu_uri)
 
     Blather::Client.new.setup("#{uri.user}@#{uri.host}", uri.password).tap do |connection|
-      @adaptor = Connfu::ConnectionAdaptor.new(connection)
-
       [:iq, :presence].each do |stanza_type|
         connection.register_handler(stanza_type) do |stanza|
           l.debug "Receiving #{stanza_type} from server"

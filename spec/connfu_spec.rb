@@ -1,16 +1,17 @@
 require 'spec_helper'
 
 describe Connfu do
-
   before do
     @uri = 'jid://foo:password@bar.com'
     Connfu.setup(@uri)
+    Connfu.connection = nil
+    Connfu.connection
   end
 
-  describe "#setup" do
-    it "should create a connection to server" do
+  describe "#setup(uri = nil)" do
+    it "should create a proxied connection to server" do
       @connection = Connfu.connection
-      @connection.should be_instance_of(Blather::Client)
+      @connection.proxied_connection.should be_instance_of(Blather::Client)
       @connection.should be_setup
     end
 
