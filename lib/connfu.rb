@@ -29,9 +29,10 @@ module Connfu
     attr_accessor :adaptor
   end
 
-  def self.setup(jid, password)
-    @jid = jid
-    @connection = Blather::Client.new.setup(jid, password)
+  def self.setup(connfu_uri)
+    uri = URI.parse(connfu_uri)
+    @jid = "#{uri.user}@#{uri.host}"
+    @connection = Blather::Client.new.setup(@jid, uri.password)
     @adaptor = Connfu::ConnectionAdaptor.new(@connection)
 
     [:iq, :presence].each do |stanza_type|

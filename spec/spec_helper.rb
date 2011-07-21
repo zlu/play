@@ -27,12 +27,14 @@ class MyTestClass
   include Connfu
 end
 
+PRISM_USER = "usera"
 PRISM_HOST = '127.0.0.1'
-PRISM_JID = "usera@#{PRISM_HOST}"
+PRISM_JID = "#{PRISM_USER}@#{PRISM_HOST}"
 PRISM_PASSWORD = "1"
+PRISM_URI = "jid://#{PRISM_USER}:#{PRISM_PASSWORD}@#{PRISM_HOST}"
 
 def setup_connfu(handler_class)
-  Connfu.setup PRISM_JID, PRISM_PASSWORD
+  Connfu.setup PRISM_URI
   Connfu.event_processor = Connfu::EventProcessor.new(handler_class)
   Connfu.adaptor = TestConnection.new
 end

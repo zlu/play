@@ -3,9 +3,8 @@ require 'spec_helper'
 describe Connfu do
 
   before do
-    @host = 'foo@bar.com'
-    @password = 'password'
-    Connfu.setup(@host, @password)
+    @uri = 'jid://foo:password@bar.com'
+    Connfu.setup(@uri)
   end
 
   describe "#setup" do
