@@ -19,6 +19,9 @@ module Connfu
             :linear_16bit_128k, :linear_16bit_256k, :alaw_pcm_64k, :mulaw_pcm_64k,
             :adpcm_32k, :adpcm_32k_oki
           ]
+        },
+        :mp3 => {
+          :name => "MP3"
         }
       }
 
