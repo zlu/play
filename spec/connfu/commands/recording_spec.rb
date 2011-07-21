@@ -84,6 +84,19 @@ describe Connfu::Commands::Recording do
       end
     end
 
+    describe "with recording format passed as :raw" do
+      subject do
+        Connfu::Commands::Recording::Start.new(
+          :to => 'server-address', :from => 'client-address', :format => :raw
+        ).to_iq
+      end
+
+      it 'should have format set correctly' do
+        node = subject.xpath("//x:record", "x" => "urn:xmpp:ozone:record:1").first
+        node.attributes['format'].value.should eq 'RAW'
+      end
+    end
+
     describe "with recording format passed as unsupported format" do
       it 'should raise exception' do
         lambda {
