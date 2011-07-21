@@ -30,18 +30,7 @@ module Connfu
   end
 
   def self.setup(connfu_uri)
-    uri = URI.parse(connfu_uri)
-    @jid = "#{uri.user}@#{uri.host}"
-    @connection = Blather::Client.new.setup(@jid, uri.password)
-    @adaptor = Connfu::ConnectionAdaptor.new(@connection)
-
-    [:iq, :presence].each do |stanza_type|
-      @connection.register_handler(stanza_type) do |stanza|
-        l.debug "Receiving #{stanza_type} from server"
-        l.debug stanza.inspect
-        handle_stanza(stanza)
-      end
-    end
+    @connfu_uri = connfu_uri
   end
 
   def self.handle_stanza(stanza)
@@ -50,16 +39,35 @@ module Connfu
   end
 
   def self.start(handler_class)
-    @connection.register_handler(:ready) do |stanza|
-      l.debug "Established @connection to Connfu Server with JID: #{@jid}"
-      l.debug "Queue implementation: #{Queue.implementation.inspect}"
-    end
-
     self.event_processor ||= EventProcessor.new(handler_class)
     EM.run do
       EventMachine::add_periodic_timer(1, Queue::Worker.new(Jobs::Dial.queue))
-      @connection.run
+      connection.run
     end
   end
 
+  def self.connection
+    @connection ||= build_connection
+  end
+
+  def self.build_connection
+    uri = URI.parse(@connfu_uri)
+
+    Blather::Client.new.setup("#{uri.user}@#{uri.host}", uri.password).tap do |connection|
+      @adaptor = Connfu::ConnectionAdaptor.new(connection)
+
+      [:iq, :presence].each do |stanza_type|
+        connection.register_handler(stanza_type) do |stanza|
+          l.debug "Receiving #{stanza_type} from server"
+          l.debug stanza.inspect
+          handle_stanza(stanza)
+        end
+      end
+
+      connection.register_handler(:ready) do |stanza|
+        l.debug "Established @connection to Connfu Server with JID: #{@connfu_uri}"
+        l.debug "Queue implementation: #{Queue.implementation.inspect}"
+      end
+    end
+  end
 end
