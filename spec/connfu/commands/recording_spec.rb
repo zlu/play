@@ -100,7 +100,7 @@ describe Connfu::Commands::Recording do
     describe "with recording format passed as :mp3" do
       subject do
         Connfu::Commands::Recording::Start.new(
-          :to => 'server-address', :from => 'client-address', :format => :raw
+          :to => 'server-address', :from => 'client-address', :format => :mp3
         ).to_iq
       end
 
