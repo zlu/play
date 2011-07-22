@@ -3,23 +3,7 @@ require 'spec_helper'
 describe Connfu do
   before do
     @uri = 'jid://foo:password@bar.com'
-    Connfu.uri = @uri
-  end
-
-  describe "#uri" do
-    before do
-      ENV['CONNFU_URI'] = 'jid://from:env@example.com'
-    end
-
-    it "returns any value if set" do
-      Connfu.uri = 'jid://anything:here@example.com'
-      Connfu.uri.should eql('jid://anything:here@example.com')
-    end
-
-    it "returns ENV['CONNFU_URI'] if not set" do
-      Connfu.uri = nil
-      Connfu.uri.should eql('jid://from:env@example.com')
-    end
+    Connfu.config.uri = @uri
   end
 
   describe '#connection' do

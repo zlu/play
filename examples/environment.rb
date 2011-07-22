@@ -12,4 +12,4 @@ CONNFU_CONFIG['amazon'] = CONNFU_CONFIG['default'].merge(:connfu_uri => 'jid://u
 
 CONNFU_ENV = ENV['CONNFU_ENV'] || 'default'
 
-Connfu.uri = CONNFU_CONFIG[CONNFU_ENV][:connfu_uri]
+Connfu.config.uri = CONNFU_CONFIG[CONNFU_ENV][:connfu_uri]
