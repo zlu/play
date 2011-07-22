@@ -3,15 +3,7 @@ require 'spec_helper'
 describe Connfu do
   before do
     @uri = 'jid://foo:password@bar.com'
-    Connfu.setup(@uri)
-  end
-
-  describe "#setup(uri = nil)" do
-    it "sets connfu uri to passed value" do
-      Connfu.uri = nil
-      Connfu.setup(@uri)
-      Connfu.uri.should eql(@uri)
-    end
+    Connfu.uri = @uri
   end
 
   describe "#uri" do

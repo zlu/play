@@ -29,10 +29,6 @@ module Connfu
     attr_accessor :uri
   end
 
-  def self.setup(connfu_uri)
-    self.uri = connfu_uri
-  end
-
   def self.uri
     @uri || ENV['CONNFU_URI']
   end
