@@ -1,28 +1,18 @@
-%w[
-  blather/client/client
-
-  connfu/logging
-  connfu/continuation
-  connfu/event
-  connfu/event_processor
-  connfu/transfer_event
-  connfu/dsl
-  connfu/transfer_state
-  connfu/ozone/parser
-  connfu/ozone/iq_builder
-  connfu/logging_connection_proxy
-  connfu/commands/base
-  connfu/queue
-  connfu/queue/worker
-  connfu/queue/in_process
-  connfu/jobs
-].each { |file| require file }
-
-Dir[File.expand_path("../connfu/commands/**/*.rb", __FILE__)].each do |f|
-  require f
-end
+require 'blather/client/client'
 
 module Connfu
+  autoload :Continuation, 'connfu/continuation'
+  autoload :Commands, 'connfu/commands'
+  autoload :Dsl, 'connfu/dsl'
+  autoload :Event, 'connfu/event'
+  autoload :EventProcessor, 'connfu/event_processor'
+  autoload :Jobs, 'connfu/jobs'
+  autoload :Logging, 'connfu/logging'
+  autoload :LoggingConnectionProxy, 'connfu/logging_connection_proxy'
+  autoload :Ozone, 'connfu/ozone'
+  autoload :Queue, 'connfu/queue'
+  autoload :TransferState, 'connfu/transfer_state'
+
   include Connfu::Logging
 
   class << self
