@@ -1,5 +1,7 @@
 module Connfu
   class LoggingConnectionProxy
+    include Connfu::Logging
+
     def initialize(connection)
       @connection = connection
     end
@@ -10,7 +12,7 @@ module Connfu
 
     def send_command(command)
       iq = command.to_iq
-      l.debug iq
+      logger.debug iq
       @connection.write iq
     end
 

@@ -21,7 +21,7 @@ RSpec.configure do |config|
   config.extend ConnfuTestDsl
 end
 
-l.level = Logger::WARN
+Connfu.logger.level = Logger::WARN
 
 class MyTestClass
   include Connfu

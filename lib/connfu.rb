@@ -1,7 +1,7 @@
 %w[
   blather/client/client
 
-  connfu/logger
+  connfu/logging
   connfu/continuation
   connfu/event
   connfu/event_processor
@@ -23,6 +23,8 @@ Dir[File.expand_path("../connfu/commands/**/*.rb", __FILE__)].each do |f|
 end
 
 module Connfu
+  include Connfu::Logging
+
   class << self
     attr_accessor :event_processor
     attr_accessor :connection
@@ -56,16 +58,20 @@ module Connfu
     Blather::Client.new.setup("#{parsed_uri.user}@#{parsed_uri.host}", parsed_uri.password).tap do |connection|
       [:iq, :presence].each do |stanza_type|
         connection.register_handler(stanza_type) do |stanza|
-          l.debug "Receiving #{stanza_type} from server"
-          l.debug stanza.inspect
+          logger.debug "Receiving #{stanza_type} from server"
+          logger.debug stanza.inspect
           handle_stanza(stanza)
         end
       end
 
       connection.register_handler(:ready) do |stanza|
-        l.debug "Established @connection to Connfu Server with JID: #{uri}"
-        l.debug "Queue implementation: #{Queue.implementation.inspect}"
+        logger.debug "Established @connection to Connfu Server with JID: #{uri}"
+        logger.debug "Queue implementation: #{Queue.implementation.inspect}"
       end
     end
+  end
+
+  def self.logger
+    @logger ||= Logger.new(STDOUT)
   end
 end
