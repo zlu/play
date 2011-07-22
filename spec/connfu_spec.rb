@@ -4,15 +4,36 @@ describe Connfu do
   before do
     @uri = 'jid://foo:password@bar.com'
     Connfu.setup(@uri)
-    Connfu.connection = nil
-    Connfu.connection
   end
 
   describe "#setup(uri = nil)" do
-    it "should create a proxied connection to server" do
-      @connection = Connfu.connection
-      @connection.proxied_connection.should be_instance_of(Blather::Client)
-      @connection.should be_setup
+    it "sets connfu uri to passed value" do
+      Connfu.uri = nil
+      Connfu.setup(@uri)
+      Connfu.uri.should eql(@uri)
+    end
+  end
+
+  describe "#uri" do
+    before do
+      ENV['CONNFU_URI'] = 'jid://from:env@example.com'
+    end
+
+    it "returns any value if set" do
+      Connfu.uri = 'jid://anything:here@example.com'
+      Connfu.uri.should eql('jid://anything:here@example.com')
+    end
+
+    it "returns ENV['CONNFU_URI'] if not set" do
+      Connfu.uri = nil
+      Connfu.uri.should eql('jid://from:env@example.com')
+    end
+  end
+
+  describe '#connection' do
+    before do
+      Connfu.connection = nil
+      Connfu.connection
     end
 
     it "should register iq handler for offer" do
@@ -43,7 +64,6 @@ describe Connfu do
   end
 
   describe 'Queue::Worker' do
-
     subject { Connfu::Queue::Worker.new(Connfu::Jobs::Dial.queue) }
 
     it "should grab the next job from the dial queue" do

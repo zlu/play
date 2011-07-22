@@ -26,10 +26,15 @@ module Connfu
   class << self
     attr_accessor :event_processor
     attr_accessor :connection
+    attr_accessor :uri
   end
 
   def self.setup(connfu_uri)
-    @connfu_uri = connfu_uri
+    self.uri = connfu_uri
+  end
+
+  def self.uri
+    @uri || ENV['CONNFU_URI']
   end
 
   def self.handle_stanza(stanza)
@@ -50,9 +55,9 @@ module Connfu
   end
 
   def self.build_connection
-    uri = URI.parse(@connfu_uri)
+    parsed_uri = URI.parse(uri)
 
-    Blather::Client.new.setup("#{uri.user}@#{uri.host}", uri.password).tap do |connection|
+    Blather::Client.new.setup("#{parsed_uri.user}@#{parsed_uri.host}", parsed_uri.password).tap do |connection|
       [:iq, :presence].each do |stanza_type|
         connection.register_handler(stanza_type) do |stanza|
           l.debug "Receiving #{stanza_type} from server"
@@ -62,7 +67,7 @@ module Connfu
       end
 
       connection.register_handler(:ready) do |stanza|
-        l.debug "Established @connection to Connfu Server with JID: #{@connfu_uri}"
+        l.debug "Established @connection to Connfu Server with JID: #{uri}"
         l.debug "Queue implementation: #{Queue.implementation.inspect}"
       end
     end
