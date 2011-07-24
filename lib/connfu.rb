@@ -2,6 +2,7 @@ require 'blather/client/client'
 
 module Connfu
   autoload :Configuration, 'connfu/configuration'
+  autoload :Connection, 'connfu/connection'
   autoload :Continuation, 'connfu/continuation'
   autoload :Commands, 'connfu/commands'
   autoload :Dsl, 'connfu/dsl'
@@ -9,7 +10,6 @@ module Connfu
   autoload :EventProcessor, 'connfu/event_processor'
   autoload :Jobs, 'connfu/jobs'
   autoload :Logging, 'connfu/logging'
-  autoload :LoggingConnectionProxy, 'connfu/logging_connection_proxy'
   autoload :Ozone, 'connfu/ozone'
   autoload :Queue, 'connfu/queue'
   autoload :TransferState, 'connfu/transfer_state'
@@ -39,24 +39,7 @@ module Connfu
   end
 
   def self.connection
-    @connection ||= LoggingConnectionProxy.new(build_connection)
-  end
-
-  def self.build_connection
-    Blather::Client.new.setup("#{config.user}@#{config.host}", config.password).tap do |connection|
-      [:iq, :presence].each do |stanza_type|
-        connection.register_handler(stanza_type) do |stanza|
-          logger.debug "Receiving #{stanza_type} from server"
-          logger.debug stanza.inspect
-          handle_stanza(stanza)
-        end
-      end
-
-      connection.register_handler(:ready) do |stanza|
-        logger.debug "Established @connection to Connfu Server with JID: #{uri}"
-        logger.debug "Queue implementation: #{Queue.implementation.inspect}"
-      end
-    end
+    @connection ||= Connection.new(config)
   end
 
   def self.logger
