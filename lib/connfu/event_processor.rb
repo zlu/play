@@ -2,6 +2,8 @@ module Connfu
   class EventProcessor
     include Connfu::Logging
 
+    attr_reader :handler_class
+
     def initialize(handler_class)
       @handler_class = handler_class
     end

@@ -30,8 +30,8 @@ class Connfu::Connection
       end
 
       connection.register_handler(:ready) do |stanza|
-        logger.debug "Established @connection to Connfu Server with JID: #{uri}"
-        logger.debug "Queue implementation: #{Queue.implementation.inspect}"
+        logger.debug "Established @connection to Connfu Server with JID: #{config.uri}"
+        logger.debug "Queue implementation: #{Connfu::Queue.implementation.inspect}"
       end
     end
   end

@@ -26,8 +26,9 @@ module Connfu
     event_processor.handle_event(event)
   end
 
-  def self.start(handler_class)
-    self.event_processor ||= EventProcessor.new(handler_class)
+  def self.start(handler_class = nil, &block)
+    handler_class ||= build_handler_class(&block)
+    self.event_processor = EventProcessor.new(handler_class)
     EM.run do
       EventMachine::add_periodic_timer(1, Queue::Worker.new(Jobs::Dial.queue))
       connection.run
@@ -44,5 +45,14 @@ module Connfu
 
   def self.logger
     @logger ||= Logger.new(STDOUT)
+  end
+
+  private
+
+  def self.build_handler_class(&block)
+    Class.new do
+      include Connfu::Dsl
+      instance_eval(&block)
+    end
   end
 end
