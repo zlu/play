@@ -35,7 +35,7 @@ describe Connfu do
         Connfu.event_processor.should_not be_nil
         handler_class = Connfu.event_processor.handler_class
         handler_class.included_modules.include?(Connfu::Dsl).should be_true
-        handler_class.instance_methods.include?('smoke_signal').should be_true
+        handler_class.instance_method(:smoke_signal).should be_true
       end
     end
   end
