@@ -2,6 +2,7 @@ module Connfu
   module Commands
     module Base
       include Connfu::Logging
+      include Connfu::Rayo::Namespacing
 
       def initialize(params)
         @params = params
