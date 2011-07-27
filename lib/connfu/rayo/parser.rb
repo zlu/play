@@ -1,5 +1,5 @@
 module Connfu
-  module Ozone
+  module Rayo
     module Parser
 
       def self.parse_event_from(node)

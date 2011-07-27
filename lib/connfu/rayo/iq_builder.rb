@@ -1,5 +1,5 @@
 module Connfu
-  module Ozone
+  module Rayo
     module IqBuilder
 
       def self.build_iq(to, from, command, attributes = {}, &block)
