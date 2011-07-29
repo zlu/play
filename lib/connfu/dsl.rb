@@ -193,6 +193,5 @@ module Connfu
       @server_address = params[:from]
       @client_address = params[:to]
     end
-
   end
 end
