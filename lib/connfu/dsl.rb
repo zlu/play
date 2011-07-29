@@ -135,7 +135,10 @@ module Connfu
         else
           case event
             when Connfu::Event::Offer
-              start(event)
+              start do
+                run event
+                hangup unless finished?
+              end
             when Connfu::Event::Ringing
               run_any_call_behaviour_for(:ringing)
             when Connfu::Event::Answered

@@ -17,11 +17,15 @@ module Connfu
 
     private
 
+    def build_handler(event)
+      @handler_class.new(:from => event.presence_from, :to => event.presence_to)
+    end
+
     def handler_for(event)
       if event.is_a?(Connfu::Event::Offer)
-        handlers[event.call_id] = @handler_class.new(:from => event.presence_from, :to => event.presence_to)
+        handlers[event.call_id] = build_handler(event)
       elsif event.is_a?(Connfu::Event::Ringing)
-        handlers[event.call_id] = @handler_class.new(:from => event.presence_from, :to => event.presence_to)
+        handlers[event.call_id] = build_handler(event)
       else
         handlers[event.call_id]
       end

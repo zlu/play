@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "discriminating based on the caller" do
+describe "handling a call offer" do
   testing_dsl do
     on :offer do |offer|
       do_something_with(
@@ -30,6 +30,14 @@ describe "discriminating based on the caller" do
       hash_including(:to => parsed_hash)
     )
 
+    incoming :offer_presence, @server_address, @client_address, :to => "<sip:usera@127.0.0.1>"
+  end
+
+  it "implicitly hangs up once handling is complete" do
+    handler_instance = Connfu.event_processor.handler_class.new({})
+    Connfu.event_processor.stub(:build_handler).and_return(handler_instance)
+    handler_instance.should_receive(:do_something_with).ordered
+    handler_instance.should_receive(:hangup).ordered
     incoming :offer_presence, @server_address, @client_address, :to => "<sip:usera@127.0.0.1>"
   end
 end
