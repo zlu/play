@@ -14,6 +14,15 @@ describe Connfu::Dsl do
     DslTest.new(:from => "server-address", :to => "client-address")
   }
 
+  describe 'handle_event' do
+    it 'should raise an exception if event is not recognized' do
+      unrecognised_event = Class.new(Connfu::Event::Presence).new
+      lambda do
+        subject.handle_event(unrecognised_event)
+      end.should raise_error
+    end
+  end
+
   describe 'send_command' do
     it 'should be able to handle results with same id but different call id' do
       Connfu.connection.stub(:send_command).and_return('command-id')

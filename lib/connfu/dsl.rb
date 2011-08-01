@@ -146,6 +146,8 @@ module Connfu
             when Connfu::Event::Hangup
               run_any_call_behaviour_for(:hangup)
               @finished = true
+            else
+              raise "Unrecognized event: #{event}"
           end
         end
       end
