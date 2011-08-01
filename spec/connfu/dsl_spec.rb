@@ -23,6 +23,14 @@ describe Connfu::Dsl do
     end
   end
 
+  describe 'on' do
+    it 'should raise an exception if context is unexpected' do
+     lambda do
+       DslTest.on(:goobledegook)
+     end.should raise_error
+    end
+  end
+
   describe 'send_command' do
     it 'should be able to handle results with same id but different call id' do
       Connfu.connection.stub(:send_command).and_return('command-id')

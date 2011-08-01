@@ -36,6 +36,8 @@ module Connfu
             call_behaviour = CallBehaviour.new
             yield call_behaviour
             define_method(:call_behaviour) { call_behaviour }
+          else
+            raise "Unrecognised context: #{context}"
         end
 
       end
