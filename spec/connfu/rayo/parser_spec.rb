@@ -194,6 +194,21 @@ describe Connfu::Rayo::Parser do
       end
     end
 
+    context "an unknown stanza" do
+      before do
+        @node = create_presence(%{<presence from="abc@127.0.0.1/123" to="userb@127.0.0.1/voxeo">
+          <garbage xmlns="urn:xmpp:rayo:ext:1">
+            <trash xmlns="urn:xmpp:rayo:ext:rubbish:1"/>
+          </garbage>
+        </presence>})
+      end
+
+      it "should raise an exception" do
+        lambda do
+          Connfu::Rayo::Parser.parse_event_from(@node)
+        end.should raise_error
+      end
+    end
   end
 
 end
