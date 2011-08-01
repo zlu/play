@@ -6,7 +6,7 @@ module Connfu
       base.send(:include, Connfu::Logging)
       base.extend Connfu::Dsl::ClassMethods
       base.class_eval do
-        attr_reader :server_address, :client_address
+        attr_reader :server_address, :client_address, :call_id
       end
     end
 
@@ -152,6 +152,16 @@ module Connfu
         end
       end
 
+      def can_handle_event?(event)
+        event.call_id == call_id
+      end
+
+      def waiting_for?(event)
+        can_handle_event?(event) && @waiting_for && @waiting_for.detect do |e|
+          e === event
+        end
+      end
+
       private
 
       def send_start_recording(options = {})
@@ -167,12 +177,6 @@ module Connfu
       def wait_for(*events)
         @waiting_for = events
         wait
-      end
-
-      def waiting_for?(event)
-        @waiting_for && @waiting_for.detect do |e|
-          e === event
-        end
       end
 
       def send_command(command)
@@ -192,6 +196,7 @@ module Connfu
     def initialize(params)
       @server_address = params[:from]
       @client_address = params[:to]
+      @call_id = params[:call_id]
     end
   end
 end
