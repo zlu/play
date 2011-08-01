@@ -153,7 +153,7 @@ module Connfu
       end
 
       def can_handle_event?(event)
-        event.call_id == call_id
+        event_matches_call_id?(event) || event_matches_last_command_id?(event)
       end
 
       def waiting_for?(event)
@@ -162,7 +162,28 @@ module Connfu
         end
       end
 
+      def send_command(command)
+        return if @finished
+        @last_command_id = Connfu.connection.send_command command
+        logger.debug "Sent command: #{command}"
+        result = wait_for Connfu::Event::Result, Connfu::Event::Error
+        logger.debug "Result from command #{result}"
+        if result.is_a?(Connfu::Event::Error)
+          raise
+        else
+          result
+        end
+      end
+
       private
+
+      def event_matches_call_id?(event)
+        event.call_id == call_id
+      end
+
+      def event_matches_last_command_id?(event)
+        event.respond_to?(:command_id) && @last_command_id == event.command_id
+      end
 
       def send_start_recording(options = {})
         command_options = { :to => server_address, :from => client_address }
@@ -179,18 +200,6 @@ module Connfu
         wait
       end
 
-      def send_command(command)
-        return if @finished
-        Connfu.connection.send_command command
-        logger.debug "Sent command: #{command}"
-        result = wait_for Connfu::Event::Result, Connfu::Event::Error
-        logger.debug "Result from command #{result}"
-        if result.is_a?(Connfu::Event::Error)
-          raise
-        else
-          result
-        end
-      end
     end
 
     def initialize(params)
