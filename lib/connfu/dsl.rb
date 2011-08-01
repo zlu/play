@@ -146,8 +146,6 @@ module Connfu
             when Connfu::Event::Hangup
               run_any_call_behaviour_for(:hangup)
               @finished = true
-            when Connfu::Event::RecordingErrorComplete
-              recordings << event.uri
           end
         end
       end
