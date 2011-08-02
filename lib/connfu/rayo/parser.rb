@@ -35,7 +35,7 @@ module Connfu
         elsif node.xpath('//x:joined', 'x' => rayo('1')).first
           Connfu::Event::Joined.new(:call_id => call_id)
         elsif (results = node.xpath("//x:*", 'x' => tropo('transfer:complete:1'))).any?
-          Connfu::TransferState.event_map[results.first.name.to_sym].new(:call_id => node.from.node)
+          Connfu::TransferState.event_map[results.first.name.to_sym].new(:call_id => call_id)
         else
           raise "Stanza not recognised: #{node}"
         end
