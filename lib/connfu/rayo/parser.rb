@@ -34,7 +34,7 @@ module Connfu
           Connfu::Event::AskComplete.new(:call_id => call_id, :captured_input => captured_input)
         elsif node.xpath('//x:joined', 'x' => rayo('1')).first
           Connfu::Event::Joined.new(:call_id => call_id)
-        elsif node.xpath("//x:complete", 'x' => rayo('ext:1')).any? && node.xpath("//x:complete", 'x' => rayo('ext:1')).children.map(&:namespace)[1].href == tropo("transfer:complete:1")
+        elsif node.xpath("//x:*", 'x' => tropo('transfer:complete:1')).any?
           self.transfer_complete?(node)
         else
           raise "Stanza not recognised: #{node}"
