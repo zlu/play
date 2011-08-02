@@ -194,6 +194,21 @@ describe Connfu::Rayo::Parser do
       end
     end
 
+    context "a joined presence" do
+      before do
+        @node = create_presence(joined_presence("call-id", "other-call-id"))
+        @event = Connfu::Rayo::Parser.parse_event_from(@node)
+      end
+
+      it "should create a Joined event" do
+        @event.should be_instance_of Connfu::Event::Joined
+      end
+
+      it "should determine the call_id value of a Joined event" do
+        @event.call_id.should eq "call-id"
+      end
+    end
+
     context "an unknown stanza" do
       before do
         @node = create_presence(%{<presence from="abc@127.0.0.1/123" to="userb@127.0.0.1/voxeo">

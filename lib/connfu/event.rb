@@ -93,5 +93,8 @@ module Connfu
         @uri = params[:uri]
       end
     end
+
+    class Joined < Presence
+    end
   end
 end

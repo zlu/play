@@ -103,6 +103,19 @@ module Connfu
         end
       end
 
+      def transfer_using_join(dial_from, dial_to)
+        command_options = {
+          :to => server_address,
+          :from => client_address,
+          :dial_to => dial_to,
+          :dial_from => dial_from,
+          :call_id => call_id
+        }
+        send_command Connfu::Commands::NestedJoin.new(command_options)
+        wait_for Connfu::Event::Hangup
+        @finished = true
+      end
+
       def recordings
         @recordings ||= []
       end
@@ -148,6 +161,8 @@ module Connfu
             when Connfu::Event::Hangup
               run_any_call_behaviour_for(:hangup)
               @finished = true
+            when Connfu::Event::Joined
+              # ignore for now
             else
               raise "Unrecognized event: #{event}"
           end
