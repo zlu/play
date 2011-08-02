@@ -20,7 +20,7 @@ describe "handling a call offer" do
 
   it "exposes who the call is being routed to" do
     parsed_hash = {
-      :address => "<sip:usera@127.0.0.1>",
+      :address => "sip:usera@127.0.0.1",
       :scheme => "sip",
       :username => "usera",
       :host => "127.0.0.1"

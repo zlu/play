@@ -29,7 +29,7 @@ describe Connfu::Rayo::Parser do
       end
 
       it "should determine the to value of the offer" do
-        @event.to[:address].should eq "<sip:username@example.com>"
+        @event.to[:address].should eq "sip:username@example.com"
         @event.to[:username].should eq "username"
         @event.to[:host].should eq "example.com"
         @event.to[:scheme].should eq "sip"
