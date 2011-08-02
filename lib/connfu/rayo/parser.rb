@@ -26,13 +26,13 @@ module Connfu
           Connfu::Event::Answered.new(:call_id => call_id)
         elsif node.xpath("//x:hangup", 'x' => rayo('1')).any?
           Connfu::Event::Hangup.new(:call_id => call_id)
-        elsif stop = node.xpath('//x:stop', 'x' => rayo('ext:complete:1')).first
+        elsif node.xpath('//x:stop', 'x' => rayo('ext:complete:1')).first
           recording_element = node.xpath('//x:recording', 'x' => rayo('record:complete:1')).first
           Connfu::Event::RecordingStopComplete.new(:call_id => call_id, :uri => recording_element.attributes['uri'].value)
         elsif complete = node.xpath('//x:success', 'x' => tropo('ask:complete:1')).first
           captured_input = complete.xpath('//x:interpretation', 'x' => tropo('ask:complete:1')).first.inner_text
           Connfu::Event::AskComplete.new(:call_id => call_id, :captured_input => captured_input)
-        elsif joined = node.xpath('//x:joined', 'x' => rayo('1')).first
+        elsif node.xpath('//x:joined', 'x' => rayo('1')).first
           Connfu::Event::Joined.new(:call_id => call_id)
         elsif node.xpath("//x:complete", 'x' => rayo('ext:1')).any? && node.xpath("//x:complete", 'x' => rayo('ext:1')).children.map(&:namespace)[1].href == tropo("transfer:complete:1")
           self.transfer_complete?(node)
