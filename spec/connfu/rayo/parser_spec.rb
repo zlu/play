@@ -36,6 +36,17 @@ describe Connfu::Rayo::Parser do
       end
     end
 
+    context "a stop complete presence" do
+      before do
+        @node = create_presence(stop_presence('call-id'))
+        @event = Connfu::Rayo::Parser.parse_event_from(@node)
+      end
+
+      it "should create a stop complete event" do
+        @event.should be_instance_of Connfu::Event::StopComplete
+      end
+    end
+
     context 'a recording result iq' do
       before do
         @node = create_presence(recording_result_iq('call-id', 'ref-id'))

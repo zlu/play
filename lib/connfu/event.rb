@@ -85,6 +85,9 @@ module Connfu
     class Hangup < Presence
     end
 
+    class StopComplete < Presence
+    end
+
     class RecordingStopComplete < Presence
       attr_reader :uri
 

@@ -27,8 +27,11 @@ module Connfu
         elsif node.xpath("//x:hangup", 'x' => rayo('1')).any?
           Connfu::Event::Hangup.new(:call_id => call_id)
         elsif node.xpath('//x:stop', 'x' => rayo('ext:complete:1')).first
-          recording_element = node.xpath('//x:recording', 'x' => rayo('record:complete:1')).first
-          Connfu::Event::RecordingStopComplete.new(:call_id => call_id, :uri => recording_element.attributes['uri'].value)
+          if recording_element = node.xpath('//x:recording', 'x' => rayo('record:complete:1')).first
+            Connfu::Event::RecordingStopComplete.new(:call_id => call_id, :uri => recording_element.attributes['uri'].value)
+          else
+            Connfu::Event::StopComplete.new(:call_id => call_id)
+          end
         elsif complete = node.xpath('//x:success', 'x' => tropo('ask:complete:1')).first
           captured_input = complete.xpath('//x:interpretation', 'x' => tropo('ask:complete:1')).first.inner_text
           Connfu::Event::AskComplete.new(:call_id => call_id, :captured_input => captured_input)
