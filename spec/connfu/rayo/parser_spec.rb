@@ -207,6 +207,10 @@ describe Connfu::Rayo::Parser do
       it "should determine the call_id value of a Joined event" do
         @event.call_id.should eq "call-id"
       end
+
+      it "should determine the joined call id" do
+        @event.joined_call_id.should eq "other-call-id"
+      end
     end
 
     context "an unknown stanza" do

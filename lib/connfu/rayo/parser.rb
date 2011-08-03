@@ -32,8 +32,8 @@ module Connfu
         elsif complete = node.xpath('//x:success', 'x' => tropo('ask:complete:1')).first
           captured_input = complete.xpath('//x:interpretation', 'x' => tropo('ask:complete:1')).first.inner_text
           Connfu::Event::AskComplete.new(:call_id => call_id, :captured_input => captured_input)
-        elsif node.xpath('//x:joined', 'x' => rayo('1')).first
-          Connfu::Event::Joined.new(:call_id => call_id)
+        elsif joined = node.xpath('//x:joined', 'x' => rayo('1')).first
+          Connfu::Event::Joined.new(:call_id => call_id, :joined_call_id => joined.attributes['call-id'].value)
         elsif (results = node.xpath("//x:*", 'x' => tropo('transfer:complete:1'))).any?
           Connfu::TransferState.event_map[results.first.name.to_sym].new(:call_id => call_id)
         else
