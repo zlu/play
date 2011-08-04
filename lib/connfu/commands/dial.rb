@@ -18,7 +18,6 @@ module Connfu
           end
         end
 
-        logger.debug oc_iq
         oc_iq
       end
     end
