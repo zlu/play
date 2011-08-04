@@ -9,7 +9,11 @@ Connfu.start do
     result = send_command Connfu::Commands::Dial.new(:to => "sip:jasoncale@iptel.org", :from => call.to[:address])
     observe_events_for(result.ref_id)
 
+    # result_2 = send_command Connfu::Commands::Dial.new(:to => "sip:jasentonic@iptel.org", :from => call.to[:address])
+    # observe_events_for(result_2.ref_id)
+
     wait_for Connfu::Event::Answered
+    sleep 1
     send_command Connfu::Commands::Join.new(:from => client_address, :to => "#{call_id}@127.0.0.1", :call_id => result.ref_id)
 
     # command_options = {
