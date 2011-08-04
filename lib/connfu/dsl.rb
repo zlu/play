@@ -164,7 +164,7 @@ module Connfu
             when Connfu::Event::Joined
               # ignore for now
             else
-              raise "Unrecognized event: #{event}"
+              logger.warn "Unrecognized event: #{event}"
           end
         end
       end
