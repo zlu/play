@@ -11,3 +11,30 @@ RSpec::Core::RakeTask.new(:test) do |spec|
   spec.pattern = 'spec/**/*_spec.rb'
   spec.rspec_opts = '--color'
 end
+
+namespace :tropo do
+  task :update do
+    require 'tmpdir'
+    
+    prism_home = '/Applications/prism'
+    download_dir = File.join(Dir.tmpdir, 'tropo2')
+    
+    system "mkdir -p #{download_dir}"
+    
+    puts "* Downloading latest succesful build of Tropo2"
+    system "cd #{download_dir} && wget -q http://hudson.voxeolabs.com/hudson/job/Tropo%202/lastSuccessfulBuild/artifact/*zip*/archive.zip"
+    puts "* Downloaded to #{File.join(download_dir, 'archive.zip')}"
+    
+    puts "* Unzipping tropo2"
+    system "cd #{download_dir} && unzip archive.zip"
+    
+    puts "* Updating tropo2"
+    system "cd #{download_dir} && mv archive/tropo-war/target/tropo-*.war #{prism_home}/apps/tropo2.war"
+    
+    puts "* Cleaning up"
+    system "cd #{download_dir} && rm archive.zip"
+    system "cd #{download_dir} && rm -rf archive"
+    
+    puts "* *IMPORTANT* Restart your Prism server now."
+  end
+end
