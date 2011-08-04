@@ -12,6 +12,7 @@ class Connfu::Connection
   def send_command(command)
     iq = command.to_iq
     logger.debug iq
+    File.open('/tmp/connfu.log', 'a') { |f| f.puts(iq) }
     blather_client.write iq
     iq.attributes['id'].to_s
   end
@@ -26,6 +27,7 @@ class Connfu::Connection
         connection.register_handler(stanza_type) do |stanza|
           logger.debug "Receiving #{stanza_type} from server"
           logger.debug stanza.inspect
+          File.open('/tmp/connfu.log', 'a') { |f| f.puts(stanza) }
           Connfu.handle_stanza(stanza)
         end
       end
