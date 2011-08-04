@@ -40,14 +40,20 @@ describe Connfu::Dsl do
     it 'should be able to handle results with same id but different call id' do
       Connfu.connection.stub(:send_command).and_return('command-id')
       subject.send_command(Connfu::Commands::Say.new(:text => '', :from => 'client-address', :to => 'server-address'))
-      result = Connfu::Event::Result.new(:call_id => 'different-call-id', :command_id => 'command-id')
+
+      iq = create_iq(result_iq('different-call-id', 'command-id'))
+      result = Connfu::Rayo::Parser.parse_event_from(iq)
+
       subject.can_handle_event?(result).should be_true
     end
 
     it 'should be able to handle errors with same id but different call id' do
       Connfu.connection.stub(:send_command).and_return('command-id')
       subject.send_command(Connfu::Commands::Say.new(:text => '', :from => 'client-address', :to => 'server-address'))
-      error = Connfu::Event::Error.new(:call_id => 'different-call-id', :command_id => 'command-id')
+
+      iq = create_iq(error_iq('different-call-id', 'command-id'))
+      error = Connfu::Rayo::Parser.parse_event_from(iq)
+
       subject.can_handle_event?(error).should be_true
     end
   end
