@@ -16,12 +16,13 @@ namespace :tropo do
   task :update do
     require 'tmpdir'
     
-    prism_home = '/Applications/prism'
+    prism_home = RUBY_PLATFORM.match(/darwin/)? '/Applications/prism' : '/opt/voxeo/prism'
+
     download_dir = File.join(Dir.tmpdir, 'tropo2')
     
     system "mkdir -p #{download_dir}"
     
-    puts "* Downloading latest succesful build of Tropo2"
+    puts "* Downloading latest successful build of Tropo2"
     system "cd #{download_dir} && wget -q http://hudson.voxeolabs.com/hudson/job/Tropo%202/lastSuccessfulBuild/artifact/*zip*/archive.zip"
     puts "* Downloaded to #{File.join(download_dir, 'archive.zip')}"
     
@@ -35,6 +36,8 @@ namespace :tropo do
     system "cd #{download_dir} && rm archive.zip"
     system "cd #{download_dir} && rm -rf archive"
     
-    puts "* *IMPORTANT* Restart your Prism server now."
+    puts "* Restarting Prism server ..."
+    system "#{prism_home}/bin/prism restart"
+    puts "* Prism server restarted."
   end
 end
