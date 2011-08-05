@@ -13,6 +13,7 @@ class Connfu::Connection
     iq = command.to_iq
     logger.debug iq
     blather_client.write iq
+    Connfu.io_log.sent iq if Connfu.io_log
     iq.attributes['id'].to_s
   end
 

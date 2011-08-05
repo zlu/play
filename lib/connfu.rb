@@ -19,9 +19,11 @@ module Connfu
   class << self
     attr_accessor :event_processor
     attr_accessor :connection
+    attr_accessor :io_log
   end
 
   def self.handle_stanza(stanza)
+    io_log.received stanza if io_log
     event = Connfu::Rayo::Parser.parse_event_from(stanza)
     event_processor.handle_event(event)
   end
