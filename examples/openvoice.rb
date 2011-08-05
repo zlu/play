@@ -1,9 +1,7 @@
 #!/usr/bin/env ruby
 require File.expand_path('../environment', __FILE__)
 
-class OpenVoice
-  include Connfu::Dsl
-
+Connfu.start do
   on :offer do |call|
     answer
     say "Welcome to Zhao's Open Voice communication center"
@@ -36,5 +34,3 @@ class OpenVoice
     end
   end
 end
-
-Connfu.start OpenVoice

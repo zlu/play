@@ -1,9 +1,7 @@
 #!/usr/bin/env ruby
 require File.expand_path('../environment', __FILE__)
 
-class TransferBusy
-  include Connfu::Dsl
-
+Connfu.start do
   on :offer do |call|
     answer
     result = transfer 'sip:zlu@213.192.59.75', :timeout => 15
@@ -11,5 +9,3 @@ class TransferBusy
     puts "The transfer was rejected because far-end is busy" if result.busy?
   end
 end
-
-Connfu.start TransferBusy

@@ -3,9 +3,7 @@ require File.expand_path('../environment', __FILE__)
 
 exit_with_usage_message unless DIAL_TO = ENV['DIAL_TO']
 
-class DialAndHangupOnRingingExample
-  include Connfu::Dsl
-
+Connfu.start do
   dial :to => "sip:#{DIAL_TO}", :from => "sip:usera@127.0.0.1"
 
   on :outgoing_call do |c|
@@ -15,5 +13,3 @@ class DialAndHangupOnRingingExample
     end
   end
 end
-
-Connfu.start DialAndHangupOnRingingExample

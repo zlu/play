@@ -1,9 +1,7 @@
 #!/usr/bin/env ruby
 require File.expand_path('../environment', __FILE__)
 
-class DialOnBehalfOfUserAndJoin
-  include Connfu::Dsl
-
+Connfu.start do
   caller = "sip:lazyatom@iptel.org"
   recipient = "sip:chrisroos@iptel.org"
 
@@ -31,5 +29,3 @@ class DialOnBehalfOfUserAndJoin
     end
   end
 end
-
-Connfu.start DialOnBehalfOfUserAndJoin

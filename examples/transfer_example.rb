@@ -1,9 +1,7 @@
 #!/usr/bin/env ruby
 require File.expand_path('../environment', __FILE__)
 
-class TransferExample
-  include Connfu::Dsl
-
+Connfu.start do
   on :offer do |call|
     answer
     say 'please wait while we transfer your call'
@@ -13,5 +11,3 @@ class TransferExample
     puts "The call was answered, and has finished" if result.answered?
   end
 end
-
-Connfu.start TransferExample
