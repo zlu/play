@@ -18,10 +18,7 @@ Connfu.config.uri = CONNFU_CONFIG[CONNFU_ENV][:connfu_uri]
 logfile = File.expand_path('../../log/xmpp.log', __FILE__)
 Connfu.io_log = Connfu::Logging::IOLogger.new(logfile)
 
-def exit_with_usage_message
-  puts "Specify the destination SIP address by setting the DIAL_TO environment variable"
-  exit 1
-end
+
 
 def update_status(status)
   logfile = File.expand_path('../../log/example_status.log', __FILE__)
@@ -30,6 +27,13 @@ end
 
 DIAL_TO = ENV['DIAL_TO']
 RECIPIENTS = []
+
+def require_one_recipient!
+  unless DIAL_TO
+    puts "Specify the destination SIP address by setting the DIAL_TO environment variable"
+    exit 1
+  end
+end
 
 def require_two_recipients!
   unless DIAL_TO and DIAL_TO.split(',').length == 2

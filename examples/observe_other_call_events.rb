@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 require File.expand_path('../environment', __FILE__)
 
-exit_with_usage_message unless DIAL_TO = ENV['DIAL_TO']
+require_one_recipient!
 
 Connfu.start do
   on :offer do |call|
