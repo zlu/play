@@ -12,7 +12,9 @@ RSpec::Core::RakeTask.new(:test) do |spec|
   spec.rspec_opts = '--color'
 end
 
-prism_home = RUBY_PLATFORM.match(/darwin/)? '/Applications/prism' : '/opt/voxeo/prism'
+possible_prism_locations = ['~/Applications/prism', '/Applications/prism', '/opt/voxeo/prism'].map { |p| File.expand_path(p) }
+prism_home = possible_prism_locations.find { |p| File.directory?(p) }
+raise "Couldn't find prism" unless prism_home
 
 namespace :tropo do
   task :update do
