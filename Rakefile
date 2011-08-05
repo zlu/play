@@ -56,18 +56,18 @@ namespace :prism do
   desc "Start the Prism application & media servers"
   task :start => :exists do
     system "#{prism_home}/bin/prism start"
-    abort("Error") unless $?.success?
+    abort("Error starting Prism") unless $?.success?
   end
 
   desc "Stop the Prism application & media servers"
   task :stop => :exists do
     system("#{prism_home}/bin/prism stop")
-    abort("Error") unless $?.success?
+    abort("Error stopping Prism") unless $?.success?
   end
 
   desc "Restart the Prism application & media servers"
   task :restart => :exists do
     system("#{prism_home}/bin/prism restart")
-    abort("Error") unless $?.success?
+    abort("Error restarting Prism") unless $?.success?
   end
 end
