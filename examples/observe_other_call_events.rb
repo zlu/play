@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 require File.expand_path('../environment', __FILE__)
 
+exit_with_usage_message unless DIAL_TO = ENV['DIAL_TO']
+
 Connfu.start do
   on :offer do |call|
     answer
@@ -9,7 +11,7 @@ Connfu.start do
     command_options = {
       :call_jid => call_jid,
       :client_jid => client_jid,
-      :dial_to => "sip:chrisroos@iptel.org",
+      :dial_to => "sip:#{DIAL_TO}",
       :dial_from => call.to[:address],
       :call_id => call_id
     }
