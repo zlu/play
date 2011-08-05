@@ -1,9 +1,11 @@
 #!/usr/bin/env ruby
 require File.expand_path('../environment', __FILE__)
 
+require_two_recipients!
+
 Connfu.start do
-  caller = "sip:lazyatom@iptel.org"
-  recipient = "sip:chrisroos@iptel.org"
+  caller = "sip:#{RECIPIENTS.first}"
+  recipient = "sip:#{RECIPIENTS.last}"
 
   dial :to => caller, :from => "sip:usera@127.0.0.1"
 
