@@ -12,11 +12,11 @@ RSpec::Core::RakeTask.new(:test) do |spec|
   spec.rspec_opts = '--color'
 end
 
+prism_home = RUBY_PLATFORM.match(/darwin/)? '/Applications/prism' : '/opt/voxeo/prism'
+
 namespace :tropo do
   task :update do
     require 'tmpdir'
-
-    prism_home = RUBY_PLATFORM.match(/darwin/)? '/Applications/prism' : '/opt/voxeo/prism'
 
     download_dir = File.join(Dir.tmpdir, 'tropo2')
 
@@ -37,23 +37,27 @@ namespace :tropo do
     system "cd #{download_dir} && rm -rf archive"
 
     puts "* Restarting Prism server ..."
-    system "#{prism_home}/bin/prism restart"
+    Rake::Task["prism:restart"].invoke
     puts "* Prism server restarted."
   end
 end
 
-prism_home = ENV["PRISM_HOME"] || "/Applications/prism"
-
 namespace :prism do
-  desc "Start the Prism Application & Media Servers"
+  desc "Start the Prism application & media servers"
   task :start do
-    system("#{prism_home}/bin/startup.sh")
+    system "#{prism_home}/bin/prism start"
     abort("Error") unless $?.success?
   end
 
-  desc "Stop the Prism Application & Media Servers"
+  desc "Stop the Prism application & media servers"
   task :stop do
-    system("#{prism_home}/bin/shutdown.sh")
+    system("#{prism_home}/bin/prism stop")
+    abort("Error") unless $?.success?
+  end
+
+  desc "Restart the Prism application & media servers"
+  task :restart do
+    system("#{prism_home}/bin/prism restart")
     abort("Error") unless $?.success?
   end
 end
