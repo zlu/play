@@ -1,12 +1,7 @@
 #!/usr/bin/env ruby
 require File.expand_path('../environment', __FILE__)
 
-DIAL_TO = ENV['DIAL_TO']
-unless DIAL_TO and DIAL_TO.split(',').length == 2
-  puts "Please specify two recipients by setting DIAL_TO, e.g. DIAL_TO=foo@example.com,bar@example.com"
-  exit 1
-end
-RECIPIENT_1, RECIPIENT_2 = DIAL_TO.split(',')
+require_two_recipients!
 
 Connfu.start do
   on :offer do |call|
@@ -18,10 +13,10 @@ Connfu.start do
       :client_jid => Connfu.connection.jid.to_s,
       :rayo_host => Connfu.connection.jid.domain
     }
-    call_1_result = send_command Connfu::Commands::Dial.new(dial_options.merge(:to => "sip:#{RECIPIENT_1}"))
+    call_1_result = send_command Connfu::Commands::Dial.new(dial_options.merge(:to => "sip:#{RECIPIENTS.first}"))
     observe_events_for(call_1_result.ref_id)
 
-    call_2_result = send_command Connfu::Commands::Dial.new(dial_options.merge(:to => "sip:#{RECIPIENT_2}"))
+    call_2_result = send_command Connfu::Commands::Dial.new(dial_options.merge(:to => "sip:#{RECIPIENTS.last}"))
     observe_events_for(call_2_result.ref_id)
 
     answered_result = wait_for Connfu::Event::Answered
