@@ -12,12 +12,12 @@ RSpec::Core::RakeTask.new(:test) do |spec|
   spec.rspec_opts = '--color'
 end
 
-namespace :tropo do
-  task :update do
-    possible_prism_locations = ['~/Applications/prism', '/Applications/prism', '/opt/voxeo/prism'].map { |p| File.expand_path(p) }
-    prism_home = possible_prism_locations.find { |p| File.directory?(p) }
-    raise "Couldn't find prism" unless prism_home
+possible_prism_locations = ['~/Applications/prism', '/Applications/prism', '/opt/voxeo/prism'].map { |p| File.expand_path(p) }
+prism_home = possible_prism_locations.find { |p| File.directory?(p) }
 
+namespace :tropo do
+  desc "Updates tropo to the latest version and restarts prism"
+  task :update => "prism:exists" do
     require 'tmpdir'
 
     download_dir = File.join(Dir.tmpdir, 'tropo2')
@@ -45,20 +45,25 @@ namespace :tropo do
 end
 
 namespace :prism do
+  desc "Check that we know where prism is installed"
+  task :exists do
+    raise "Couldn't find prism" unless prism_home
+  end
+
   desc "Start the Prism application & media servers"
-  task :start do
+  task :start => :exists do
     system "#{prism_home}/bin/prism start"
     abort("Error") unless $?.success?
   end
 
   desc "Stop the Prism application & media servers"
-  task :stop do
+  task :stop => :exists do
     system("#{prism_home}/bin/prism stop")
     abort("Error") unless $?.success?
   end
 
   desc "Restart the Prism application & media servers"
-  task :restart do
+  task :restart => :exists do
     system("#{prism_home}/bin/prism restart")
     abort("Error") unless $?.success?
   end
