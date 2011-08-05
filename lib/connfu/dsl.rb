@@ -6,7 +6,7 @@ module Connfu
       base.send(:include, Connfu::Logging)
       base.extend Connfu::Dsl::ClassMethods
       base.class_eval do
-        attr_reader :server_address, :client_address, :call_id
+        attr_reader :call_jid, :client_address, :call_id
       end
     end
 
@@ -57,32 +57,32 @@ module Connfu
       end
 
       def say(text)
-        send_command Connfu::Commands::Say.new(:text => text, :to => server_address, :from => client_address)
+        send_command Connfu::Commands::Say.new(:text => text, :call_jid => call_jid, :from => client_address)
         wait_for Connfu::Event::SayComplete
       end
 
       def ask(options)
-        send_command Connfu::Commands::Ask.new(:prompt => options[:prompt], :digits => options[:digits], :from => client_address, :to => server_address)
+        send_command Connfu::Commands::Ask.new(:prompt => options[:prompt], :digits => options[:digits], :from => client_address, :call_jid => call_jid)
         ask_complete = wait_for Connfu::Event::AskComplete
         ask_complete.captured_input
       end
 
       def answer
-        send_command Connfu::Commands::Answer.new(:to => server_address, :from => client_address)
+        send_command Connfu::Commands::Answer.new(:call_jid => call_jid, :from => client_address)
       end
 
       def reject
-        send_command Connfu::Commands::Reject.new(:to => server_address, :from => client_address)
+        send_command Connfu::Commands::Reject.new(:call_jid => call_jid, :from => client_address)
       end
 
       def hangup
-        send_command Connfu::Commands::Hangup.new(:to => server_address, :from => client_address)
+        send_command Connfu::Commands::Hangup.new(:call_jid => call_jid, :from => client_address)
         wait_for Connfu::Event::Hangup
         @finished = true
       end
 
       def redirect(redirect_to)
-        send_command Connfu::Commands::Redirect.new(:redirect_to => redirect_to, :to => server_address, :from => client_address)
+        send_command Connfu::Commands::Redirect.new(:redirect_to => redirect_to, :call_jid => call_jid, :from => client_address)
       end
 
       def transfer(*transfer_to)
@@ -95,7 +95,7 @@ module Connfu
           end
           return result
         else
-          command_options = {:transfer_to => transfer_to, :to => server_address, :from => client_address}
+          command_options = {:transfer_to => transfer_to, :call_jid => call_jid, :from => client_address}
           command_options[:timeout] = options[:timeout] * 1000 if options[:timeout]
           send_command Connfu::Commands::Transfer.new(command_options)
           transfer_event = wait_for Connfu::Event::TransferEvent
@@ -105,7 +105,7 @@ module Connfu
 
       def transfer_using_join(dial_from, dial_to)
         command_options = {
-          :to => server_address,
+          :call_jid => call_jid,
           :from => client_address,
           :dial_to => dial_to,
           :dial_from => dial_from,
@@ -131,7 +131,7 @@ module Connfu
       end
 
       def stop_recording
-        send_command Connfu::Commands::Recording::Stop.new(:to => server_address, :from => client_address, :ref_id => @ref_id)
+        send_command Connfu::Commands::Recording::Stop.new(:call_jid => call_jid, :from => client_address, :ref_id => @ref_id)
         event = wait_for(Connfu::Event::RecordingStopComplete)
         recordings << event.uri
       end
@@ -209,7 +209,7 @@ module Connfu
       end
 
       def send_start_recording(options = {})
-        command_options = { :to => server_address, :from => client_address }
+        command_options = { :call_jid => call_jid, :from => client_address }
         command_options[:max_length] = options[:max_length] * 1000 if options[:max_length]
         command_options[:beep] = options[:beep] if options.has_key?(:beep)
         command_options[:format] = options[:format] if options.has_key?(:format)
@@ -226,7 +226,7 @@ module Connfu
     end
 
     def initialize(params)
-      @server_address = params[:from]
+      @call_jid = params[:from]
       @client_address = params[:to]
       @call_id = params[:call_id]
     end

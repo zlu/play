@@ -5,7 +5,7 @@ describe Connfu::Commands::Ask do
   describe "generating XMPP iq" do
     subject do
       Connfu::Commands::Ask.new(
-        :to => 'server-address',
+        :call_jid => 'call-jid',
         :from => 'client-address',
         :prompt => "enter your pin",
         :digits => 4
@@ -21,7 +21,7 @@ describe Connfu::Commands::Ask do
     end
 
     it "should send the attribute 'to' in the iq" do
-      subject.xpath("/iq").first.attributes["to"].value.should eq "server-address"
+      subject.xpath("/iq").first.attributes["to"].value.should eq "call-jid"
     end
 
     it "should send the attribute 'from' in the iq" do

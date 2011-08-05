@@ -11,7 +11,7 @@ Connfu.start do
     say 'please wait while we join'
 
     command_options = {
-      :to => server_address,
+      :to => call_jid,
       :from => client_address,
       :dial_to => "sip:someone@iptel.org",
       :dial_from => call.to[:address],

@@ -1,7 +1,7 @@
 module Connfu
   module Commands
     module StopComponent
-      def to
+      def call_jid
         super + "/" + @params[:ref_id]
       end
 

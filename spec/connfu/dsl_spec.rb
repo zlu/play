@@ -11,7 +11,7 @@ describe Connfu::Dsl do
   end
 
   subject {
-    DslTest.new(:from => "server-address", :to => "client-address", :call_id => "call-id")
+    DslTest.new(:from => "call-jid", :to => "client-address", :call_id => "call-id")
   }
 
   describe 'handle_event' do
@@ -39,7 +39,7 @@ describe Connfu::Dsl do
   describe 'send_command' do
     it 'should be able to handle results with same id but different call id' do
       Connfu.connection.stub(:send_command).and_return('command-id')
-      subject.send_command(Connfu::Commands::Say.new(:text => '', :from => 'client-address', :to => 'server-address'))
+      subject.send_command(Connfu::Commands::Say.new(:text => '', :from => 'client-address', :call_jid => 'call-jid'))
 
       iq = create_iq(result_iq('different-call-id', 'command-id'))
       result = Connfu::Rayo::Parser.parse_event_from(iq)
@@ -49,7 +49,7 @@ describe Connfu::Dsl do
 
     it 'should be able to handle errors with same id but different call id' do
       Connfu.connection.stub(:send_command).and_return('command-id')
-      subject.send_command(Connfu::Commands::Say.new(:text => '', :from => 'client-address', :to => 'server-address'))
+      subject.send_command(Connfu::Commands::Say.new(:text => '', :from => 'client-address', :call_jid => 'call-jid'))
 
       iq = create_iq(error_iq('different-call-id', 'command-id'))
       error = Connfu::Rayo::Parser.parse_event_from(iq)
@@ -61,7 +61,7 @@ describe Connfu::Dsl do
   describe 'say' do
     it 'should send Say command to connection' do
       text = 'connfu is awesome'
-      Connfu.connection.should_receive(:send_command).with(Connfu::Commands::Say.new(:text => text, :from => 'client-address', :to => 'server-address'))
+      Connfu.connection.should_receive(:send_command).with(Connfu::Commands::Say.new(:text => text, :from => 'client-address', :call_jid => 'call-jid'))
       catch :waiting do
         subject.say(text)
       end
@@ -70,14 +70,14 @@ describe Connfu::Dsl do
 
   describe 'hangup' do
     it 'should send Hangup command to connection' do
-      Connfu.connection.should_receive(:send_command).with(Connfu::Commands::Hangup.new(:from => 'client-address', :to => 'server-address'))
+      Connfu.connection.should_receive(:send_command).with(Connfu::Commands::Hangup.new(:from => 'client-address', :call_jid => 'call-jid'))
       subject.hangup
     end
   end
 
   describe 'reject' do
     it 'should send Reject command to connection' do
-      Connfu.connection.should_receive(:send_command).with(Connfu::Commands::Reject.new(:from => 'client-address', :to => 'server-address'))
+      Connfu.connection.should_receive(:send_command).with(Connfu::Commands::Reject.new(:from => 'client-address', :call_jid => 'call-jid'))
       subject.reject
     end
   end
@@ -85,7 +85,7 @@ describe Connfu::Dsl do
   describe 'redirect' do
     it 'should send Redirect command to connection' do
       redirect_to = 'sip:1652@connfu.com'
-      Connfu.connection.should_receive(:send_command).with(Connfu::Commands::Redirect.new(:redirect_to => redirect_to, :from => 'client-address', :to => 'server-address'))
+      Connfu.connection.should_receive(:send_command).with(Connfu::Commands::Redirect.new(:redirect_to => redirect_to, :from => 'client-address', :call_jid => 'call-jid'))
       subject.redirect(redirect_to)
     end
   end
@@ -97,7 +97,7 @@ describe Connfu::Dsl do
 
     it 'should send Transfer command to connection' do
       transfer_to = 'sip:1652@connfu.com'
-      Connfu.connection.should_receive(:send_command).with(Connfu::Commands::Transfer.new(:transfer_to => [transfer_to], :from => 'client-address', :to => 'server-address'))
+      Connfu.connection.should_receive(:send_command).with(Connfu::Commands::Transfer.new(:transfer_to => [transfer_to], :from => 'client-address', :call_jid => 'call-jid'))
       catch :waiting do
         subject.transfer(transfer_to)
       end
@@ -106,7 +106,7 @@ describe Connfu::Dsl do
     it 'should send Transfer command with optional timeout in milliseconds' do
       transfer_to = 'sip:1652@connfu.com'
       timeout_in_seconds = 5
-      cmd = Connfu::Commands::Transfer.new(:transfer_to => [transfer_to], :from => 'client-address', :to => 'server-address', :timeout => (timeout_in_seconds * 1000))
+      cmd = Connfu::Commands::Transfer.new(:transfer_to => [transfer_to], :from => 'client-address', :call_jid => 'call-jid', :timeout => (timeout_in_seconds * 1000))
       Connfu.connection.should_receive(:send_command).with(cmd)
       catch :waiting do
         subject.transfer(transfer_to, :timeout => timeout_in_seconds)
@@ -122,7 +122,7 @@ describe Connfu::Dsl do
         :dial_to => dial_to,
         :dial_from => dial_from,
         :from => 'client-address',
-        :to => 'server-address',
+        :call_jid => 'call-jid',
         :call_id => 'call-id'
       ))
       subject.transfer_using_join(dial_from, dial_to)
@@ -133,7 +133,7 @@ describe Connfu::Dsl do
     it 'should send a start command to connection' do
       subject.stub(:wait_for).and_return(Connfu::Event::Result.new)
       Connfu.connection.should_receive(:send_command).with(Connfu::Commands::Recording::Start.new(
-        :from => 'client-address', :to => 'server-address'
+        :from => 'client-address', :call_jid => 'call-jid'
       ))
       subject.start_recording
     end
@@ -141,7 +141,7 @@ describe Connfu::Dsl do
     it 'should send a start command to connection with optional beep parameter' do
       subject.stub(:wait_for).and_return(Connfu::Event::Result.new)
       Connfu.connection.should_receive(:send_command).with(Connfu::Commands::Recording::Start.new(
-        :from => 'client-address', :to => 'server-address', :beep => false
+        :from => 'client-address', :call_jid => 'call-jid', :beep => false
       ))
       subject.start_recording(:beep => false)
     end
@@ -149,7 +149,7 @@ describe Connfu::Dsl do
     it 'should send a start command to connection with optional format parameter' do
       subject.stub(:wait_for).and_return(Connfu::Event::Result.new)
       Connfu.connection.should_receive(:send_command).with(Connfu::Commands::Recording::Start.new(
-        :from => 'client-address', :to => 'server-address', :format => :wav
+        :from => 'client-address', :call_jid => 'call-jid', :format => :wav
       ))
       subject.start_recording(:format => :wav)
     end
@@ -157,7 +157,7 @@ describe Connfu::Dsl do
     it 'should send a start command to connection with optional format and encoding parameters' do
       subject.stub(:wait_for).and_return(Connfu::Event::Result.new)
       Connfu.connection.should_receive(:send_command).with(Connfu::Commands::Recording::Start.new(
-        :from => 'client-address', :to => 'server-address', :format => :wav, :codec => :mulaw_pcm_64k
+        :from => 'client-address', :call_jid => 'call-jid', :format => :wav, :codec => :mulaw_pcm_64k
 
       ))
       subject.start_recording(:format => :wav, :codec => :mulaw_pcm_64k)
@@ -167,7 +167,7 @@ describe Connfu::Dsl do
       max_length_in_seconds = 25
       subject.stub(:wait_for).and_return(Connfu::Event::Result.new, Connfu::Event::RecordingStopComplete.new)
       Connfu.connection.should_receive(:send_command).with(Connfu::Commands::Recording::Start.new(
-        :from => 'client-address', :to => 'server-address', :max_length => (max_length_in_seconds * 1000)
+        :from => 'client-address', :call_jid => 'call-jid', :max_length => (max_length_in_seconds * 1000)
       ))
       subject.record_for(max_length_in_seconds)
     end
@@ -176,7 +176,7 @@ describe Connfu::Dsl do
       max_length_in_seconds = 25
       subject.stub(:wait_for).and_return(Connfu::Event::Result.new, Connfu::Event::RecordingStopComplete.new)
       Connfu.connection.should_receive(:send_command).with(Connfu::Commands::Recording::Start.new(
-        :from => 'client-address', :to => 'server-address', :max_length => (max_length_in_seconds * 1000), :beep => false
+        :from => 'client-address', :call_jid => 'call-jid', :max_length => (max_length_in_seconds * 1000), :beep => false
       ))
       subject.record_for(max_length_in_seconds, :beep => false)
     end
@@ -185,7 +185,7 @@ describe Connfu::Dsl do
       max_length_in_seconds = 25
       subject.stub(:wait_for).and_return(Connfu::Event::Result.new, Connfu::Event::RecordingStopComplete.new)
       Connfu.connection.should_receive(:send_command).with(Connfu::Commands::Recording::Start.new(
-        :from => 'client-address', :to => 'server-address', :max_length => (max_length_in_seconds * 1000), :format => :wav
+        :from => 'client-address', :call_jid => 'call-jid', :max_length => (max_length_in_seconds * 1000), :format => :wav
       ))
       subject.record_for(max_length_in_seconds, :format => :wav)
     end
@@ -194,7 +194,7 @@ describe Connfu::Dsl do
       max_length_in_seconds = 25
       subject.stub(:wait_for).and_return(Connfu::Event::Result.new, Connfu::Event::RecordingStopComplete.new)
       Connfu.connection.should_receive(:send_command).with(Connfu::Commands::Recording::Start.new(
-        :from => 'client-address', :to => 'server-address', :max_length => (max_length_in_seconds * 1000), :format => :wav, :codec => :mulaw_pcm_64k
+        :from => 'client-address', :call_jid => 'call-jid', :max_length => (max_length_in_seconds * 1000), :format => :wav, :codec => :mulaw_pcm_64k
       ))
       subject.record_for(max_length_in_seconds, :format => :wav, :codec => :mulaw_pcm_64k)
     end
@@ -202,7 +202,7 @@ describe Connfu::Dsl do
     it 'should send a stop command to connection' do
       subject.stub(:wait_for).and_return(Connfu::Event::RecordingStopComplete.new)
       subject.instance_eval { @ref_id = 'foo' }
-      Connfu.connection.should_receive(:send_command).with(Connfu::Commands::Recording::Stop.new(:from => 'client-address', :to => 'server-address', :ref_id => 'foo'))
+      Connfu.connection.should_receive(:send_command).with(Connfu::Commands::Recording::Stop.new(:from => 'client-address', :call_jid => 'call-jid', :ref_id => 'foo'))
       subject.stop_recording
     end
   end
@@ -213,7 +213,7 @@ describe Connfu::Dsl do
       digits = 4
       caller_input = "9812"
       subject.stub(:wait_for).and_return(Connfu::Event::AskComplete.new(:call_id => "call-id", :captured_input => caller_input))
-      Connfu.connection.should_receive(:send_command).with(Connfu::Commands::Ask.new(:prompt => text, :from => 'client-address', :to => 'server-address', :digits => digits))
+      Connfu.connection.should_receive(:send_command).with(Connfu::Commands::Ask.new(:prompt => text, :from => 'client-address', :call_jid => 'call-jid', :digits => digits))
       catch :waiting do
         captured_input = subject.ask(:prompt => text, :digits => digits)
         captured_input.should eq "9812"

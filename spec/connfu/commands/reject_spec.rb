@@ -4,7 +4,7 @@ describe Connfu::Commands::Reject do
 
   describe "generating XMPP iq" do
     subject do
-      Connfu::Commands::Reject.new(:to => 'server-address', :from => 'client-address').to_iq
+      Connfu::Commands::Reject.new(:call_jid => 'call-jid', :from => 'client-address').to_iq
     end
 
     it "should generate reject iq from Reject command" do
@@ -16,7 +16,7 @@ describe Connfu::Commands::Reject do
     end
 
     it "should send the command 'to' the server" do
-      subject.xpath("/iq").first.attributes["to"].value.should eq "server-address"
+      subject.xpath("/iq").first.attributes["to"].value.should eq "call-jid"
     end
 
     it "should send the command 'from' the client" do

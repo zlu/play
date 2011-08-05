@@ -12,8 +12,8 @@ module Connfu
         other.kind_of?(self.class) && other.params == @params
       end
 
-      def to
-        @params[:to]
+      def call_jid
+        @params[:call_jid]
       end
 
       def from
@@ -35,7 +35,7 @@ module Connfu
       end
 
       def build_iq(attributes = {}, &block)
-        Connfu::Rayo::IqBuilder.build_iq(to, from, command, attributes, &block)
+        Connfu::Rayo::IqBuilder.build_iq(call_jid, from, command, attributes, &block)
       end
     end
   end

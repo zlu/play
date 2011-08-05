@@ -17,7 +17,7 @@ Connfu.start do
     send_command Connfu::Commands::Join.new(:from => client_address, :to => "#{call_id}@127.0.0.1", :call_id => result.ref_id)
 
     # command_options = {
-    #   :to => server_address,
+    #   :to => call_jid,
     #   :from => client_address,
     #   :dial_to => "sip:someone@iptel.org",
     #   :dial_from => call.to[:address],

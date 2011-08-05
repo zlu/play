@@ -11,7 +11,7 @@ describe Connfu::Commands::Join do
 
       subject do
         Connfu::Commands::Join.new(
-          :to => 'call-jid-of-call-in-progress',
+          :call_jid => 'call-jid-of-call-in-progress',
           :from => 'user-jid',
           :call_id => 'call-id'
         ).to_iq

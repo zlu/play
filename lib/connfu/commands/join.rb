@@ -4,7 +4,7 @@ module Connfu
       include Base
 
       def to_iq
-        oc_iq = Blather::Stanza::Iq.new(:set, to)
+        oc_iq = Blather::Stanza::Iq.new(:set, call_jid)
         oc_iq.from = from
         Nokogiri::XML::Builder.with(oc_iq) do |xml|
           xml.join_("xmlns" => rayo('1'), :direction => "duplex", :media => "bridge", :"call-id" => @params[:call_id])
