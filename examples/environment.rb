@@ -22,3 +22,8 @@ def exit_with_usage_message
   puts "Specify the destination SIP address by setting the DIAL_TO environment variable"
   exit 1
 end
+
+def update_status(status)
+  logfile = File.expand_path('../../log/example_status.log', __FILE__)
+  File.open(logfile, "a") { |f| f.puts "Status change: #{status}" }
+end
