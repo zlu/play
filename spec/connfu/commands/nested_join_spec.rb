@@ -6,7 +6,7 @@ describe Connfu::Commands::NestedJoin do
     subject do
       Connfu::Commands::NestedJoin.new(
         :call_jid => 'call-jid',
-        :from => 'client-address',
+        :client_jid => 'client-jid',
         :call_id => 'call-id',
         :dial_to => 'dial-to',
         :dial_from => 'dial-from').to_iq
@@ -26,7 +26,7 @@ describe Connfu::Commands::NestedJoin do
     end
 
     it "should send the attribute 'from' in the iq" do
-      subject.xpath("/iq").first.attributes["from"].value.should eq "client-address"
+      subject.xpath("/iq").first.attributes["from"].value.should eq "client-jid"
     end
 
     it "should contain the dial 'to' and 'from' in the dial iq element" do

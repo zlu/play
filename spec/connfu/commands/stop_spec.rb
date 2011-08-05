@@ -4,7 +4,7 @@ describe Connfu::Commands::Stop do
   
   describe "generating XMPP iq for a Stop command" do
     subject do
-      Connfu::Commands::Stop.new(:call_jid => 'call-jid', :from => 'client-address', :ref_id => 'abc123').to_iq
+      Connfu::Commands::Stop.new(:call_jid => 'call-jid', :client_jid => 'client-jid', :ref_id => 'abc123').to_iq
     end
 
     it "should generate a stop iq" do
@@ -20,7 +20,7 @@ describe Connfu::Commands::Stop do
     end
 
     it "should contain the 'from' address in the iq" do
-      subject.xpath("/iq").first.attributes["from"].value.should eq "client-address"
+      subject.xpath("/iq").first.attributes["from"].value.should eq "client-jid"
     end
 
     it 'should not set any other iq attributes' do

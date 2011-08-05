@@ -5,7 +5,7 @@ describe Connfu::Commands::Redirect do
   describe "generating XMPP iq" do
     subject do
       @redirect_to = 'sip:1324@connfu.com'
-      Connfu::Commands::Redirect.new(:redirect_to => @redirect_to, :call_jid => 'call-jid', :from => 'client-address').to_iq
+      Connfu::Commands::Redirect.new(:redirect_to => @redirect_to, :call_jid => 'call-jid', :client_jid => 'client-jid').to_iq
     end
 
     it "should be an iq of type 'set'" do
@@ -17,7 +17,7 @@ describe Connfu::Commands::Redirect do
     end
 
     it "should contain the 'from' address in the iq" do
-      subject.xpath("/iq").first.attributes["from"].value.should eq "client-address"
+      subject.xpath("/iq").first.attributes["from"].value.should eq "client-jid"
     end
 
     it "should generate redirect iq" do

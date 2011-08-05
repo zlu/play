@@ -12,7 +12,7 @@ Connfu.start do
 
     command_options = {
       :to => call_jid,
-      :from => client_address,
+      :client_jid => client_jid,
       :dial_to => "sip:someone@iptel.org",
       :dial_from => call.to[:address],
       :call_id => call_id

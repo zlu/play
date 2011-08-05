@@ -16,8 +16,8 @@ module Connfu
         @params[:call_jid]
       end
 
-      def from
-        @params[:from]
+      def client_jid
+        @params[:client_jid]
       end
 
       def command
@@ -35,7 +35,7 @@ module Connfu
       end
 
       def build_iq(attributes = {}, &block)
-        Connfu::Rayo::IqBuilder.build_iq(call_jid, from, command, attributes, &block)
+        Connfu::Rayo::IqBuilder.build_iq(call_jid, client_jid, command, attributes, &block)
       end
     end
   end

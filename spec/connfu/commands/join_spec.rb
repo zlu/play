@@ -12,7 +12,7 @@ describe Connfu::Commands::Join do
       subject do
         Connfu::Commands::Join.new(
           :call_jid => 'call-jid-of-call-in-progress',
-          :from => 'user-jid',
+          :client_jid => 'client-jid',
           :call_id => 'call-id'
         ).to_iq
       end
@@ -26,7 +26,7 @@ describe Connfu::Commands::Join do
       end
 
       it "should contain the 'from' address in the iq" do
-        subject.xpath("/iq").first.attributes["from"].value.should eq 'user-jid'
+        subject.xpath("/iq").first.attributes["from"].value.should eq 'client-jid'
       end
 
       describe 'join node' do

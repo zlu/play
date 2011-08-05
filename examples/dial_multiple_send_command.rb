@@ -14,11 +14,11 @@ Connfu.start do
 
     wait_for Connfu::Event::Answered
     sleep 1
-    send_command Connfu::Commands::Join.new(:from => client_address, :to => "#{call_id}@127.0.0.1", :call_id => result.ref_id)
+    send_command Connfu::Commands::Join.new(:client_jid => client_jid, :to => "#{call_id}@127.0.0.1", :call_id => result.ref_id)
 
     # command_options = {
     #   :to => call_jid,
-    #   :from => client_address,
+    #   :client_jid => client_jid,
     #   :dial_to => "sip:someone@iptel.org",
     #   :dial_from => call.to[:address],
     #   :call_id => call_id

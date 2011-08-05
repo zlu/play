@@ -6,7 +6,7 @@ describe Connfu::Commands::Ask do
     subject do
       Connfu::Commands::Ask.new(
         :call_jid => 'call-jid',
-        :from => 'client-address',
+        :client_jid => 'client-jid',
         :prompt => "enter your pin",
         :digits => 4
       ).to_iq
@@ -25,7 +25,7 @@ describe Connfu::Commands::Ask do
     end
 
     it "should send the attribute 'from' in the iq" do
-      subject.xpath("/iq").first.attributes["from"].value.should eq "client-address"
+      subject.xpath("/iq").first.attributes["from"].value.should eq "client-jid"
     end
 
     it "should set the mode to default dtmf" do
