@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 require File.expand_path('../environment', __FILE__)
 
+exit_with_usage_message unless DIAL_TO = ENV['DIAL_TO']
+
 class DialViaInProcessQueueExample
   include Connfu::Dsl
 
@@ -8,7 +10,7 @@ class DialViaInProcessQueueExample
     File.open("/tmp/status.log", "a") { |f| f.puts "Status change: #{status}" }
   end
 
-  dial :to => 'sip:zlu@213.192.59.75', :from => "sip:usera@127.0.0.1"
+  dial :to => "sip:#{DIAL_TO}", :from => "sip:usera@127.0.0.1"
 
   on :outgoing_call do |c|
     c.on_ringing do

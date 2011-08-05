@@ -17,3 +17,8 @@ Connfu.config.uri = CONNFU_CONFIG[CONNFU_ENV][:connfu_uri]
 
 logfile = File.expand_path('../../log/xmpp.log', __FILE__)
 Connfu.io_log = Connfu::Logging::IOLogger.new(logfile)
+
+def exit_with_usage_message
+  puts "Specify the destination SIP address by setting the DIAL_TO environment variable"
+  exit 1
+end
