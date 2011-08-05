@@ -1,15 +1,20 @@
 #!/usr/bin/env ruby
 require File.expand_path('../environment', __FILE__)
 
+unless DIAL_TO = ENV['DIAL_TO']
+  puts "Specify the destination SIP address by setting the DIAL_TO environment variable"
+  exit 1
+end
+
 Connfu.start do
   on :offer do |call|
     answer
     say 'please wait'
 
     result = send_command Connfu::Commands::Dial.new(
-      :to => "sip:chrisroos@iptel.org", 
-      :from => call.to[:address], 
-      :client_jid => Connfu.connection.jid.to_s, 
+      :to => "sip:#{DIAL_TO}",
+      :from => call.to[:address],
+      :client_jid => Connfu.connection.jid.to_s,
       :rayo_host => Connfu.connection.jid.domain)
     observe_events_for(result.ref_id)
 
