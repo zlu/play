@@ -24,6 +24,10 @@ module Connfu
         self.class.name.split("::").last.downcase
       end
 
+      def recipient_jid
+        call_jid
+      end
+
       def to_iq
         build_iq
       end
@@ -35,7 +39,7 @@ module Connfu
       end
 
       def build_iq(attributes = {}, &block)
-        Connfu::Rayo::IqBuilder.build_iq(call_jid, client_jid, command, attributes, &block)
+        Connfu::Rayo::IqBuilder.build_iq(recipient_jid, client_jid, command, attributes, &block)
       end
     end
   end
