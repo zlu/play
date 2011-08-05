@@ -1,8 +1,6 @@
 #!/usr/bin/env ruby
 require File.expand_path('../environment', __FILE__)
 
-Connfu.io_log = Connfu::Logging::IOLogger.new("/tmp/xmpp.log")
-
 Connfu.start do
   on :offer do |call|
     answer

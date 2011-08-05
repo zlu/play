@@ -14,3 +14,6 @@ CONNFU_CONFIG['linode'] = CONNFU_CONFIG['default'].merge(:connfu_uri => 'jid://u
 CONNFU_ENV = ENV['CONNFU_ENV'] || 'default'
 
 Connfu.config.uri = CONNFU_CONFIG[CONNFU_ENV][:connfu_uri]
+
+logfile = File.expand_path('../../log/xmpp.log', __FILE__)
+Connfu.io_log = Connfu::Logging::IOLogger.new(logfile)

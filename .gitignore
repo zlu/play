@@ -3,3 +3,4 @@
 .build
 .rspec
 Gemfile.lock
+log/*.log
