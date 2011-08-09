@@ -148,11 +148,14 @@ describe "Dialing" do
 
     it "should allow running commands" do
       incoming :outgoing_call_result_iq, "call-id", Connfu.connection.commands.last.id
-      incoming :outgoing_call_ringing_presence, "call-id"
+      incoming :outgoing_call_ringing_presence, "call-id", "client-jid"
       incoming :outgoing_call_answered_presence, "call-id"
 
-      Connfu.connection.commands.last.should be_instance_of Connfu::Commands::Say
-      Connfu.connection.commands.last.text.should == "hello"
+      say_command = Connfu.connection.commands.last
+      say_command.should be_instance_of Connfu::Commands::Say
+      say_command.text.should == "hello"
+      say_command.call_jid.should == "call-id@#{PRISM_HOST}"
+      say_command.client_jid.should == "client-jid"
     end
 
     it "should not execute next command until the previous is completed" do

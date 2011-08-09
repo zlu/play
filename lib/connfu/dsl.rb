@@ -177,6 +177,8 @@ module Connfu
                 hangup unless finished?
               end
             when Connfu::Event::Ringing
+              @client_jid = event.presence_to
+              @call_jid = event.presence_from
               run_any_call_behaviour_for(:ringing)
             when Connfu::Event::Answered
               run_any_call_behaviour_for(:answer)
