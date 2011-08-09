@@ -1,22 +1,13 @@
 require "spec_helper"
 
-describe "dialing a number" do
-  class Dialler
+describe "Dialing" do
+  class Dialer
     include Connfu::Dsl
-
-    class << self
-      def do_something(call_id=nil)
-        @did_something = true
-        @call_id = call_id
-      end
-      attr_reader :did_something, :call_id
-
-      def execute
-        dial :to => "recipient", :from => "caller" do |call|
-          call.on_start { Dialler.do_something(call_id) }
-        end
-      end
-    end
+    class << self; attr_accessor :stash; end
+    def start_happened;   end
+    def ringing_happened; end
+    def answer_happened;  end
+    def hangup_happened;  end
   end
 
   before do
@@ -24,27 +15,167 @@ describe "dialing a number" do
   end
 
   it "should send a dial command" do
-    Dialler.execute
+    Dialer.dial :to => "recipient", :from => "caller" do |call|
+    end
     Connfu.connection.commands.last.should == Connfu::Commands::Dial.new(:to => "recipient", :from => "caller", :client_jid => Connfu.connection.jid.to_s, :rayo_host => Connfu.connection.jid.domain)
   end
 
-  it "should not execute on_start block before command result is received" do
-    Dialler.execute
-    Dialler.should_not_receive(:do_something)
+  it "should not run the start behaviour before the call has begun" do
+    Dialer.any_instance.should_not_receive(:start_happened)
+
+    Dialer.dial :to => "to", :from => "from" do |c|
+      c.on_start { start_happened }
+    end
   end
 
-  it "should execute on_start block after command result is received" do
-    Dialler.execute
-    incoming :outgoing_call_result_iq, "anything", Connfu.connection.commands.last.id
-    Dialler.did_something.should be_true
+  it "should run the start behaviour when the call has begun" do
+    Dialer.any_instance.should_receive(:start_happened)
+
+    Dialer.dial :to => "to", :from => "from" do |c|
+      c.on_start { start_happened }
+    end
+
+    incoming :outgoing_call_result_iq, "call-id", Connfu.connection.commands.last.id
+  end
+
+  it 'should not run the ringing behaviour before the call starts ringing' do
+    Dialer.any_instance.should_not_receive(:ringing_happened)
+
+    Dialer.dial :to => "to", :from => "from" do |c|
+      c.on_ringing { ringing_happened }
+    end
+
+    incoming :outgoing_call_result_iq, "call-id", Connfu.connection.commands.last.id
+  end
+
+  it 'should run the ringing behaviour when the call starts ringing' do
+    Dialer.any_instance.should_receive(:ringing_happened)
+
+    Dialer.dial :to => "to", :from => "from" do |c|
+      c.on_ringing { ringing_happened }
+    end
+
+    incoming :outgoing_call_result_iq, "call-id", Connfu.connection.commands.last.id
+    incoming :outgoing_call_ringing_presence, "call-id"
+  end
+
+  it 'should not run the answer behaviour before the call is answered' do
+    Dialer.any_instance.should_not_receive(:answer_happened)
+
+    Dialer.dial :to => "to", :from => "from" do |c|
+      c.on_answer { answer_happened }
+    end
+
+    incoming :outgoing_call_result_iq, "call-id", Connfu.connection.commands.last.id
+    incoming :outgoing_call_ringing_presence, "call-id"
+  end
+
+  it 'should run the answer behaviour when the call is answered' do
+    Dialer.any_instance.should_receive(:answer_happened)
+
+    Dialer.dial :to => "to", :from => "from" do |c|
+      c.on_answer { answer_happened }
+    end
+
+    incoming :outgoing_call_result_iq, "call-id", Connfu.connection.commands.last.id
+    incoming :outgoing_call_ringing_presence, "call-id"
+    incoming :outgoing_call_answered_presence, "call-id"
+  end
+
+  it 'should not run the hangup behaviour before the call is hung up' do
+    Dialer.any_instance.should_not_receive(:hangup_happened)
+
+    Dialer.dial :to => "to", :from => "from" do |c|
+      c.on_hangup { hangup_happened }
+    end
+
+    incoming :outgoing_call_result_iq, "call-id", Connfu.connection.commands.last.id
+    incoming :outgoing_call_ringing_presence, "call-id"
+    incoming :outgoing_call_answered_presence, "call-id"
+  end
+
+  it 'should run the hangup behaviour when the call is hung up' do
+    Dialer.any_instance.should_receive(:hangup_happened)
+
+    Dialer.dial :to => "to", :from => "from" do |c|
+      c.on_hangup { hangup_happened }
+    end
+
+    incoming :outgoing_call_result_iq, "call-id", Connfu.connection.commands.last.id
+    incoming :outgoing_call_ringing_presence, "call-id"
+    incoming :outgoing_call_answered_presence, "call-id"
+    incoming :hangup_presence, "call-id"
+  end
+
+  it 'should run all behaviours that are defined' do
+    Dialer.any_instance.should_receive(:start_happened)
+    Dialer.any_instance.should_receive(:ringing_happened)
+    Dialer.any_instance.should_receive(:answer_happened)
+    Dialer.any_instance.should_receive(:hangup_happened)
+
+    Dialer.dial :to => "to", :from => "from" do |c|
+      c.on_start   { start_happened }
+      c.on_ringing { ringing_happened }
+      c.on_answer  { answer_happened }
+      c.on_hangup  { hangup_happened }
+    end
+
+    incoming :outgoing_call_result_iq, "call-id", Connfu.connection.commands.last.id
+    incoming :outgoing_call_ringing_presence, "call-id"
+    incoming :outgoing_call_answered_presence, "call-id"
+    incoming :hangup_presence, "call-id"
   end
 
   it "should make the call id available when the on_start block is triggered" do
-    Dialler.execute
+    Dialer.dial :to => "to", :from => "from" do |c|
+      c.on_start { Dialer.stash = call_id }
+    end
+
     incoming :outgoing_call_result_iq, "call-id", Connfu.connection.commands.last.id
-    Dialler.call_id.should == "call-id"
+
+    Dialer.stash.should == "call-id"
   end
 
+  context "behaviour blocks" do
+    before do
+      Dialer.dial :to => "to", :from => "from" do |c|
+        c.on_answer do
+          say "hello"
+          say "is it me you're looking for?"
+        end
+      end
+    end
+
+    it "should allow running commands" do
+      incoming :outgoing_call_result_iq, "call-id", Connfu.connection.commands.last.id
+      incoming :outgoing_call_ringing_presence, "call-id"
+      incoming :outgoing_call_answered_presence, "call-id"
+
+      Connfu.connection.commands.last.should be_instance_of Connfu::Commands::Say
+      Connfu.connection.commands.last.text.should == "hello"
+    end
+
+    it "should not execute next command until the previous is completed" do
+      incoming :outgoing_call_result_iq, "call-id", Connfu.connection.commands.last.id
+      incoming :outgoing_call_ringing_presence, "call-id"
+      incoming :outgoing_call_answered_presence, "call-id"
+      incoming :result_iq, "call-id"
+
+      Connfu.connection.commands.last.should be_instance_of Connfu::Commands::Say
+      Connfu.connection.commands.last.text.should == "hello"
+    end
+
+    it "should continue executing next command when the previous has completed" do
+      incoming :outgoing_call_result_iq, "call-id", Connfu.connection.commands.last.id
+      incoming :outgoing_call_ringing_presence, "call-id"
+      incoming :outgoing_call_answered_presence, "call-id"
+      incoming :result_iq, "call-id"
+      incoming :say_complete_success, "call-id"
+
+      Connfu.connection.commands.last.should be_instance_of Connfu::Commands::Say
+      Connfu.connection.commands.last.text.should == "is it me you're looking for?"
+    end
+  end
 end
 
 describe "dialing with instance-specific call behaviour" do
