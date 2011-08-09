@@ -46,3 +46,34 @@ describe "dialing a number" do
   end
 
 end
+
+describe "dialing with instance-specific call behaviour" do
+  class DiallerWithInstanceSpecificBehaviour
+    include Connfu::Dsl
+
+    class << self
+      def execute(instance_specific_argument)
+        dial :to => "recipient", :from => "caller" do |call|
+          call.on_answer { say instance_specific_argument }
+        end
+      end
+    end
+  end
+
+  before do
+    setup_connfu(handler_class = nil)
+  end
+
+  it "should retain the specific behaviour for each dial statement" do
+    DiallerWithInstanceSpecificBehaviour.execute "first behaviour"
+    first_dial_command_id = Connfu.connection.commands.last.id
+    DiallerWithInstanceSpecificBehaviour.execute "second behaviour"
+
+    incoming :outgoing_call_result_iq, "call-1", first_dial_command_id
+    incoming :outgoing_call_ringing_presence, "call-1"
+    incoming :outgoing_call_answered_presence, "call-1"
+
+    Connfu.connection.commands.last.should be_instance_of Connfu::Commands::Say
+    Connfu.connection.commands.last.text.should == "first behaviour"
+  end
+end

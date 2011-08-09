@@ -7,6 +7,7 @@ module Connfu
       base.extend Connfu::Dsl::ClassMethods
       base.class_eval do
         attr_reader :call_jid, :client_jid, :call_id
+        attr_accessor :call_behaviour
       end
     end
 
@@ -49,10 +50,9 @@ module Connfu
 
       def dial(options={})
         if block_given?
-          call_behaviour = CallBehaviour.new
-          yield call_behaviour
-          define_method(:call_behaviour) { call_behaviour }
           instance = new({})
+          instance.call_behaviour = CallBehaviour.new
+          yield instance.call_behaviour
           Connfu.event_processor.handlers << instance
           instance.send_command_without_waiting Connfu::Commands::Dial.new({
             :to => options[:to],
@@ -156,7 +156,7 @@ module Connfu
       end
 
       def run_any_call_behaviour_for(event)
-        if respond_to?(:call_behaviour) && behaviour = call_behaviour.send("on_#{event}")
+        if call_behaviour && behaviour = call_behaviour.send("on_#{event}")
           start { instance_eval(&behaviour) }
         end
       end
