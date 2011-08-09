@@ -14,6 +14,40 @@ describe Connfu::Dsl do
     DslTest.new(:call_jid => "call-jid", :client_jid => "client-jid", :call_id => "call-id")
   }
 
+  it 'should not allow the call JID to be modified' do
+    subject.call_jid = "other-call-jid"
+    subject.call_jid.should == "call-jid"
+  end
+
+  it 'should not allow the client JID to be modified' do
+    subject.client_jid = "other-client-jid"
+    subject.client_jid.should == "client-jid"
+  end
+
+  it 'should not allow the call ID to be modified' do
+    subject.call_id = "other-call-id"
+    subject.call_id.should == "call-id"
+  end
+
+  context 'where no jids or call id were provided' do
+    subject { DslTest.new({}) }
+
+    it 'should allow the call JID to be set' do
+      subject.call_jid = "call-jid"
+      subject.call_jid.should == "call-jid"
+    end
+
+    it 'should allow the client JID to be set' do
+      subject.client_jid = "client-jid"
+      subject.client_jid.should == "client-jid"
+    end
+
+    it 'should allow the call ID to be set' do
+      subject.call_id = "call-id"
+      subject.call_id.should == "call-id"
+    end
+  end
+
   describe 'handle_event' do
     it 'should log unhandled event for debugging purposes' do
       unrecognised_event = Class.new(Connfu::Event::Presence).new

@@ -165,7 +165,7 @@ module Connfu
         logger.debug "Handling event: #{event.inspect}"
 
         if expected_dial_result?(event)
-          @call_id = event.ref_id
+          self.call_id = event.ref_id
           run_any_call_behaviour_for(:start)
         elsif waiting_for?(event)
           continue(event)
@@ -177,8 +177,8 @@ module Connfu
                 hangup unless finished?
               end
             when Connfu::Event::Ringing
-              @client_jid = event.presence_to
-              @call_jid = event.presence_from
+              self.client_jid = event.presence_to
+              self.call_jid = event.presence_from
               run_any_call_behaviour_for(:ringing)
             when Connfu::Event::Answered
               run_any_call_behaviour_for(:answer)
@@ -262,9 +262,21 @@ module Connfu
     end
 
     def initialize(params)
-      @call_jid = params[:call_jid]
-      @client_jid = params[:client_jid]
-      @call_id = params[:call_id]
+      self.call_jid = params[:call_jid]
+      self.client_jid = params[:client_jid]
+      self.call_id = params[:call_id]
+    end
+
+    def call_jid=(jid)
+      @call_jid ||= jid
+    end
+
+    def client_jid=(jid)
+      @client_jid ||= jid
+    end
+
+    def call_id=(id)
+      @call_id ||= id
     end
   end
 end
