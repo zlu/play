@@ -214,6 +214,12 @@ def stop_presence(call_id="a27d73c5-6f5c-4a41-bfb9-6ea21b198602", id="23399310-4
   </presence>}
 end
 
+def outgoing_call_result_iq(call_id="abc123", xmpp_id="blather_001")
+  %{<iq type="result" id="#{xmpp_id}" from="#{PRISM_HOST}" to="#{PRISM_JID}/voxeo">
+    <ref xmlns="urn:xmpp:rayo:1" id="#{call_id}"/>
+  </iq>}
+end
+
 def outgoing_call_ringing_presence(call_id="ebe45dbf-2a8b-4f1c-9aa0-1f1b39d1e821")
   %{<presence from="#{call_id}@#{PRISM_HOST}" to="#{PRISM_JID}/voxeo">
     <ringing xmlns="#{rayo('1')}"/>

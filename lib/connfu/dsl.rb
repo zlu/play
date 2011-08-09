@@ -11,6 +11,11 @@ module Connfu
     end
 
     class CallBehaviour
+      def on_start(&block)
+        @on_start = block if block_given?
+        @on_start
+      end
+
       def on_ringing(&block)
         @on_ringing = block if block_given?
         @on_ringing
@@ -43,7 +48,21 @@ module Connfu
       end
 
       def dial(options={})
-        Queue.enqueue(Jobs::Dial, options)
+        if block_given?
+          call_behaviour = CallBehaviour.new
+          yield call_behaviour
+          define_method(:call_behaviour) { call_behaviour }
+          instance = new({})
+          Connfu.event_processor.handlers << instance
+          instance.send_command_without_waiting Connfu::Commands::Dial.new({
+            :to => options[:to],
+            :from => options[:from],
+            :client_jid => Connfu.connection.jid.to_s,
+            :rayo_host => Connfu.connection.jid.domain
+          })
+        else
+          Queue.enqueue(Jobs::Dial, options)
+        end
       end
     end
 
@@ -145,7 +164,10 @@ module Connfu
       def handle_event(event)
         logger.debug "Handling event: #{event.inspect}"
 
-        if waiting_for?(event)
+        if expected_dial_result?(event)
+          @call_id = event.ref_id
+          run_any_call_behaviour_for(:start)
+        elsif waiting_for?(event)
           continue(event)
         else
           case event
@@ -171,16 +193,28 @@ module Connfu
         event_matches_call_id?(event) || event_matches_last_command_id?(event)
       end
 
+      def expected_dial_result?(event)
+        event.is_a?(Connfu::Event::Result) && waiting_for_dial_result?
+      end
+
+      def waiting_for_dial_result?
+        @call_id.nil?
+      end
+
       def waiting_for?(event)
         can_handle_event?(event) && @waiting_for && @waiting_for.detect do |e|
           e === event
         end
       end
 
-      def send_command(command)
-        return if @finished
+      def send_command_without_waiting(command)
         @last_command_id = Connfu.connection.send_command command
         logger.debug "Sent command: #{command}"
+      end
+
+      def send_command(command)
+        return if @finished
+        send_command_without_waiting command
         result = wait_for Connfu::Event::Result, Connfu::Event::Error
         logger.debug "Result from command #{result}"
         if result.is_a?(Connfu::Event::Error)
