@@ -81,6 +81,7 @@ class TestConnection
 
   def send_command(command)
     @commands << command
+    command.id
   end
 
   def jid

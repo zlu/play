@@ -12,6 +12,10 @@ module Connfu
         other.kind_of?(self.class) && other.params == @params
       end
 
+      def id
+        to_iq.attributes['id'].to_s
+      end
+
       def call_jid
         @params[:call_jid]
       end
@@ -39,7 +43,7 @@ module Connfu
       end
 
       def build_iq(attributes = {}, &block)
-        Connfu::Rayo::IqBuilder.build_iq(recipient_jid, client_jid, command, attributes, &block)
+        @iq ||= Connfu::Rayo::IqBuilder.build_iq(recipient_jid, client_jid, command, attributes, &block)
       end
     end
   end
