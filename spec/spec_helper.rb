@@ -32,7 +32,7 @@ Connfu.logger = Logger.new(StringIO.new)
 Connfu.logger.level = Logger::WARN
 
 class MyTestClass
-  include Connfu
+  include Connfu::Dsl
 end
 
 PRISM_USER = "usera"
@@ -77,6 +77,7 @@ class TestConnection
 
   def initialize
     @commands = []
+    @handlers = {}
   end
 
   def send_command(command)
@@ -86,6 +87,16 @@ class TestConnection
 
   def jid
     Blather::JID.new('zlu', 'openvoice.org', '1')
+  end
+
+  def register_handler(type, &block)
+    @handlers[type] ||= []
+    @handlers[type] << block
+  end
+
+  def run
+    @handlers[:ready].each { |h| h.call }
+    EM.stop # break out of the loop
   end
 end
 

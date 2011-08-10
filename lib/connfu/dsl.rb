@@ -34,8 +34,14 @@ module Connfu
     end
 
     module ClassMethods
+      def on_ready
+        instance_eval(&@ready_block) if @ready_block
+      end
+
       def on(context, &block)
         case context
+          when :ready
+            @ready_block = block
           when :offer
             define_method(:run, &block)
           when :outgoing_call
