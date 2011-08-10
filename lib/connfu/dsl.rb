@@ -60,12 +60,15 @@ module Connfu
           instance.call_behaviour = CallBehaviour.new
           yield instance.call_behaviour
           Connfu.event_processor.handlers << instance
-          instance.send_command_without_waiting Connfu::Commands::Dial.new({
+          options = {
             :to => options[:to],
             :from => options[:from],
+            :headers => options[:headers],
             :client_jid => Connfu.connection.jid.to_s,
             :rayo_host => Connfu.connection.jid.domain
-          })
+          }
+          options.delete(:headers) if options[:headers].nil?
+          instance.send_command_without_waiting Connfu::Commands::Dial.new(options)
         else
           Queue.enqueue(Jobs::Dial, options)
         end
