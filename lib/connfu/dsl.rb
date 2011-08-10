@@ -170,6 +170,10 @@ module Connfu
         end
       end
 
+      def wait_because_of_tropo_bug_133
+        Connfu.connection.wait_because_of_tropo_bug_133
+      end
+
       def handle_event(event)
         logger.debug "Handling event: #{event.inspect}"
 
@@ -190,6 +194,7 @@ module Connfu
               self.call_jid = event.presence_from
               run_any_call_behaviour_for(:ringing)
             when Connfu::Event::Answered
+              wait_because_of_tropo_bug_133
               run_any_call_behaviour_for(:answer)
             when Connfu::Event::Hangup
               run_any_call_behaviour_for(:hangup)

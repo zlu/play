@@ -98,6 +98,10 @@ class TestConnection
     @handlers[:ready].each { |h| h.call }
     EM.stop # break out of the loop
   end
+
+  def wait_because_of_tropo_bug_133
+    # no-op when testing
+  end
 end
 
 def result_iq(call_id='4a3fe31a-0c2a-4a9a-ae98-f5b8afb55708', id='blather0008')

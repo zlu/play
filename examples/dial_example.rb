@@ -11,8 +11,6 @@ Connfu.start do
       end
       c.on_answer do
         update_status "The phone was answered!"
-
-        sleep 2 # avoid known prism/tropo bug
         say "Though I am but a robot, my love for you is real."
         hangup
       end

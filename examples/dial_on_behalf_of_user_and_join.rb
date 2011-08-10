@@ -22,7 +22,6 @@ Connfu.start do
           :dial_from => "sip:usera@127.0.0.1",
           :call_id => call_id
         }
-        sleep 1
         result = send_command Connfu::Commands::NestedJoin.new(command_options)
         observe_events_for(result.ref_id)
         puts "waiting for hangup"

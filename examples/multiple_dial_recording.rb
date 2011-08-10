@@ -7,7 +7,6 @@ Connfu.start do
   def self.do_dial(options)
     dial(options) do |c|
       c.on_answer do
-        sleep 2
         record_for(5)
       end
     end
