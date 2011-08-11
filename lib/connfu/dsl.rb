@@ -7,7 +7,7 @@ module Connfu
       base.extend Connfu::Dsl::ClassMethods
       base.class_eval do
         attr_reader :call_jid, :client_jid, :call_id
-        attr_accessor :call_behaviour
+        attr_accessor :call_behaviour, :last_event_call_id
       end
     end
 
@@ -185,7 +185,7 @@ module Connfu
 
       def handle_event(event)
         logger.debug "Handling event: %p" % event
-
+        self.last_event_call_id = event.call_id
         if expected_dial_result?(event)
           self.call_id = event.ref_id
           run_any_call_behaviour_for(:start)

@@ -60,6 +60,12 @@ describe Connfu::Dsl do
       subject.observe_events_for("another-call-id")
       subject.can_handle_event?(event_for_another_call).should be_true
     end
+    
+    it "should store the call id of the event that has fired" do
+      event = Connfu::Event::Result.new(:call_id => 'call-id')
+      subject.handle_event(event)
+      subject.last_event_call_id.should == 'call-id'
+    end
   end
 
   describe 'on' do
