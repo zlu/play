@@ -206,6 +206,12 @@ def joined_presence(call_id="9d27a2d3-9134-48ef-957e-5f5e72686d79", new_call_id=
   </presence>}
 end
 
+def unjoined_presence(call_id='8c27e8c6-76c1-4cc6-a818-18075f07a511', other_call_id='56258fa4-db93-46a6-a507-0a22313e709a')
+  %{<presence from="#{call_id}@#{PRISM_HOST}" to="#{PRISM_JID}/voxeo">
+    <unjoined xmlns="urn:xmpp:rayo:1" call-id="#{other_call_id}"/>
+  </presence>}
+end
+
 def recording_result_iq(call_id="a0565638-90f8-416e-b26f-636f1aa684d0", id="f3c1b8c4-bb4f-4f7c-a063-87ee9bac0980")
   %{<iq type="result" id="blather000a" from="#{call_id}@#{PRISM_HOST}" to="#{PRISM_JID}/voxeo">
     <ref xmlns="#{rayo('1')}" id="#{id}"/>
