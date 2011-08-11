@@ -109,6 +109,19 @@ module Connfu
         @finished = true
       end
 
+      def dial(options)
+        options = {
+          :to => options[:to],
+          :from => options[:from],
+          :headers => options[:headers],
+          :client_jid => Connfu.connection.jid.to_s,
+          :rayo_host => Connfu.connection.jid.domain
+        }
+        options.delete(:headers) if options[:headers].nil?
+        result = send_command Connfu::Commands::Dial.new(options)
+        observe_events_for(result.ref_id)
+      end
+
       def redirect(redirect_to)
         send_command Connfu::Commands::Redirect.new(:redirect_to => redirect_to, :call_jid => call_jid, :client_jid => client_jid)
       end

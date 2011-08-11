@@ -8,12 +8,7 @@ Connfu.start do
     answer
     say 'please wait'
 
-    result = send_command Connfu::Commands::Dial.new(
-      :to => "sip:#{DIAL_TO}",
-      :from => call.to[:address],
-      :client_jid => Connfu.connection.jid.to_s,
-      :rayo_host => Connfu.connection.jid.domain)
-    observe_events_for(result.ref_id)
+    dial :to => "sip:#{DIAL_TO}", :from => call.to[:address]
 
     wait_for Connfu::Event::Answered
 
