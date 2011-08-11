@@ -185,16 +185,6 @@ module Connfu
       @observed_call_ids ||= []
     end
 
-    def send_start_recording(options = {})
-      command_options = { :call_jid => call_jid, :client_jid => client_jid }
-      command_options[:max_length] = options[:max_length] * 1000 if options[:max_length]
-      command_options[:beep] = options[:beep] if options.has_key?(:beep)
-      command_options[:format] = options[:format] if options.has_key?(:format)
-      command_options[:codec] = options[:codec] if options.has_key?(:codec)
-      result = send_command Connfu::Commands::Recording::Start.new(command_options)
-      @ref_id = result.ref_id
-    end
-
     def wait_for(*events)
       @waiting_for = events
       wait
