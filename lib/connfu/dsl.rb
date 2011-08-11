@@ -1,7 +1,12 @@
 module Connfu
   module Dsl
+    autoload :Methods, "connfu/dsl/methods"
+    autoload :Recording, "connfu/dsl/recording"
+
     def self.included(base)
       base.send(:include, Connfu::Continuation)
+      base.send(:include, Connfu::Dsl::Methods)
+      base.send(:include, Connfu::Dsl::Recording)
       base.send(:include, Connfu::Logging)
       base.extend Connfu::Dsl::ClassMethods
       base.class_eval do
@@ -88,99 +93,6 @@ module Connfu
 
     def finished?
       @finished == true
-    end
-
-    def say(text)
-      send_command Connfu::Commands::Say.new(:text => text, :call_jid => call_jid, :client_jid => client_jid)
-      wait_for Connfu::Event::SayComplete
-    end
-
-    def ask(options)
-      send_command Connfu::Commands::Ask.new(:prompt => options[:prompt], :digits => options[:digits], :client_jid => client_jid, :call_jid => call_jid)
-      ask_complete = wait_for Connfu::Event::AskComplete
-      ask_complete.captured_input
-    end
-
-    def answer
-      send_command Connfu::Commands::Answer.new(:call_jid => call_jid, :client_jid => client_jid)
-    end
-
-    def reject
-      send_command Connfu::Commands::Reject.new(:call_jid => call_jid, :client_jid => client_jid)
-    end
-
-    def hangup(jid=call_jid)
-      send_command Connfu::Commands::Hangup.new(:call_jid => jid, :client_jid => client_jid)
-      wait_for Connfu::Event::Hangup
-      @finished = true
-    end
-
-    def dial(options)
-      options = {
-        :to => options[:to],
-        :from => options[:from],
-        :headers => options[:headers],
-        :client_jid => Connfu.connection.jid.to_s,
-        :rayo_host => Connfu.connection.jid.domain
-      }
-      options.delete(:headers) if options[:headers].nil?
-      result = send_command Connfu::Commands::Dial.new(options)
-      observe_events_for(result.ref_id)
-    end
-
-    def redirect(redirect_to)
-      send_command Connfu::Commands::Redirect.new(:redirect_to => redirect_to, :call_jid => call_jid, :client_jid => client_jid)
-    end
-
-    def transfer(*transfer_to)
-      options = transfer_to.last.is_a?(Hash) ? transfer_to.pop : {}
-      if options.delete(:mode) == :round_robin
-        result = nil
-        transfer_to.each do |sip_address|
-          result = transfer sip_address, options
-          break if result.answered?
-        end
-        return result
-      else
-        command_options = {:transfer_to => transfer_to, :call_jid => call_jid, :client_jid => client_jid}
-        command_options[:timeout] = options[:timeout] * 1000 if options[:timeout]
-        send_command Connfu::Commands::Transfer.new(command_options)
-        transfer_event = wait_for Connfu::Event::TransferEvent
-        transfer_event.state
-      end
-    end
-
-    def transfer_using_join(dial_from, dial_to)
-      command_options = {
-        :call_jid => call_jid,
-        :client_jid => client_jid,
-        :dial_to => dial_to,
-        :dial_from => dial_from,
-        :call_id => call_id
-      }
-      send_command Connfu::Commands::NestedJoin.new(command_options)
-      wait_for Connfu::Event::Hangup
-      @finished = true
-    end
-
-    def recordings
-      @recordings ||= []
-    end
-
-    def start_recording(options = {})
-      send_start_recording(options)
-    end
-
-    def record_for(max_length, options = {})
-      send_start_recording(options.merge(:max_length => max_length))
-      event = wait_for(Connfu::Event::RecordingStopComplete)
-      recordings << event.uri
-    end
-
-    def stop_recording
-      send_command Connfu::Commands::Recording::Stop.new(:call_jid => call_jid, :client_jid => client_jid, :ref_id => @ref_id)
-      event = wait_for(Connfu::Event::RecordingStopComplete)
-      recordings << event.uri
     end
 
     def run_any_call_behaviour_for(event_name)
