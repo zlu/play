@@ -177,8 +177,8 @@ module Connfu
         recordings << event.uri
       end
 
-      def run_any_call_behaviour_for(event)
-        if call_behaviour && behaviour = call_behaviour.send("on_#{event}")
+      def run_any_call_behaviour_for(event_name)
+        if call_behaviour && behaviour = call_behaviour.send("on_#{event_name}")
           start { instance_eval(&behaviour) }
         end
       end
