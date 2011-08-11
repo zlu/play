@@ -170,10 +170,6 @@ module Connfu
         end
       end
 
-      def wait_because_of_tropo_bug_133
-        Connfu.connection.wait_because_of_tropo_bug_133
-      end
-
       def handle_event(event)
         logger.debug "Handling event: #{event.inspect}"
 
@@ -209,20 +205,6 @@ module Connfu
         event_matches_call_id?(event) || event_matches_last_command_id?(event)
       end
 
-      def expected_dial_result?(event)
-        event.is_a?(Connfu::Event::Result) && waiting_for_dial_result?
-      end
-
-      def waiting_for_dial_result?
-        @call_id.nil?
-      end
-
-      def waiting_for?(event)
-        can_handle_event?(event) && @waiting_for && @waiting_for.detect do |e|
-          e === event
-        end
-      end
-
       def send_command_without_waiting(command)
         @last_command_id = Connfu.connection.send_command command
         logger.debug "Sent command: #{command}"
@@ -254,6 +236,20 @@ module Connfu
         event.respond_to?(:command_id) && @last_command_id == event.command_id
       end
 
+      def waiting_for?(event)
+        can_handle_event?(event) && @waiting_for && @waiting_for.detect do |e|
+          e === event
+        end
+      end
+
+      def expected_dial_result?(event)
+        event.is_a?(Connfu::Event::Result) && waiting_for_dial_result?
+      end
+
+      def waiting_for_dial_result?
+        @call_id.nil?
+      end
+
       def observed_call_ids
         @observed_call_ids ||= []
       end
@@ -273,6 +269,9 @@ module Connfu
         wait
       end
 
+      def wait_because_of_tropo_bug_133
+        Connfu.connection.wait_because_of_tropo_bug_133
+      end
     end
 
     def initialize(params)
