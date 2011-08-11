@@ -11,6 +11,9 @@ module Connfu
       end
     end
 
+    def on_offer(event=nil)
+    end
+
     class CallBehaviour
       def on_start(&block)
         @on_start = block if block_given?
@@ -43,7 +46,7 @@ module Connfu
           when :ready
             @ready_block = block
           when :offer
-            define_method(:run, &block)
+            define_method(:on_offer, &block)
           when :outgoing_call
             call_behaviour = CallBehaviour.new
             yield call_behaviour
@@ -76,9 +79,6 @@ module Connfu
     end
 
     module InstanceMethods
-
-      def run(*args)
-      end
 
       def finished?
         @finished == true
@@ -195,7 +195,7 @@ module Connfu
           case event
             when Connfu::Event::Offer
               start do
-                run event
+                on_offer event
                 hangup unless finished?
               end
             when Connfu::Event::Ringing
