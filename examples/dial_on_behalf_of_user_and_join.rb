@@ -23,7 +23,6 @@ Connfu.start do
           :call_id => call_id
         }
         result = send_command Connfu::Commands::NestedJoin.new(command_options)
-        observe_events_for(result.ref_id)
         puts "waiting for hangup"
         wait_for Connfu::Event::Hangup
       end
