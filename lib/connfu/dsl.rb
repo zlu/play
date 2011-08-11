@@ -47,10 +47,6 @@ module Connfu
             @ready_block = block
           when :offer
             define_method(:on_offer, &block)
-          when :outgoing_call
-            call_behaviour = CallBehaviour.new
-            yield call_behaviour
-            define_method(:call_behaviour) { call_behaviour }
           else
             raise "Unrecognised context: #{context}"
         end
@@ -58,23 +54,19 @@ module Connfu
       end
 
       def dial(options={})
-        if block_given?
-          instance = new({})
-          instance.call_behaviour = CallBehaviour.new
-          yield instance.call_behaviour
-          Connfu.event_processor.handlers << instance
-          options = {
-            :to => options[:to],
-            :from => options[:from],
-            :headers => options[:headers],
-            :client_jid => Connfu.connection.jid.to_s,
-            :rayo_host => Connfu.connection.jid.domain
-          }
-          options.delete(:headers) if options[:headers].nil?
-          instance.send_command_without_waiting Connfu::Commands::Dial.new(options)
-        else
-          Queue.enqueue(Jobs::Dial, options)
-        end
+        instance = new({})
+        instance.call_behaviour = CallBehaviour.new
+        yield instance.call_behaviour if block_given?
+        Connfu.event_processor.handlers << instance
+        options = {
+          :to => options[:to],
+          :from => options[:from],
+          :headers => options[:headers],
+          :client_jid => Connfu.connection.jid.to_s,
+          :rayo_host => Connfu.connection.jid.domain
+        }
+        options.delete(:headers) if options[:headers].nil?
+        instance.send_command_without_waiting Connfu::Commands::Dial.new(options)
       end
     end
 
