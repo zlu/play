@@ -15,9 +15,6 @@ module Connfu
       end
     end
 
-    def on_offer(event=nil)
-    end
-
     class CallBehaviour
       def on_start(&block)
         @on_start = block if block_given?
@@ -38,6 +35,9 @@ module Connfu
         @on_hangup = block if block_given?
         @on_hangup
       end
+    end
+
+    def on_offer(event=nil)
     end
 
     module ClassMethods
