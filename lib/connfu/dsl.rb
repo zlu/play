@@ -50,7 +50,6 @@ module Connfu
           else
             raise "Unrecognised context: #{context}"
         end
-
       end
 
       def dial(options={})
