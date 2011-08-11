@@ -171,7 +171,7 @@ module Connfu
       end
 
       def handle_event(event)
-        logger.debug "Handling event: #{event.inspect}"
+        logger.debug "Handling event: %p" % event
 
         if expected_dial_result?(event)
           self.call_id = event.ref_id
@@ -196,7 +196,7 @@ module Connfu
               run_any_call_behaviour_for(:hangup)
               @finished = true
             else
-              logger.warn "Unrecognized event: #{event}"
+              logger.warn "Unrecognized event: %p" % event
           end
         end
       end
@@ -207,14 +207,14 @@ module Connfu
 
       def send_command_without_waiting(command)
         @last_command_id = Connfu.connection.send_command command
-        logger.debug "Sent command: #{command}"
+        logger.debug "Sent command: %p" % command
       end
 
       def send_command(command)
         return if @finished
         send_command_without_waiting command
         result = wait_for Connfu::Event::Result, Connfu::Event::Error
-        logger.debug "Result from command #{result}"
+        logger.debug "Result from command: %p" % result
         if result.is_a?(Connfu::Event::Error)
           raise
         else
