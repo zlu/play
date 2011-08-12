@@ -6,11 +6,11 @@ module Connfu
       def command
         "dial"
       end
-      
+
       def dial_to
         @params[:dial_to]
       end
-      
+
       def dial_from
         @params[:dial_from]
       end

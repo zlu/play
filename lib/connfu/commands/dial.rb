@@ -6,7 +6,7 @@ module Connfu
       def headers
         @params[:headers] || {}
       end
-      
+
       def from
         @params[:from]
       end
