@@ -23,6 +23,9 @@ end
 describe "Dialing and answering a call" do
   
   it "should dial and answer the call" do
+    logfile = File.expand_path('../../../log/xmpp_test.log', __FILE__)
+    Connfu.io_log = Connfu::Logging::IOLogger.new(logfile)
+    
     Connfu.config.uri = ENV['PRISM_JID'] || 'jid://usera:1@127.0.0.1'
     thread = Thread.new { Connfu.start DialAndAnswer }
 
