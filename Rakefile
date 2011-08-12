@@ -8,17 +8,17 @@ task :default => [:unit, :functional, :integration]
 require 'rspec/core/rake_task'
 RSpec::Core::RakeTask.new(:unit) do |spec|
   spec.skip_bundler = true
-  spec.pattern = 'spec/connfu/*_spec.rb'
+  spec.pattern = 'spec/connfu/**/*_spec.rb'
   spec.rspec_opts = '--color'
 end
 RSpec::Core::RakeTask.new(:functional) do |spec|
   spec.skip_bundler = true
-  spec.pattern = 'spec/functional/*_spec.rb'
+  spec.pattern = 'spec/functional/**/*_spec.rb'
   spec.rspec_opts = '--color'
 end
 RSpec::Core::RakeTask.new(:integration) do |spec|
   spec.skip_bundler = true
-  spec.pattern = 'spec/integration/*_spec.rb'
+  spec.pattern = 'spec/integration/**/*_spec.rb'
   spec.rspec_opts = '--color'
 end
 
