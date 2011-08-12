@@ -23,7 +23,7 @@ end
 describe "Dialing and answering a call" do
   
   it "should dial and answer the call" do
-    Connfu.config.uri = 'jid://usera:1@127.0.0.1'
+    Connfu.config.uri = ENV['PRISM_JID'] || 'jid://usera:1@127.0.0.1'
     thread = Thread.new { Connfu.start DialAndAnswer }
 
     finish_at = Time.now + 10
