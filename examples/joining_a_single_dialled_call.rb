@@ -8,7 +8,7 @@ Connfu.start do
     answer
     say 'please wait'
 
-    dial :to => "sip:#{DIAL_TO}", :from => call.to[:address]
+    result = dial :to => "sip:#{DIAL_TO}", :from => call.to[:address]
 
     wait_for Connfu::Event::Answered
 
