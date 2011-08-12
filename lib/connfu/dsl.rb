@@ -2,11 +2,13 @@ module Connfu
   module Dsl
     autoload :Methods, "connfu/dsl/methods"
     autoload :Recording, "connfu/dsl/recording"
+    autoload :EventHandler, "connfu/dsl/event_handler"
 
     def self.included(base)
       base.send(:include, Connfu::Continuation)
       base.send(:include, Connfu::Dsl::Methods)
       base.send(:include, Connfu::Dsl::Recording)
+      base.send(:include, Connfu::Dsl::EventHandler)
       base.send(:include, Connfu::Logging)
       base.extend Connfu::Dsl::ClassMethods
       base.class_eval do
@@ -79,22 +81,6 @@ module Connfu
       self.call_id = params[:call_id]
     end
 
-    def call_jid=(jid)
-      @call_jid ||= jid
-    end
-
-    def client_jid=(jid)
-      @client_jid ||= jid
-    end
-
-    def call_id=(id)
-      @call_id ||= id
-    end
-
-    def finished?
-      @finished == true
-    end
-
     def run_any_call_behaviour_for(event_name)
       if call_behaviour && behaviour = call_behaviour.send("on_#{event_name}")
         start { instance_eval(&behaviour) }
@@ -132,10 +118,6 @@ module Connfu
       end
     end
 
-    def can_handle_event?(event)
-      event_matches_call_id?(event) || event_matches_last_command_id?(event)
-    end
-
     def send_command_without_waiting(command)
       @last_command_id = Connfu.connection.send_command command
       logger.debug "Sent command: %p" % command
@@ -153,23 +135,11 @@ module Connfu
       end
     end
 
-    def observe_events_for(call_id)
-      observed_call_ids << call_id
-    end
-
     def wait_because_of_tropo_bug_133
       Connfu.connection.wait_because_of_tropo_bug_133
     end
 
     private
-
-    def event_matches_call_id?(event)
-      event.call_id == call_id || observed_call_ids.include?(event.call_id)
-    end
-
-    def event_matches_last_command_id?(event)
-      event.respond_to?(:command_id) && @last_command_id == event.command_id
-    end
 
     def waiting_for?(event)
       can_handle_event?(event) && @waiting_for && @waiting_for.detect do |e|
@@ -183,10 +153,6 @@ module Connfu
 
     def waiting_for_dial_result?
       @call_id.nil?
-    end
-
-    def observed_call_ids
-      @observed_call_ids ||= []
     end
 
     def wait_for(*events)
