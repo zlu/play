@@ -9,9 +9,11 @@ module Connfu
     end
 
     def handle_event(event)
+      logger.debug "Incoming event: %p" % event
       if handler = handler_for(event)
+        logger.debug "Passing event to handler: %p" % handler
         handler.handle_event(event)
-      elsif event.is_a?(Connfu::Event::Offer) || event.is_a?(Connfu::Event::Ringing)
+      elsif event.is_a?(Connfu::Event::Offer)
         handler = build_handler(event)
         handlers << handler
         handler.handle_event(event)
@@ -31,6 +33,7 @@ module Connfu
 
     def handler_for(event)
       handlers.detect do |h|
+        logger.debug "asking %p" % h
         h.can_handle_event?(event)
       end
     end

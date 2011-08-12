@@ -4,10 +4,10 @@ describe "Dialing" do
   class Dialer
     include Connfu::Dsl
     class << self; attr_accessor :stash; end
-    def start_happened;   end
-    def ringing_happened; end
-    def answer_happened;  end
-    def hangup_happened;  end
+    def self.start_happened;   end
+    def self.ringing_happened; end
+    def self.answer_happened;  end
+    def self.hangup_happened;  end
   end
 
   before do
@@ -27,38 +27,38 @@ describe "Dialing" do
   end
 
   it "should not run the start behaviour before the call has begun" do
-    Dialer.any_instance.should_not_receive(:start_happened)
+    Dialer.should_not_receive(:start_happened)
 
     Dialer.dial :to => "to", :from => "from" do |c|
-      c.on_start { start_happened }
+      c.on_start { Dialer.start_happened }
     end
   end
 
   it "should run the start behaviour when the call has begun" do
-    Dialer.any_instance.should_receive(:start_happened)
+    Dialer.should_receive(:start_happened)
 
     Dialer.dial :to => "to", :from => "from" do |c|
-      c.on_start { start_happened }
+      c.on_start { Dialer.start_happened }
     end
 
     incoming :outgoing_call_result_iq, "call-id", Connfu.connection.commands.last.id
   end
 
   it 'should not run the ringing behaviour before the call starts ringing' do
-    Dialer.any_instance.should_not_receive(:ringing_happened)
+    Dialer.should_not_receive(:ringing_happened)
 
     Dialer.dial :to => "to", :from => "from" do |c|
-      c.on_ringing { ringing_happened }
+      c.on_ringing { Dialer.ringing_happened }
     end
 
     incoming :outgoing_call_result_iq, "call-id", Connfu.connection.commands.last.id
   end
 
   it 'should run the ringing behaviour when the call starts ringing' do
-    Dialer.any_instance.should_receive(:ringing_happened)
+    Dialer.should_receive(:ringing_happened)
 
     Dialer.dial :to => "to", :from => "from" do |c|
-      c.on_ringing { ringing_happened }
+      c.on_ringing { Dialer.ringing_happened }
     end
 
     incoming :outgoing_call_result_iq, "call-id", Connfu.connection.commands.last.id
@@ -66,10 +66,10 @@ describe "Dialing" do
   end
 
   it 'should not run the answer behaviour before the call is answered' do
-    Dialer.any_instance.should_not_receive(:answer_happened)
+    Dialer.should_not_receive(:answer_happened)
 
     Dialer.dial :to => "to", :from => "from" do |c|
-      c.on_answer { answer_happened }
+      c.on_answer { Dialer.answer_happened }
     end
 
     incoming :outgoing_call_result_iq, "call-id", Connfu.connection.commands.last.id
@@ -77,10 +77,10 @@ describe "Dialing" do
   end
 
   it 'should run the answer behaviour when the call is answered' do
-    Dialer.any_instance.should_receive(:answer_happened)
+    Dialer.should_receive(:answer_happened)
 
     Dialer.dial :to => "to", :from => "from" do |c|
-      c.on_answer { answer_happened }
+      c.on_answer { Dialer.answer_happened }
     end
 
     incoming :outgoing_call_result_iq, "call-id", Connfu.connection.commands.last.id
@@ -89,10 +89,10 @@ describe "Dialing" do
   end
 
   it 'should not run the hangup behaviour before the call is hung up' do
-    Dialer.any_instance.should_not_receive(:hangup_happened)
+    Dialer.should_not_receive(:hangup_happened)
 
     Dialer.dial :to => "to", :from => "from" do |c|
-      c.on_hangup { hangup_happened }
+      c.on_hangup { Dialer.hangup_happened }
     end
 
     incoming :outgoing_call_result_iq, "call-id", Connfu.connection.commands.last.id
@@ -101,10 +101,10 @@ describe "Dialing" do
   end
 
   it 'should run the hangup behaviour when the call is hung up' do
-    Dialer.any_instance.should_receive(:hangup_happened)
+    Dialer.should_receive(:hangup_happened)
 
     Dialer.dial :to => "to", :from => "from" do |c|
-      c.on_hangup { hangup_happened }
+      c.on_hangup { Dialer.hangup_happened }
     end
 
     incoming :outgoing_call_result_iq, "call-id", Connfu.connection.commands.last.id
@@ -114,16 +114,16 @@ describe "Dialing" do
   end
 
   it 'should run all behaviours that are defined' do
-    Dialer.any_instance.should_receive(:start_happened)
-    Dialer.any_instance.should_receive(:ringing_happened)
-    Dialer.any_instance.should_receive(:answer_happened)
-    Dialer.any_instance.should_receive(:hangup_happened)
+    Dialer.should_receive(:start_happened)
+    Dialer.should_receive(:ringing_happened)
+    Dialer.should_receive(:answer_happened)
+    Dialer.should_receive(:hangup_happened)
 
     Dialer.dial :to => "to", :from => "from" do |c|
-      c.on_start   { start_happened }
-      c.on_ringing { ringing_happened }
-      c.on_answer  { answer_happened }
-      c.on_hangup  { hangup_happened }
+      c.on_start   { Dialer.start_happened }
+      c.on_ringing { Dialer.ringing_happened }
+      c.on_answer  { Dialer.answer_happened }
+      c.on_hangup  { Dialer.hangup_happened }
     end
 
     incoming :outgoing_call_result_iq, "call-id", Connfu.connection.commands.last.id

@@ -1,6 +1,12 @@
 module Connfu
   module Dsl
     module EventHandler
+      def self.included(base)
+        base.class_eval do
+          attr_reader :call_jid, :client_jid, :call_id
+        end
+      end
+
       def call_jid=(jid)
         @call_jid ||= jid
       end
@@ -10,6 +16,7 @@ module Connfu
       end
 
       def call_id=(id)
+        logger.debug "#{self} setting call id to %p" % id
         @call_id ||= id
       end
 
@@ -17,16 +24,8 @@ module Connfu
         @finished == true
       end
 
-      def can_handle_event?(event)
-        event_matches_call_id?(event) || event_matches_last_command_id?(event)
-      end
-
       def observe_events_for(call_id)
         observed_call_ids << call_id
-      end
-
-      def handle_event(event)
-        # no-op
       end
 
       private
