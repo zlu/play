@@ -11,7 +11,7 @@ class DialAsJobExample
   end
 
   def self.perform(to, from)
-    connfu_user = "sip:usera@127.0.0.1"
+    connfu_user = "sip:#{Connfu.config.user}@#{Connfu.config.host}"
     dial :to => from, :from => connfu_user do |c|
       c.on_start   { puts "The call ID is: #{call_id}" }
       c.on_ringing { puts "... ring ring ..." }
