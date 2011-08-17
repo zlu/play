@@ -5,7 +5,6 @@ describe "transfer using join" do
   testing_dsl do
     on :offer do |call|
       transfer_using_join("dial-from", "dial-to")
-      $finished = finished?
     end
   end
 
@@ -33,7 +32,7 @@ describe "transfer using join" do
     incoming :joined_presence, @call_id, "a-new-call-id"
     incoming :joined_presence, "a-new-call-id", @call_id
 
-    $finished.should_not be_true
+    Connfu.should_not be_finished
   end
 
   it "should continue execution when hangup is received, but mark call as finished" do
@@ -43,6 +42,6 @@ describe "transfer using join" do
     incoming :joined_presence, "a-new-call-id", @call_id
     incoming :hangup_presence, @call_id
 
-    $finished.should be_true
+    Connfu.should be_finished
   end
 end
