@@ -60,6 +60,10 @@ module Connfu
       end
     end
 
+    def finished?
+      event_processor.handlers.all?(&:finished?)
+    end
+
     private
 
     def build_handler_class(&block)
