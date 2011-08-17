@@ -18,6 +18,7 @@ end
 
 possible_prism_locations = ['~/Applications/prism', '/Applications/prism', '/opt/voxeo/prism'].map { |p| File.expand_path(p) }
 prism_home = possible_prism_locations.find { |p| File.directory?(p) }
+tropo_build_path = "#{prism_home}/apps/tropo-build.txt"
 
 namespace :tropo do
   desc "Updates tropo to the latest version and restarts prism"
@@ -38,7 +39,7 @@ namespace :tropo do
     puts "* Updating tropo2"
     tropo_war = Dir["#{download_dir}/archive/tropo-war/target/tropo-*.war"][0]
     build_number = File.basename(tropo_war, ".war").split("_").last
-    File.open("#{prism_home}/apps/tropo-build.txt", "w") { |f| f.write build_number }
+    File.open(tropo_build_path, "w") { |f| f.write build_number }
     system "cd #{download_dir} && rm -rf #{prism_home}/apps/tropo2 && mv archive/tropo-war/target/tropo-*.war #{prism_home}/apps/tropo2.war"
 
     puts "* Cleaning up"
@@ -48,6 +49,15 @@ namespace :tropo do
     puts "* Restarting Prism server ..."
     Rake::Task["prism:restart"].invoke
     puts "* Prism server restarted."
+    Rake::Task["tropo:version"].invoke
+  end
+
+  desc "Reports the version of tropo based on the last time 'tropo:update' task was run"
+  task :version => "prism:exists" do
+    File.open(tropo_build_path) do |f|
+      tropo_build_number = f.read.sub(%r{^b}, '')
+      puts "Tropo build ##{tropo_build_number}"
+    end
   end
 end
 
