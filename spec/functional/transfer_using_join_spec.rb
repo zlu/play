@@ -17,7 +17,7 @@ describe "transfer using join" do
   it "should send a nested join when on incoming offer" do
     incoming :offer_presence, @call_jid, @client_jid
 
-    Connfu.connection.commands.last.should == Connfu::Commands::NestedJoin.new(
+    last_command.should == Connfu::Commands::NestedJoin.new(
       :dial_to => 'dial-to',
       :dial_from => 'dial-from',
       :call_jid => @call_jid,
