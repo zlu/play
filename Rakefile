@@ -39,7 +39,7 @@ namespace :tropo do
     tropo_war = Dir["#{download_dir}/archive/tropo-war/target/tropo-*.war"][0]
     build_number = File.basename(tropo_war, ".war").split("_").last
     File.open("#{prism_home}/apps/tropo-build.txt", "w") { |f| f.write build_number }
-    system "cd #{download_dir} && mv archive/tropo-war/target/tropo-*.war #{prism_home}/apps/tropo2.war"
+    system "cd #{download_dir} && rm -rf #{prism_home}/apps/tropo2 && mv archive/tropo-war/target/tropo-*.war #{prism_home}/apps/tropo2.war"
 
     puts "* Cleaning up"
     system "cd #{download_dir} && rm archive.zip"
