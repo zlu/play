@@ -243,17 +243,17 @@ describe Connfu::Rayo::Parser do
         @event.joined_call_id.should eq "other-call-id"
       end
     end
-    
+
     context "an unjoined presence" do
       before do
         @node = create_presence(unjoined_presence('call-id', 'other-call-id'))
         @event = Connfu::Rayo::Parser.parse_event_from(@node)
       end
-      
+
       it "should create an Unjoined event" do
         @event.should be_instance_of Connfu::Event::Unjoined
       end
-      
+
       it "should determine the call_id value of an Unjoined event" do
         @event.call_id.should eq "call-id"
       end

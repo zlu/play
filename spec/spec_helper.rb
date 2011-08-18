@@ -148,8 +148,8 @@ def offer_presence(call_jid="4a3fe31a-0c2a-4a9a-ae98-f5b8afb55708@#{PRISM_HOST}"
   </presence>"
 end
 
-def say_complete_success(call_id='7bc6c7d5-1428-421d-bb40-22f58cdcd2ec')
-  "<presence from='#{call_id}@#{PRISM_HOST}/a1b45d70-6df2-4460-b172-4bd077e8966d' to='#{PRISM_JID}/voxeo'>
+def say_complete_success(call_jid="7bc6c7d5-1428-421d-bb40-22f58cdcd2ec@#{PRISM_HOST}/a1b45d70-6df2-4460-b172-4bd077e8966d")
+  "<presence from='#{call_jid}' to='#{PRISM_JID}/voxeo'>
     <complete xmlns='#{rayo('ext:1')}'>
       <success xmlns='#{tropo('say:complete:1')}'/>
     </complete>

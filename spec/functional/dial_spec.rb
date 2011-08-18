@@ -229,7 +229,7 @@ describe "Dialing" do
       incoming :outgoing_call_ringing_presence, "call-id"
       incoming :outgoing_call_answered_presence, "call-id"
       incoming :result_iq, @call_jid
-      incoming :say_complete_success, "call-id"
+      incoming :say_complete_success, @call_jid
 
       last_command.should be_instance_of Connfu::Commands::Say
       last_command.text.should == "is it me you're looking for?"
