@@ -265,3 +265,11 @@ def hangup_presence(call_id="abc")
     </end>
   </presence>}
 end
+
+def reject_presence(call_id="abc")
+  %{<presence from="#{call_id}@#{PRISM_HOST}" to="#{PRISM_JID}/voxeo">
+    <end xmlns="urn:xmpp:rayo:1">
+      <reject/>
+    </end>
+  </presence>}
+end
