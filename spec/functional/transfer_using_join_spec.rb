@@ -29,8 +29,8 @@ describe "transfer using join" do
   it "should wait until a hangup is received" do
     incoming :offer_presence, @call_jid, @client_jid
     incoming :result_iq, @call_jid
-    incoming :joined_presence, @call_id, "a-new-call-id"
-    incoming :joined_presence, "a-new-call-id", @call_id
+    incoming :joined_presence, @call_jid, "a-new-call-id"
+    incoming :joined_presence, "a-new-call-id@#{PRISM_HOST}", @call_id
 
     Connfu.should_not be_finished
   end
@@ -38,8 +38,8 @@ describe "transfer using join" do
   it "should continue execution when hangup is received, but mark call as finished" do
     incoming :offer_presence, @call_jid, @client_jid
     incoming :result_iq, @call_jid
-    incoming :joined_presence, @call_id, "a-new-call-id"
-    incoming :joined_presence, "a-new-call-id", @call_id
+    incoming :joined_presence, @call_jid, "a-new-call-id"
+    incoming :joined_presence, "a-new-call-id@#{PRISM_HOST}", @call_id
     incoming :hangup_presence, @call_id
 
     Connfu.should be_finished

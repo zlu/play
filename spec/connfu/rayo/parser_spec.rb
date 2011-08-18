@@ -227,7 +227,7 @@ describe Connfu::Rayo::Parser do
 
     context "a joined presence" do
       before do
-        @node = create_presence(joined_presence("call-id", "other-call-id"))
+        @node = create_presence(joined_presence("call-id@#{PRISM_HOST}", "other-call-id"))
         @event = Connfu::Rayo::Parser.parse_event_from(@node)
       end
 
@@ -246,7 +246,7 @@ describe Connfu::Rayo::Parser do
 
     context "an unjoined presence" do
       before do
-        @node = create_presence(unjoined_presence('call-id', 'other-call-id'))
+        @node = create_presence(unjoined_presence("call-id@#{PRISM_HOST}", 'other-call-id'))
         @event = Connfu::Rayo::Parser.parse_event_from(@node)
       end
 
