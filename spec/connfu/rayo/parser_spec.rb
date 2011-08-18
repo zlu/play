@@ -293,6 +293,21 @@ describe Connfu::Rayo::Parser do
         @event.call_id.should eq 'call-id'
       end
     end
+
+    context "a component hangup" do
+      before do
+        node = create_presence(component_hangup_presence('call-id'))
+        @event = Connfu::Rayo::Parser.parse_event_from(node)
+      end
+
+      it "should create a Hangup event" do
+        @event.should be_instance_of Connfu::Event::Hangup
+      end
+
+      it "should determine the call_id" do
+        @event.call_id.should eq 'call-id'
+      end
+    end
   end
 
 end

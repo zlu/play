@@ -240,6 +240,14 @@ def stop_presence(call_id="a27d73c5-6f5c-4a41-bfb9-6ea21b198602", id="23399310-4
   </presence>}
 end
 
+def component_hangup_presence(call_id='call-id')
+  %{<presence from="#{call_id}@#{PRISM_HOST}/3b1d199c-39af-4256-9a49-97293a530ac6" to="#{PRISM_JID}/voxeo">
+    <complete xmlns="#{rayo('ext:1')}">
+      <hangup xmlns="#{rayo('ext:complete:1')}"/>
+    </complete>
+  </presence>}
+end
+
 def outgoing_call_result_iq(call_id="abc123", xmpp_id="blather_001")
   %{<iq type="result" id="#{xmpp_id}" from="#{PRISM_HOST}" to="#{PRISM_JID}/voxeo">
     <ref xmlns="urn:xmpp:rayo:1" id="#{call_id}"/>
