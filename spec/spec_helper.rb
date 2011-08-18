@@ -148,7 +148,7 @@ def offer_presence(call_jid="4a3fe31a-0c2a-4a9a-ae98-f5b8afb55708@#{PRISM_HOST}"
   </presence>"
 end
 
-def say_complete_success(call_jid="7bc6c7d5-1428-421d-bb40-22f58cdcd2ec@#{PRISM_HOST}/a1b45d70-6df2-4460-b172-4bd077e8966d")
+def say_success_presence(call_jid="7bc6c7d5-1428-421d-bb40-22f58cdcd2ec@#{PRISM_HOST}/a1b45d70-6df2-4460-b172-4bd077e8966d")
   "<presence from='#{call_jid}' to='#{PRISM_JID}/voxeo'>
     <complete xmlns='#{rayo('ext:1')}'>
       <success xmlns='#{tropo('say:complete:1')}'/>
@@ -156,7 +156,7 @@ def say_complete_success(call_jid="7bc6c7d5-1428-421d-bb40-22f58cdcd2ec@#{PRISM_
   </presence>"
 end
 
-def ask_complete_success(call_id="9f00061", catpured_input="1234")
+def ask_success_presence(call_id="9f00061", catpured_input="1234")
   "<presence to='16577@app.ozone.net/1' from='#{call_id}@call.ozone.net/fgh4590'>
     <complete xmlns='#{rayo('ext:1')}'>
       <success mode='speech' confidence='0.45' xmlns='#{tropo('ask:complete:1')}'>

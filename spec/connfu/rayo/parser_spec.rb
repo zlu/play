@@ -110,7 +110,7 @@ describe Connfu::Rayo::Parser do
 
     context "a say complete iq" do
       before do
-        @node = create_presence(say_complete_success)
+        @node = create_presence(say_success_presence)
         @event = Connfu::Rayo::Parser.parse_event_from(@node)
       end
 
@@ -125,7 +125,7 @@ describe Connfu::Rayo::Parser do
 
     context "an ask complete iq" do
       before do
-        @node = create_presence(ask_complete_success)
+        @node = create_presence(ask_success_presence)
         @event = Connfu::Rayo::Parser.parse_event_from(@node)
       end
 
