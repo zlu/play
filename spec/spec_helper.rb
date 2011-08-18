@@ -125,12 +125,12 @@ def error_iq(call_jid="4a3fe31a-0c2a-4a9a-ae98-f5b8afb55708@#{PRISM_HOST}", id='
   </iq>}
 end
 
-def offer_presence(from="4a3fe31a-0c2a-4a9a-ae98-f5b8afb55708@#{PRISM_HOST}", to="#{PRISM_JID}/voxeo", options={})
+def offer_presence(call_jid="4a3fe31a-0c2a-4a9a-ae98-f5b8afb55708@#{PRISM_HOST}", client_jid="#{PRISM_JID}/voxeo", options={})
   offer_options = {
     :from => "<sip:16508983130@#{PRISM_HOST}>;tag=34ccaa4d",
     :to => "<sip:#{PRISM_JID}:5060>"
   }.merge(options)
-  "<presence from='#{from}' to='#{to}'>
+  "<presence from='#{call_jid}' to='#{client_jid}'>
     <offer xmlns='#{rayo('1')}' to='sip:#{PRISM_JID}:5060' from='sip:16508983130@#{PRISM_HOST}'>
       <header name='Max-Forwards' value='70'/>
       <header name='Content-Length' value='422'/>
