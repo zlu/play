@@ -167,32 +167,32 @@ def ask_success_presence(call_jid="9f00061@call.ozone.net/fgh4590", catpured_inp
   </presence>"
 end
 
-def transfer_timeout_presence(call_id='9f00061')
-  %{<presence to='16577@app.ozone.net/1' from='#{call_id}@call.ozone.net/fgh4590'>
+def transfer_timeout_presence(call_jid="9f00061@call.ozone.net/fgh4590")
+  %{<presence to='16577@app.ozone.net/1' from='#{call_jid}'>
     <complete xmlns='#{rayo('ext:1')}'>
       <timeout xmlns='#{tropo('transfer:complete:1')}' />
     </complete>
   </presence>}
 end
 
-def transfer_success_presence(call_id='9f00061')
-  %{<presence to='16577@app.ozone.net/1' from='#{call_id}@call.ozone.net/fgh4590'>
+def transfer_success_presence(call_jid="9f00061@call.ozone.net/fgh4590")
+  %{<presence to='16577@app.ozone.net/1' from='#{call_jid}'>
     <complete xmlns='#{rayo('ext:1')}'>
       <success xmlns='#{tropo('transfer:complete:1')}' />
     </complete>
   </presence>}
 end
 
-def transfer_busy_presence(call_id="c82737e4-f70c-466d-b839-924f69be57bd")
-  %{<presence from="#{call_id}@#{PRISM_HOST}/7d858f27-e961-4aa2-ae9f-ecaffd4c841e" to="#{PRISM_JID}/voxeo">
+def transfer_busy_presence(call_jid="c82737e4-f70c-466d-b839-924f69be57bd@#{PRISM_HOST}/7d858f27-e961-4aa2-ae9f-ecaffd4c841e")
+  %{<presence from="#{call_jid}" to="#{PRISM_JID}/voxeo">
     <complete xmlns="#{rayo('ext:1')}">
       <busy xmlns="#{tropo('transfer:complete:1')}"/>
     </complete>
   </presence>}
 end
 
-def transfer_rejected_presence(call_id="c82737e4-f70c-466d-b839-924f69be57bd")
-  %{<presence from="#{call_id}@#{PRISM_HOST}/7d858f27-e961-4aa2-ae9f-ecaffd4c841e" to="#{PRISM_JID}/voxeo">
+def transfer_rejected_presence(call_jid="c82737e4-f70c-466d-b839-924f69be57bd@#{PRISM_HOST}/7d858f27-e961-4aa2-ae9f-ecaffd4c841e")
+  %{<presence from="#{call_jid}" to="#{PRISM_JID}/voxeo">
     <complete xmlns="#{rayo('ext:1')}">
       <reject xmlns="#{tropo('transfer:complete:1')}"/>
     </complete>
