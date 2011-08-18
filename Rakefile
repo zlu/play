@@ -52,11 +52,29 @@ namespace :tropo do
     Rake::Task["tropo:version"].invoke
   end
 
-  desc "Reports the version of tropo based on the last time 'tropo:update' task was run"
+  desc "Reports the version of Tropo running on local Prism server"
   task :version => "prism:exists" do
-    File.open(tropo_build_path) do |f|
-      tropo_build_number = f.read.sub(%r{^b}, '')
-      puts "Tropo build ##{tropo_build_number}"
+    require "open-uri"
+    require "json"
+
+    puts
+    begin
+      io = open("http://localhost:8080/tropo2/jmx/read/com.tropo:Type=Info")
+      attributes = JSON.parse(io.read)
+      puts "Tropo build info via JMX :-"
+      attributes['value'].each { |pair| puts "* %s: %s" % pair }
+    rescue
+      puts "No Tropo build info available via JMX."
+    end
+
+    puts
+    begin
+      File.open(tropo_build_path) do |f|
+        tropo_build_number = f.read.sub(%r{^b}, '')
+        puts "Last downloaded Tropo build: %s" % tropo_build_number
+      end
+    rescue
+      puts "No downloaded Tropo builds found."
     end
   end
 end
