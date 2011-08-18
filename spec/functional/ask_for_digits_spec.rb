@@ -29,7 +29,7 @@ describe "ask a caller for 4 digits" do
   it "should continue when ask was successful" do
     incoming :offer_presence, @call_jid, @client_jid
     incoming :result_iq, @call_jid
-    incoming :ask_success_presence, @call_id, "1234"
+    incoming :ask_success_presence, @call_jid, "1234"
 
     last_command.should == Connfu::Commands::Say.new(
       :text => 'you entered 1234', :call_jid => @call_jid, :client_jid => @client_jid

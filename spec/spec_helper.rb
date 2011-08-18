@@ -156,8 +156,8 @@ def say_success_presence(call_jid="7bc6c7d5-1428-421d-bb40-22f58cdcd2ec@#{PRISM_
   </presence>"
 end
 
-def ask_success_presence(call_id="9f00061", catpured_input="1234")
-  "<presence to='16577@app.ozone.net/1' from='#{call_id}@call.ozone.net/fgh4590'>
+def ask_success_presence(call_jid="9f00061@call.ozone.net/fgh4590", catpured_input="1234")
+  "<presence to='16577@app.ozone.net/1' from='#{call_jid}'>
     <complete xmlns='#{rayo('ext:1')}'>
       <success mode='speech' confidence='0.45' xmlns='#{tropo('ask:complete:1')}'>
         <interpretation>#{catpured_input}</interpretation>
