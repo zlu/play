@@ -199,6 +199,7 @@ describe "Dialing" do
           say "is it me you're looking for?"
         end
       end
+      @call_jid = "call-id@#{PRISM_HOST}"
     end
 
     it "should allow running commands" do
@@ -209,7 +210,7 @@ describe "Dialing" do
       say_command = last_command
       say_command.should be_instance_of Connfu::Commands::Say
       say_command.text.should == "hello"
-      say_command.call_jid.should == "call-id@#{PRISM_HOST}"
+      say_command.call_jid.should == @call_jid
       say_command.client_jid.should == "client-jid"
     end
 
@@ -217,7 +218,7 @@ describe "Dialing" do
       incoming :outgoing_call_result_iq, "call-id", last_command.id
       incoming :outgoing_call_ringing_presence, "call-id"
       incoming :outgoing_call_answered_presence, "call-id"
-      incoming :result_iq, "call-id"
+      incoming :result_iq, @call_jid
 
       last_command.should be_instance_of Connfu::Commands::Say
       last_command.text.should == "hello"
@@ -227,7 +228,7 @@ describe "Dialing" do
       incoming :outgoing_call_result_iq, "call-id", last_command.id
       incoming :outgoing_call_ringing_presence, "call-id"
       incoming :outgoing_call_answered_presence, "call-id"
-      incoming :result_iq, "call-id"
+      incoming :result_iq, @call_jid
       incoming :say_complete_success, "call-id"
 
       last_command.should be_instance_of Connfu::Commands::Say

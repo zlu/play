@@ -39,7 +39,7 @@ describe "Recording a call" do
 
       incoming :offer_presence, @call_jid, @client_jid
       incoming :recording_result_iq, @call_id, @recording_ref_id
-      incoming :result_iq, @call_id
+      incoming :result_iq, @call_jid
       incoming :recording_stop_presence, @call_id, @recording_ref_id, @recording_path
     end
 
@@ -48,7 +48,7 @@ describe "Recording a call" do
 
       incoming :offer_presence, @call_jid, @client_jid
       incoming :recording_result_iq, @call_id, @recording_ref_id
-      incoming :result_iq, @call_id
+      incoming :result_iq, @call_jid
       incoming :recording_stop_presence, @call_id, @recording_ref_id, @recording_path
 
       last_command.should == Connfu::Commands::Hangup.new(:call_jid => @call_jid, :client_jid => @client_jid)

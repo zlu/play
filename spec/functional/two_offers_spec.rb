@@ -19,12 +19,12 @@ describe "two simultaneous offers" do
 
   it "should handle each call independently" do
     incoming :offer_presence, @first_call_jid, @foo_address
-    incoming :result_iq, "foo"
-    incoming :result_iq, "foo"
+    incoming :result_iq, @first_call_jid
+    incoming :result_iq, @first_call_jid
 
     incoming :offer_presence, @second_call_jid, @bar_address
-    incoming :result_iq, "bar"
-    incoming :result_iq, "bar"
+    incoming :result_iq, @second_call_jid
+    incoming :result_iq, @second_call_jid
 
     incoming :say_complete_success, "bar"
     Connfu.connection.commands = []

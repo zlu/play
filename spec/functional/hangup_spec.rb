@@ -43,8 +43,8 @@ describe "defining behaviour after a hangup" do
 
   it "should not send any commands after the hangup" do
     incoming :offer_presence, @call_jid, @client_jid
-    incoming :result_iq, @call_id # from the answer command
-    incoming :result_iq, @call_id # from the hangup command
+    incoming :result_iq, @call_jid # from the answer command
+    incoming :result_iq, @call_jid # from the hangup command
     incoming :hangup_presence, @call_id
 
     last_command.should == Connfu::Commands::Hangup.new(:call_jid => @call_jid, :client_jid => @client_jid)

@@ -32,7 +32,7 @@ describe "handling a call offer" do
 
     incoming :offer_presence, @call_jid, @client_jid, :to => "<sip:usera@127.0.0.1>"
   end
-  
+
   it "should deal with a call to a raw sip address" do
     parsed_hash = {
       :address => "sip:usera@127.0.0.1",
@@ -75,9 +75,9 @@ describe "offer which is hungup by the DSL" do
     handler_instance = Connfu.event_processor.handler_class.new({})
     Connfu.event_processor.stub(:build_handler).and_return(handler_instance)
     incoming :offer_presence, @call_jid, @client_jid
-    incoming :result_iq, @call_id # from the answer command
+    incoming :result_iq, @call_jid # from the answer command
     handler_instance.should_receive(:hangup).never
-    incoming :result_iq, @call_id # from the hangup within DSL
+    incoming :result_iq, @call_jid # from the hangup within DSL
     incoming :hangup_presence, @call_id
   end
 end

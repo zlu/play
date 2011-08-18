@@ -28,7 +28,7 @@ describe "transfer using join" do
 
   it "should wait until a hangup is received" do
     incoming :offer_presence, @call_jid, @client_jid
-    incoming :result_iq, @call_id
+    incoming :result_iq, @call_jid
     incoming :joined_presence, @call_id, "a-new-call-id"
     incoming :joined_presence, "a-new-call-id", @call_id
 
@@ -37,7 +37,7 @@ describe "transfer using join" do
 
   it "should continue execution when hangup is received, but mark call as finished" do
     incoming :offer_presence, @call_jid, @client_jid
-    incoming :result_iq, @call_id
+    incoming :result_iq, @call_jid
     incoming :joined_presence, @call_id, "a-new-call-id"
     incoming :joined_presence, "a-new-call-id", @call_id
     incoming :hangup_presence, @call_id
