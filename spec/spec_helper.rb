@@ -113,8 +113,8 @@ def result_iq(call_jid="4a3fe31a-0c2a-4a9a-ae98-f5b8afb55708@#{PRISM_HOST}", id=
   "<iq type='result' id='#{id}' from='#{call_jid}' to='#{PRISM_JID}/voxeo'/>"
 end
 
-def error_iq(call_id='4a3fe31a-0c2a-4a9a-ae98-f5b8afb55708', id='blather000c')
-  %{<iq type='error' id='#{id}' from='#{call_id}@#{PRISM_HOST}' to='#{PRISM_JID}/voxeo'>
+def error_iq(call_jid="4a3fe31a-0c2a-4a9a-ae98-f5b8afb55708@#{PRISM_HOST}", id='blather000c')
+  %{<iq type='error' id='#{id}' from='#{call_jid}' to='#{PRISM_JID}/voxeo'>
     <transfer xmlns='#{tropo('transfer:1')}'>
       <to>bollocks</to>
     </transfer>

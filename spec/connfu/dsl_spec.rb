@@ -91,7 +91,7 @@ describe Connfu::Dsl do
       Connfu.connection.stub(:send_command).and_return('command-id')
       subject.send_command(Connfu::Commands::Say.new(:text => '', :client_jid => 'client-jid', :call_jid => 'call-jid'))
 
-      iq = create_iq(error_iq('different-call-id', 'command-id'))
+      iq = create_iq(error_iq("different-call-id@#{PRISM_HOST}", 'command-id'))
       error = Connfu::Rayo::Parser.parse_event_from(iq)
 
       subject.can_handle_event?(error).should be_true
