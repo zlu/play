@@ -40,7 +40,7 @@ describe "transfer using join" do
     incoming :result_iq, @call_jid
     incoming :joined_presence, @call_jid, "a-new-call-id"
     incoming :joined_presence, "a-new-call-id@#{PRISM_HOST}", @call_id
-    incoming :hangup_presence, @call_id
+    incoming :hangup_presence, @call_jid
 
     Connfu.should be_finished
   end

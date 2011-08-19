@@ -260,24 +260,24 @@ def outgoing_call_answered_presence(call_jid="ebe45dbf-2a8b-4f1c-9aa0-1f1b39d1e8
   </presence>}
 end
 
-def hangup_presence(call_id="abc")
-  %{<presence from="#{call_id}@#{PRISM_HOST}" to="#{PRISM_JID}/voxeo">
+def hangup_presence(call_jid="abc@#{PRISM_HOST}")
+  %{<presence from="#{call_jid}" to="#{PRISM_JID}/voxeo">
     <end xmlns="#{rayo('1')}">
       <hangup/>
     </end>
   </presence>}
 end
 
-def reject_presence(call_id="abc")
-  %{<presence from="#{call_id}@#{PRISM_HOST}" to="#{PRISM_JID}/voxeo">
+def reject_presence(call_jid="abc@#{PRISM_HOST}")
+  %{<presence from="#{call_jid}" to="#{PRISM_JID}/voxeo">
     <end xmlns="urn:xmpp:rayo:1">
       <reject/>
     </end>
   </presence>}
 end
 
-def timeout_presence(call_id="abc")
-  %{<presence from="#{call_id}@#{PRISM_HOST}" to="#{PRISM_JID}/voxeo">
+def timeout_presence(call_jid="abc@#{PRISM_HOST}")
+  %{<presence from="#{call_jid}" to="#{PRISM_JID}/voxeo">
     <end xmlns="urn:xmpp:rayo:1">
       <timeout/>
     </end>

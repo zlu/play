@@ -78,6 +78,6 @@ describe "offer which is hungup by the DSL" do
     incoming :result_iq, @call_jid # from the answer command
     handler_instance.should_receive(:hangup).never
     incoming :result_iq, @call_jid # from the hangup within DSL
-    incoming :hangup_presence, @call_id
+    incoming :hangup_presence, @call_jid
   end
 end

@@ -71,7 +71,7 @@ describe "Dialing" do
 
     incoming :outgoing_call_result_iq, "call-id", last_command.id
     incoming :outgoing_call_ringing_presence, @call_jid
-    incoming :reject_presence, "call-id"
+    incoming :reject_presence, @call_jid
   end
 
   it 'should run the timeout behaviour when the call is timed out' do
@@ -83,7 +83,7 @@ describe "Dialing" do
 
     incoming :outgoing_call_result_iq, "call-id", last_command.id
     incoming :outgoing_call_ringing_presence, @call_jid
-    incoming :timeout_presence, "call-id"
+    incoming :timeout_presence, @call_jid
   end
 
   it 'should not run the answer behaviour before the call is answered' do
@@ -131,7 +131,7 @@ describe "Dialing" do
     incoming :outgoing_call_result_iq, "call-id", last_command.id
     incoming :outgoing_call_ringing_presence, @call_jid
     incoming :outgoing_call_answered_presence, @call_jid
-    incoming :hangup_presence, "call-id"
+    incoming :hangup_presence, @call_jid
   end
 
   it 'should run all behaviours that are defined' do
@@ -150,7 +150,7 @@ describe "Dialing" do
     incoming :outgoing_call_result_iq, "call-id", last_command.id
     incoming :outgoing_call_ringing_presence, @call_jid
     incoming :outgoing_call_answered_presence, @call_jid
-    incoming :hangup_presence, "call-id"
+    incoming :hangup_presence, @call_jid
   end
 
   it "should make the call id available when the on_start block is triggered" do
@@ -187,7 +187,7 @@ describe "Dialing" do
       lambda {
         incoming :outgoing_call_result_iq, "call-id", last_command.id
         incoming :outgoing_call_ringing_presence, @call_jid
-        incoming :hangup_presence, "call-id"
+        incoming :hangup_presence, @call_jid
       }.should_not raise_error
     end
   end

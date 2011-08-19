@@ -281,7 +281,7 @@ describe Connfu::Rayo::Parser do
 
     context "a presence reject" do
       before do
-        @node = create_presence(reject_presence('call-id'))
+        @node = create_presence(reject_presence("call-id@#{PRISM_HOST}"))
         @event = Connfu::Rayo::Parser.parse_event_from(@node)
       end
 
@@ -296,7 +296,7 @@ describe Connfu::Rayo::Parser do
 
     context "a presence timeout" do
       before do
-        node = create_presence(timeout_presence('call-id'))
+        node = create_presence(timeout_presence("call-id@#{PRISM_HOST}"))
         @event = Connfu::Rayo::Parser.parse_event_from(node)
       end
 
