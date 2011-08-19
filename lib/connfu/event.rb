@@ -20,9 +20,9 @@ module Connfu
       attr_reader :from, :to
 
       def initialize(params)
+        super
         @presence_from = params[:presence_from]
         @presence_to = params[:presence_to]
-        @call_id = params[:call_id]
         @from = params[:from]
         @to = parse_address(params[:to])
       end
@@ -45,7 +45,7 @@ module Connfu
       attr_reader :captured_input
 
       def initialize(params = {})
-        @call_id = params[:call_id]
+        super
         @captured_input = params[:captured_input]
       end
     end
@@ -73,9 +73,9 @@ module Connfu
       attr_reader :presence_from, :presence_to
 
       def initialize(params)
+        super
         @presence_from = params[:from]
         @presence_to = params[:to]
-        @call_id = params[:call_id]
       end
     end
 
@@ -101,7 +101,7 @@ module Connfu
       attr_reader :uri
 
       def initialize(params = {})
-        @call_id = params[:call_id]
+        super
         @uri = params[:uri]
       end
     end
@@ -114,10 +114,10 @@ module Connfu
         @joined_call_id = params[:joined_call_id]
       end
     end
-    
+
     class Unjoined < Presence
       attr_reader :unjoined_call_id
-      
+
       def initialize(params = {})
         super(params)
         @unjoined_call_id = params[:unjoined_call_id]
