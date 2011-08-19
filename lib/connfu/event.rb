@@ -6,12 +6,15 @@ module Connfu
     autoload :TransferRejected, 'connfu/event/transfer_event'
     autoload :TransferBusy, 'connfu/event/transfer_event'
 
-    class Presence
+    class Base
       attr_reader :call_id
 
       def initialize(params = {})
         @call_id = params[:call_id]
       end
+    end
+
+    class Presence < Base
     end
 
     class Offer < Presence
@@ -50,21 +53,21 @@ module Connfu
       end
     end
 
-    class Result
+    class Result < Base
       attr_reader :call_id, :ref_id, :command_id
 
       def initialize(params = {})
-        @call_id = params[:call_id]
+        super
         @ref_id = params[:ref_id]
         @command_id = params[:command_id]
       end
     end
 
-    class Error
+    class Error < Base
       attr_reader :call_id, :command_id
 
       def initialize(params = {})
-        @call_id = params[:call_id]
+        super
         @command_id = params[:command_id]
       end
     end
