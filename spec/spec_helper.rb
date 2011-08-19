@@ -283,3 +283,11 @@ def timeout_presence(call_jid="abc@#{PRISM_HOST}")
     </end>
   </presence>}
 end
+
+def busy_presence(call_jid="abc@#{PRISM_HOST}")
+  %{<presence from="#{call_jid}" to="#{PRISM_JID}/voxeo">
+    <end xmlns="#{rayo('1')}">
+      <busy/>
+    </end>
+  </presence>}
+end

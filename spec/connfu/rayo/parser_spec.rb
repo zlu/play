@@ -309,6 +309,21 @@ describe Connfu::Rayo::Parser do
       end
     end
 
+    context "a presence busy" do
+      before do
+        node = create_presence(busy_presence("call-id@#{PRISM_HOST}"))
+        @event = Connfu::Rayo::Parser.parse_event_from(node)
+      end
+
+      it "should create a Busy event" do
+        @event.should be_instance_of Connfu::Event::Busy
+      end
+
+      it "should determine the call_id" do
+        @event.call_id.should eq 'call-id'
+      end
+    end
+
     context "a component hangup" do
       before do
         node = create_presence(component_hangup_presence("call-id@#{PRISM_HOST}/3b1d199c-39af-4256-9a49-97293a530ac6"))

@@ -86,6 +86,18 @@ describe "Dialing" do
     incoming :timeout_presence, @call_jid
   end
 
+  it 'should run the busy behaviour when the call is busy' do
+    Dialer.any_instance.should_receive(:busy_happened)
+
+    Dialer.dial :to => "to", :from => "from" do |c|
+      c.on_busy { busy_happened }
+    end
+
+    incoming :dial_result_iq, "call-id", last_command.id
+    incoming :ringing_presence, @call_jid
+    incoming :busy_presence, @call_jid
+  end
+
   it 'should not run the answer behaviour before the call is answered' do
     Dialer.any_instance.should_not_receive(:answer_happened)
 
