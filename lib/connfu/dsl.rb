@@ -131,11 +131,9 @@ module Connfu
       send_command_without_waiting command
       result = wait_for Connfu::Event::Result, Connfu::Event::Error
       logger.debug "Result from command: %p" % result
-      if result.is_a?(Connfu::Event::Error)
-        raise
-      else
-        result
-      end
+      raise if result.is_a?(Connfu::Event::Error)
+
+      result
     end
 
     def observe_events_for(call_id)
