@@ -82,7 +82,7 @@ describe "Dialing" do
     end
 
     incoming :outgoing_call_result_iq, "call-id", last_command.id
-    incoming :outgoing_call_ringing_presence, "call-id"
+    incoming :outgoing_call_ringing_presence, @call_jid
     incoming :timeout_presence, "call-id"
   end
 
