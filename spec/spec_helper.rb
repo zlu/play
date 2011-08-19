@@ -226,7 +226,7 @@ def recording_stop_presence(call_jid="abc123@#{PRISM_HOST}/def456", path="file:/
   </presence>}
 end
 
-def stop_presence(call_jid="a27d73c5-6f5c-4a41-bfb9-6ea21b198602@#{PRISM_HOST}/23399310-4590-499d-8917-a0642965a096")
+def component_stop_presence(call_jid="a27d73c5-6f5c-4a41-bfb9-6ea21b198602@#{PRISM_HOST}/23399310-4590-499d-8917-a0642965a096")
   %{<presence from="#{call_jid}" to="#{PRISM_JID}/voxeo">
     <complete xmlns="#{rayo('ext:1')}">
       <stop xmlns="#{rayo('ext:complete:1')}"/>

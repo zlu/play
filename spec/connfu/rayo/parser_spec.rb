@@ -38,7 +38,7 @@ describe Connfu::Rayo::Parser do
 
     context "a stop complete presence" do
       before do
-        @node = create_presence(stop_presence("call-id@#{PRISM_HOST}/23399310-4590-499d-8917-a0642965a096"))
+        @node = create_presence(component_stop_presence("call-id@#{PRISM_HOST}/23399310-4590-499d-8917-a0642965a096"))
         @event = Connfu::Rayo::Parser.parse_event_from(@node)
       end
 
