@@ -1,6 +1,6 @@
 module Connfu
   module Dsl
-    module Methods
+    module CallCommands
       def say(text)
         send_command Connfu::Commands::Say.new(:text => text, :call_jid => call_jid, :client_jid => client_jid)
         wait_for Connfu::Event::SayComplete

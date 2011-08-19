@@ -1,12 +1,12 @@
 module Connfu
   module Dsl
-    autoload :Methods, "connfu/dsl/methods"
+    autoload :CallCommands, "connfu/dsl/call_commands"
     autoload :Recording, "connfu/dsl/recording"
     autoload :CallBehaviour, "connfu/dsl/call_behaviour"
 
     def self.included(base)
       base.send(:include, Connfu::Continuation)
-      base.send(:include, Connfu::Dsl::Methods)
+      base.send(:include, Connfu::Dsl::CallCommands)
       base.send(:include, Connfu::Dsl::Recording)
       base.send(:include, Connfu::Logging)
       base.extend Connfu::Dsl::ClassMethods
