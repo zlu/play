@@ -66,8 +66,7 @@ describe "offer which is hungup by the DSL" do
   end
 
   before :each do
-    @call_id = 'call-id'
-    @call_jid = "#{@call_id}@server.whatever"
+    @call_jid = "call-id@server.whatever"
     @client_jid = "usera@127.0.0.whatever/voxeo"
   end
 
