@@ -226,16 +226,16 @@ def recording_stop_presence(call_jid="abc123@#{PRISM_HOST}/def456", path="file:/
   </presence>}
 end
 
-def stop_presence(call_id="a27d73c5-6f5c-4a41-bfb9-6ea21b198602", id="23399310-4590-499d-8917-a0642965a096")
-  %{<presence from="#{call_id}@#{PRISM_HOST}/#{id}" to="#{PRISM_JID}/voxeo">
-    <complete xmlns="urn:xmpp:rayo:ext:1">
-      <stop xmlns="urn:xmpp:rayo:ext:complete:1"/>
+def stop_presence(call_jid="a27d73c5-6f5c-4a41-bfb9-6ea21b198602@#{PRISM_HOST}/23399310-4590-499d-8917-a0642965a096")
+  %{<presence from="#{call_jid}" to="#{PRISM_JID}/voxeo">
+    <complete xmlns="#{rayo('ext:1')}">
+      <stop xmlns="#{rayo('ext:complete:1')}"/>
     </complete>
   </presence>}
 end
 
-def component_hangup_presence(call_id='call-id')
-  %{<presence from="#{call_id}@#{PRISM_HOST}/3b1d199c-39af-4256-9a49-97293a530ac6" to="#{PRISM_JID}/voxeo">
+def component_hangup_presence(call_jid="call-id@#{PRISM_HOST}/3b1d199c-39af-4256-9a49-97293a530ac6")
+  %{<presence from="#{call_jid}" to="#{PRISM_JID}/voxeo">
     <complete xmlns="#{rayo('ext:1')}">
       <hangup xmlns="#{rayo('ext:complete:1')}"/>
     </complete>
