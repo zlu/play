@@ -14,6 +14,25 @@ module Connfu
       end
     end
 
+    class Result < Base
+      attr_reader :call_id, :ref_id, :command_id
+
+      def initialize(params = {})
+        super
+        @ref_id = params[:ref_id]
+        @command_id = params[:command_id]
+      end
+    end
+
+    class Error < Base
+      attr_reader :call_id, :command_id
+
+      def initialize(params = {})
+        super
+        @command_id = params[:command_id]
+      end
+    end
+
     class Presence < Base
     end
 
@@ -50,25 +69,6 @@ module Connfu
       def initialize(params = {})
         super
         @captured_input = params[:captured_input]
-      end
-    end
-
-    class Result < Base
-      attr_reader :call_id, :ref_id, :command_id
-
-      def initialize(params = {})
-        super
-        @ref_id = params[:ref_id]
-        @command_id = params[:command_id]
-      end
-    end
-
-    class Error < Base
-      attr_reader :call_id, :command_id
-
-      def initialize(params = {})
-        super
-        @command_id = params[:command_id]
       end
     end
 
