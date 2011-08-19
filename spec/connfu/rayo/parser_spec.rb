@@ -189,7 +189,7 @@ describe Connfu::Rayo::Parser do
 
     context "an outgoing call ringing presence" do
       before do
-        @node = create_presence(outgoing_call_ringing_presence("call-id", "client-jid"))
+        @node = create_presence(outgoing_call_ringing_presence("call-id@#{PRISM_HOST}", "client-jid"))
         @event = Connfu::Rayo::Parser.parse_event_from(@node)
       end
 
@@ -212,7 +212,7 @@ describe Connfu::Rayo::Parser do
 
     context "an outgoing call answered presence" do
       before do
-        @node = create_presence(outgoing_call_answered_presence("call-id"))
+        @node = create_presence(outgoing_call_answered_presence("call-id@#{PRISM_HOST}"))
         @event = Connfu::Rayo::Parser.parse_event_from(@node)
       end
 

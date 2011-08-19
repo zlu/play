@@ -8,6 +8,7 @@ describe "Dialing" do
 
   before do
     setup_connfu(handler_class = nil)
+    @call_jid = "call-id@#{PRISM_HOST}"
   end
 
   it "should send a dial command" do
@@ -58,7 +59,7 @@ describe "Dialing" do
     end
 
     incoming :outgoing_call_result_iq, "call-id", last_command.id
-    incoming :outgoing_call_ringing_presence, "call-id"
+    incoming :outgoing_call_ringing_presence, @call_jid
   end
 
   it 'should run the reject behaviour when the call is rejected' do
@@ -69,7 +70,7 @@ describe "Dialing" do
     end
 
     incoming :outgoing_call_result_iq, "call-id", last_command.id
-    incoming :outgoing_call_ringing_presence, "call-id"
+    incoming :outgoing_call_ringing_presence, @call_jid
     incoming :reject_presence, "call-id"
   end
 
@@ -93,7 +94,7 @@ describe "Dialing" do
     end
 
     incoming :outgoing_call_result_iq, "call-id", last_command.id
-    incoming :outgoing_call_ringing_presence, "call-id"
+    incoming :outgoing_call_ringing_presence, @call_jid
   end
 
   it 'should run the answer behaviour when the call is answered' do
@@ -104,8 +105,8 @@ describe "Dialing" do
     end
 
     incoming :outgoing_call_result_iq, "call-id", last_command.id
-    incoming :outgoing_call_ringing_presence, "call-id"
-    incoming :outgoing_call_answered_presence, "call-id"
+    incoming :outgoing_call_ringing_presence, @call_jid
+    incoming :outgoing_call_answered_presence, @call_jid
   end
 
   it 'should not run the hangup behaviour before the call is hung up' do
@@ -116,8 +117,8 @@ describe "Dialing" do
     end
 
     incoming :outgoing_call_result_iq, "call-id", last_command.id
-    incoming :outgoing_call_ringing_presence, "call-id"
-    incoming :outgoing_call_answered_presence, "call-id"
+    incoming :outgoing_call_ringing_presence, @call_jid
+    incoming :outgoing_call_answered_presence, @call_jid
   end
 
   it 'should run the hangup behaviour when the call is hung up' do
@@ -128,8 +129,8 @@ describe "Dialing" do
     end
 
     incoming :outgoing_call_result_iq, "call-id", last_command.id
-    incoming :outgoing_call_ringing_presence, "call-id"
-    incoming :outgoing_call_answered_presence, "call-id"
+    incoming :outgoing_call_ringing_presence, @call_jid
+    incoming :outgoing_call_answered_presence, @call_jid
     incoming :hangup_presence, "call-id"
   end
 
@@ -147,8 +148,8 @@ describe "Dialing" do
     end
 
     incoming :outgoing_call_result_iq, "call-id", last_command.id
-    incoming :outgoing_call_ringing_presence, "call-id"
-    incoming :outgoing_call_answered_presence, "call-id"
+    incoming :outgoing_call_ringing_presence, @call_jid
+    incoming :outgoing_call_answered_presence, @call_jid
     incoming :hangup_presence, "call-id"
   end
 
@@ -170,22 +171,22 @@ describe "Dialing" do
     it 'should not crash when receiving a ringing event' do
       lambda {
         incoming :outgoing_call_result_iq, "call-id", last_command.id
-        incoming :outgoing_call_ringing_presence, "call-id"
+        incoming :outgoing_call_ringing_presence, @call_jid
       }.should_not raise_error
     end
 
     it 'should not crash when receiving an answered event' do
       lambda {
         incoming :outgoing_call_result_iq, "call-id", last_command.id
-        incoming :outgoing_call_ringing_presence, "call-id"
-        incoming :outgoing_call_answered_presence, "call-id"
+        incoming :outgoing_call_ringing_presence, @call_jid
+        incoming :outgoing_call_answered_presence, @call_jid
       }.should_not raise_error
     end
 
     it 'should not crash when receiving a hangup event' do
       lambda {
         incoming :outgoing_call_result_iq, "call-id", last_command.id
-        incoming :outgoing_call_ringing_presence, "call-id"
+        incoming :outgoing_call_ringing_presence, @call_jid
         incoming :hangup_presence, "call-id"
       }.should_not raise_error
     end
@@ -204,8 +205,8 @@ describe "Dialing" do
 
     it "should allow running commands" do
       incoming :outgoing_call_result_iq, "call-id", last_command.id
-      incoming :outgoing_call_ringing_presence, "call-id", "client-jid"
-      incoming :outgoing_call_answered_presence, "call-id"
+      incoming :outgoing_call_ringing_presence, @call_jid, "client-jid"
+      incoming :outgoing_call_answered_presence, @call_jid
 
       say_command = last_command
       say_command.should be_instance_of Connfu::Commands::Say
@@ -216,8 +217,8 @@ describe "Dialing" do
 
     it "should not execute next command until the previous is completed" do
       incoming :outgoing_call_result_iq, "call-id", last_command.id
-      incoming :outgoing_call_ringing_presence, "call-id"
-      incoming :outgoing_call_answered_presence, "call-id"
+      incoming :outgoing_call_ringing_presence, @call_jid
+      incoming :outgoing_call_answered_presence, @call_jid
       incoming :result_iq, @call_jid
 
       last_command.should be_instance_of Connfu::Commands::Say
@@ -226,8 +227,8 @@ describe "Dialing" do
 
     it "should continue executing next command when the previous has completed" do
       incoming :outgoing_call_result_iq, "call-id", last_command.id
-      incoming :outgoing_call_ringing_presence, "call-id"
-      incoming :outgoing_call_answered_presence, "call-id"
+      incoming :outgoing_call_ringing_presence, @call_jid
+      incoming :outgoing_call_answered_presence, @call_jid
       incoming :result_iq, @call_jid
       incoming :say_success_presence, @call_jid
 
@@ -252,6 +253,7 @@ describe "dialing with instance-specific call behaviour" do
 
   before do
     setup_connfu(handler_class = nil)
+    @call_jid = "call-1@#{PRISM_HOST}"
   end
 
   it "should retain the specific behaviour for each dial statement" do
@@ -260,8 +262,8 @@ describe "dialing with instance-specific call behaviour" do
     DiallerWithInstanceSpecificBehaviour.execute "second behaviour"
 
     incoming :outgoing_call_result_iq, "call-1", first_dial_command_id
-    incoming :outgoing_call_ringing_presence, "call-1"
-    incoming :outgoing_call_answered_presence, "call-1"
+    incoming :outgoing_call_ringing_presence, @call_jid
+    incoming :outgoing_call_answered_presence, @call_jid
 
     last_command.should be_instance_of Connfu::Commands::Say
     last_command.text.should == "first behaviour"
