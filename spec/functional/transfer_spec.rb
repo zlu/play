@@ -12,7 +12,7 @@ describe "a call transfer" do
   end
 
   before do
-    @call_id = "34209dfiasdoaf"
+    @call_id = "call-id"
     @call_jid = "#{@call_id}@server.whatever"
     @client_jid = "usera@127.0.0.whatever"
   end
@@ -55,7 +55,7 @@ describe "a round-robin call transfer" do
   end
 
   before do
-    @call_id = "34209dfiasdoaf"
+    @call_id = "call-id"
     @call_jid = "#{@call_id}@server.whatever"
     @client_jid = "usera@127.0.0.whatever"
   end
@@ -122,7 +122,7 @@ describe "A transfer that was rejected" do
   end
 
   before do
-    @call_id = "34209dfiasdoaf"
+    @call_id = "call-id"
     @call_jid = "#{@call_id}@server.whatever"
     @client_jid = "usera@127.0.0.whatever"
   end
@@ -150,7 +150,7 @@ describe "A transfer that was rejected because far end is busy" do
   end
 
   before do
-    @call_id = "34209dfiasdoaf"
+    @call_id = "call-id"
     @call_jid = "#{@call_id}@server.whatever"
     @client_jid = "usera@127.0.0.whatever"
   end

@@ -265,7 +265,7 @@ describe "dialing with instance-specific call behaviour" do
 
   before do
     setup_connfu(handler_class = nil)
-    @call_jid = "call-1@#{PRISM_HOST}"
+    @call_jid = "call-id@#{PRISM_HOST}"
   end
 
   it "should retain the specific behaviour for each dial statement" do
@@ -273,7 +273,7 @@ describe "dialing with instance-specific call behaviour" do
     first_dial_command_id = last_command.id
     DiallerWithInstanceSpecificBehaviour.execute "second behaviour"
 
-    incoming :dial_result_iq, "call-1", first_dial_command_id
+    incoming :dial_result_iq, "call-id", first_dial_command_id
     incoming :ringing_presence, @call_jid
     incoming :answered_presence, @call_jid
 
