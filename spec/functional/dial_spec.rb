@@ -38,7 +38,7 @@ describe "Dialing" do
       c.on_start { start_happened }
     end
 
-    incoming :outgoing_call_result_iq, "call-id", last_command.id
+    incoming :dial_result_iq, "call-id", last_command.id
   end
 
   it 'should not run the ringing behaviour before the call starts ringing' do
@@ -48,7 +48,7 @@ describe "Dialing" do
       c.on_ringing { ringing_happened }
     end
 
-    incoming :outgoing_call_result_iq, "call-id", last_command.id
+    incoming :dial_result_iq, "call-id", last_command.id
   end
 
   it 'should run the ringing behaviour when the call starts ringing' do
@@ -58,8 +58,8 @@ describe "Dialing" do
       c.on_ringing { ringing_happened }
     end
 
-    incoming :outgoing_call_result_iq, "call-id", last_command.id
-    incoming :outgoing_call_ringing_presence, @call_jid
+    incoming :dial_result_iq, "call-id", last_command.id
+    incoming :ringing_presence, @call_jid
   end
 
   it 'should run the reject behaviour when the call is rejected' do
@@ -69,8 +69,8 @@ describe "Dialing" do
       c.on_reject { reject_happened }
     end
 
-    incoming :outgoing_call_result_iq, "call-id", last_command.id
-    incoming :outgoing_call_ringing_presence, @call_jid
+    incoming :dial_result_iq, "call-id", last_command.id
+    incoming :ringing_presence, @call_jid
     incoming :reject_presence, @call_jid
   end
 
@@ -81,8 +81,8 @@ describe "Dialing" do
       c.on_timeout { timeout_happened }
     end
 
-    incoming :outgoing_call_result_iq, "call-id", last_command.id
-    incoming :outgoing_call_ringing_presence, @call_jid
+    incoming :dial_result_iq, "call-id", last_command.id
+    incoming :ringing_presence, @call_jid
     incoming :timeout_presence, @call_jid
   end
 
@@ -93,8 +93,8 @@ describe "Dialing" do
       c.on_answer { answer_happened }
     end
 
-    incoming :outgoing_call_result_iq, "call-id", last_command.id
-    incoming :outgoing_call_ringing_presence, @call_jid
+    incoming :dial_result_iq, "call-id", last_command.id
+    incoming :ringing_presence, @call_jid
   end
 
   it 'should run the answer behaviour when the call is answered' do
@@ -104,9 +104,9 @@ describe "Dialing" do
       c.on_answer { answer_happened }
     end
 
-    incoming :outgoing_call_result_iq, "call-id", last_command.id
-    incoming :outgoing_call_ringing_presence, @call_jid
-    incoming :outgoing_call_answered_presence, @call_jid
+    incoming :dial_result_iq, "call-id", last_command.id
+    incoming :ringing_presence, @call_jid
+    incoming :answered_presence, @call_jid
   end
 
   it 'should not run the hangup behaviour before the call is hung up' do
@@ -116,9 +116,9 @@ describe "Dialing" do
       c.on_hangup { hangup_happened }
     end
 
-    incoming :outgoing_call_result_iq, "call-id", last_command.id
-    incoming :outgoing_call_ringing_presence, @call_jid
-    incoming :outgoing_call_answered_presence, @call_jid
+    incoming :dial_result_iq, "call-id", last_command.id
+    incoming :ringing_presence, @call_jid
+    incoming :answered_presence, @call_jid
   end
 
   it 'should run the hangup behaviour when the call is hung up' do
@@ -128,9 +128,9 @@ describe "Dialing" do
       c.on_hangup { hangup_happened }
     end
 
-    incoming :outgoing_call_result_iq, "call-id", last_command.id
-    incoming :outgoing_call_ringing_presence, @call_jid
-    incoming :outgoing_call_answered_presence, @call_jid
+    incoming :dial_result_iq, "call-id", last_command.id
+    incoming :ringing_presence, @call_jid
+    incoming :answered_presence, @call_jid
     incoming :hangup_presence, @call_jid
   end
 
@@ -147,9 +147,9 @@ describe "Dialing" do
       c.on_hangup  { hangup_happened }
     end
 
-    incoming :outgoing_call_result_iq, "call-id", last_command.id
-    incoming :outgoing_call_ringing_presence, @call_jid
-    incoming :outgoing_call_answered_presence, @call_jid
+    incoming :dial_result_iq, "call-id", last_command.id
+    incoming :ringing_presence, @call_jid
+    incoming :answered_presence, @call_jid
     incoming :hangup_presence, @call_jid
   end
 
@@ -158,7 +158,7 @@ describe "Dialing" do
       c.on_start { Dialer.stash = call_id }
     end
 
-    incoming :outgoing_call_result_iq, "call-id", last_command.id
+    incoming :dial_result_iq, "call-id", last_command.id
 
     Dialer.stash.should == "call-id"
   end
@@ -170,23 +170,23 @@ describe "Dialing" do
 
     it 'should not crash when receiving a ringing event' do
       lambda {
-        incoming :outgoing_call_result_iq, "call-id", last_command.id
-        incoming :outgoing_call_ringing_presence, @call_jid
+        incoming :dial_result_iq, "call-id", last_command.id
+        incoming :ringing_presence, @call_jid
       }.should_not raise_error
     end
 
     it 'should not crash when receiving an answered event' do
       lambda {
-        incoming :outgoing_call_result_iq, "call-id", last_command.id
-        incoming :outgoing_call_ringing_presence, @call_jid
-        incoming :outgoing_call_answered_presence, @call_jid
+        incoming :dial_result_iq, "call-id", last_command.id
+        incoming :ringing_presence, @call_jid
+        incoming :answered_presence, @call_jid
       }.should_not raise_error
     end
 
     it 'should not crash when receiving a hangup event' do
       lambda {
-        incoming :outgoing_call_result_iq, "call-id", last_command.id
-        incoming :outgoing_call_ringing_presence, @call_jid
+        incoming :dial_result_iq, "call-id", last_command.id
+        incoming :ringing_presence, @call_jid
         incoming :hangup_presence, @call_jid
       }.should_not raise_error
     end
@@ -204,9 +204,9 @@ describe "Dialing" do
     end
 
     it "should allow running commands" do
-      incoming :outgoing_call_result_iq, "call-id", last_command.id
-      incoming :outgoing_call_ringing_presence, @call_jid, "client-jid"
-      incoming :outgoing_call_answered_presence, @call_jid
+      incoming :dial_result_iq, "call-id", last_command.id
+      incoming :ringing_presence, @call_jid, "client-jid"
+      incoming :answered_presence, @call_jid
 
       say_command = last_command
       say_command.should be_instance_of Connfu::Commands::Say
@@ -216,9 +216,9 @@ describe "Dialing" do
     end
 
     it "should not execute next command until the previous is completed" do
-      incoming :outgoing_call_result_iq, "call-id", last_command.id
-      incoming :outgoing_call_ringing_presence, @call_jid
-      incoming :outgoing_call_answered_presence, @call_jid
+      incoming :dial_result_iq, "call-id", last_command.id
+      incoming :ringing_presence, @call_jid
+      incoming :answered_presence, @call_jid
       incoming :result_iq, @call_jid
 
       last_command.should be_instance_of Connfu::Commands::Say
@@ -226,9 +226,9 @@ describe "Dialing" do
     end
 
     it "should continue executing next command when the previous has completed" do
-      incoming :outgoing_call_result_iq, "call-id", last_command.id
-      incoming :outgoing_call_ringing_presence, @call_jid
-      incoming :outgoing_call_answered_presence, @call_jid
+      incoming :dial_result_iq, "call-id", last_command.id
+      incoming :ringing_presence, @call_jid
+      incoming :answered_presence, @call_jid
       incoming :result_iq, @call_jid
       incoming :say_success_presence, @call_jid
 
@@ -261,9 +261,9 @@ describe "dialing with instance-specific call behaviour" do
     first_dial_command_id = last_command.id
     DiallerWithInstanceSpecificBehaviour.execute "second behaviour"
 
-    incoming :outgoing_call_result_iq, "call-1", first_dial_command_id
-    incoming :outgoing_call_ringing_presence, @call_jid
-    incoming :outgoing_call_answered_presence, @call_jid
+    incoming :dial_result_iq, "call-1", first_dial_command_id
+    incoming :ringing_presence, @call_jid
+    incoming :answered_presence, @call_jid
 
     last_command.should be_instance_of Connfu::Commands::Say
     last_command.text.should == "first behaviour"

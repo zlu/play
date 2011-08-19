@@ -242,19 +242,19 @@ def component_hangup_presence(call_jid="call-id@#{PRISM_HOST}/3b1d199c-39af-4256
   </presence>}
 end
 
-def outgoing_call_result_iq(call_id="abc123", xmpp_id="blather_001")
+def dial_result_iq(call_id="abc123", xmpp_id="blather_001")
   %{<iq type="result" id="#{xmpp_id}" from="#{PRISM_HOST}" to="#{PRISM_JID}/voxeo">
     <ref xmlns="urn:xmpp:rayo:1" id="#{call_id}"/>
   </iq>}
 end
 
-def outgoing_call_ringing_presence(call_jid="ebe45dbf-2a8b-4f1c-9aa0-1f1b39d1e821@#{PRISM_HOST}", client_jid="#{PRISM_JID}/voxeo")
+def ringing_presence(call_jid="ebe45dbf-2a8b-4f1c-9aa0-1f1b39d1e821@#{PRISM_HOST}", client_jid="#{PRISM_JID}/voxeo")
   %{<presence from="#{call_jid}" to="#{client_jid}">
     <ringing xmlns="#{rayo('1')}"/>
   </presence>}
 end
 
-def outgoing_call_answered_presence(call_jid="ebe45dbf-2a8b-4f1c-9aa0-1f1b39d1e821@#{PRISM_HOST}")
+def answered_presence(call_jid="ebe45dbf-2a8b-4f1c-9aa0-1f1b39d1e821@#{PRISM_HOST}")
   %{<presence from="#{call_jid}" to="#{PRISM_JID}/voxeo">
     <answered xmlns="#{rayo('1')}"/>
   </presence>}

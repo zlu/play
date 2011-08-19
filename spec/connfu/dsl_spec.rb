@@ -151,7 +151,7 @@ describe Connfu::Dsl do
       subject.stub(:send_command).and_return(stub(:ref_id => "call-id"))
       subject.dial(:to => "you", :from => "me")
 
-      stanza = create_presence(outgoing_call_ringing_presence("call-id@#{PRISM_HOST}"))
+      stanza = create_presence(ringing_presence("call-id@#{PRISM_HOST}"))
       ringing = Connfu::Rayo::Parser.parse_event_from(stanza)
 
       subject.can_handle_event?(ringing).should be_true
