@@ -38,7 +38,7 @@ describe Connfu::Rayo::Parser do
 
     context "a stop complete presence" do
       before do
-        @node = create_presence(stop_presence("call-id@#{PRISM_HOST}/23399310-4590-499d-8917-a0642965a096"))
+        @node = create_presence(component_stop_presence("call-id@#{PRISM_HOST}/23399310-4590-499d-8917-a0642965a096"))
         @event = Connfu::Rayo::Parser.parse_event_from(@node)
       end
 
@@ -189,7 +189,7 @@ describe Connfu::Rayo::Parser do
 
     context "an outgoing call ringing presence" do
       before do
-        @node = create_presence(outgoing_call_ringing_presence("call-id@#{PRISM_HOST}", "client-jid"))
+        @node = create_presence(ringing_presence("call-id@#{PRISM_HOST}", "client-jid"))
         @event = Connfu::Rayo::Parser.parse_event_from(@node)
       end
 
@@ -212,7 +212,7 @@ describe Connfu::Rayo::Parser do
 
     context "an outgoing call answered presence" do
       before do
-        @node = create_presence(outgoing_call_answered_presence("call-id@#{PRISM_HOST}"))
+        @node = create_presence(answered_presence("call-id@#{PRISM_HOST}"))
         @event = Connfu::Rayo::Parser.parse_event_from(@node)
       end
 
@@ -266,8 +266,8 @@ describe Connfu::Rayo::Parser do
     context "an unknown stanza" do
       before do
         @node = create_presence(%{<presence from="abc@127.0.0.1/123" to="userb@127.0.0.1/voxeo">
-          <garbage xmlns="urn:xmpp:rayo:ext:1">
-            <trash xmlns="urn:xmpp:rayo:ext:rubbish:1"/>
+          <garbage xmlns="#{rayo('ext:1')}">
+            <trash xmlns="#{rayo('ext:rubbish:1')}"/>
           </garbage>
         </presence>})
       end
@@ -279,9 +279,24 @@ describe Connfu::Rayo::Parser do
       end
     end
 
+    context "a presence hangup" do
+      before do
+        @node = create_presence(hangup_presence("call-id@#{PRISM_HOST}"))
+        @event = Connfu::Rayo::Parser.parse_event_from(@node)
+      end
+
+      it "should create a Hangup event" do
+        @event.should be_instance_of Connfu::Event::Hangup
+      end
+
+      it "should determine the call_id" do
+        @event.call_id.should eq 'call-id'
+      end
+    end
+
     context "a presence reject" do
       before do
-        @node = create_presence(reject_presence('call-id'))
+        @node = create_presence(reject_presence("call-id@#{PRISM_HOST}"))
         @event = Connfu::Rayo::Parser.parse_event_from(@node)
       end
 
@@ -296,12 +311,27 @@ describe Connfu::Rayo::Parser do
 
     context "a presence timeout" do
       before do
-        node = create_presence(timeout_presence('call-id'))
+        node = create_presence(timeout_presence("call-id@#{PRISM_HOST}"))
         @event = Connfu::Rayo::Parser.parse_event_from(node)
       end
 
       it "should create a Timeout event" do
         @event.should be_instance_of Connfu::Event::Timeout
+      end
+
+      it "should determine the call_id" do
+        @event.call_id.should eq 'call-id'
+      end
+    end
+
+    context "a presence busy" do
+      before do
+        node = create_presence(busy_presence("call-id@#{PRISM_HOST}"))
+        @event = Connfu::Rayo::Parser.parse_event_from(node)
+      end
+
+      it "should create a Busy event" do
+        @event.should be_instance_of Connfu::Event::Busy
       end
 
       it "should determine the call_id" do

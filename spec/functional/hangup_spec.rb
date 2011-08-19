@@ -9,8 +9,7 @@ describe "hangup a call" do
   end
 
   before :each do
-    @call_id = '34209dfiasdoaf'
-    @call_jid = "#{@call_id}@server.whatever"
+    @call_jid = "call-id@server.whatever"
     @client_jid = "usera@127.0.0.whatever/voxeo"
   end
 
@@ -22,7 +21,7 @@ describe "hangup a call" do
 
   it "should handle the hangup event that will come back from the server" do
     incoming :offer_presence, @call_jid, @client_jid
-    incoming :hangup_presence, @call_id
+    incoming :hangup_presence, @call_jid
   end
 end
 
@@ -36,8 +35,7 @@ describe "defining behaviour after a hangup" do
   end
 
   before :each do
-    @call_id = '34209dfiasdoaf'
-    @call_jid = "#{@call_id}@server.whatever"
+    @call_jid = "call-id@server.whatever"
     @client_jid = "usera@127.0.0.whatever/voxeo"
   end
 
@@ -45,7 +43,7 @@ describe "defining behaviour after a hangup" do
     incoming :offer_presence, @call_jid, @client_jid
     incoming :result_iq, @call_jid # from the answer command
     incoming :result_iq, @call_jid # from the hangup command
-    incoming :hangup_presence, @call_id
+    incoming :hangup_presence, @call_jid
 
     last_command.should == Connfu::Commands::Hangup.new(:call_jid => @call_jid, :client_jid => @client_jid)
   end

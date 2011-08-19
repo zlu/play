@@ -3,8 +3,7 @@ require 'spec_helper'
 describe "Recording a call" do
 
   before :each do
-    @call_id = "34209dfiasdoaf"
-    @call_jid = "#{@call_id}@server.whatever"
+    @call_jid = "call-id@server.whatever"
     @client_jid = "usera@127.0.0.whatever/voxeo"
     @recording_ref_id = "abc123"
     @component_jid = "#{@call_jid}/#{@recording_ref_id}"

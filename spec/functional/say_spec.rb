@@ -10,7 +10,7 @@ describe "say something on a call" do
   end
 
   before :each do
-    @call_id = "34209dfiasdoaf"
+    @call_id = "call-id"
     @call_jid = "#{@call_id}@server.whatever"
     @client_jid = "usera@127.0.0.whatever/voxeo"
   end

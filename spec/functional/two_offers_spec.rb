@@ -11,8 +11,8 @@ describe "two simultaneous offers" do
   end
 
   before :each do
-    @first_call_jid = "foo@server.whatever"
-    @second_call_jid = "bar@server.whatever"
+    @first_call_jid = "call-id-1@server.whatever"
+    @second_call_jid = "call-id-2@server.whatever"
     @foo_address = "foo@clientfoo.com"
     @bar_address = "bar@clientbar.com"
   end
