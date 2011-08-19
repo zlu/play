@@ -211,14 +211,14 @@ def unjoined_presence(call_jid="8c27e8c6-76c1-4cc6-a818-18075f07a511@#{PRISM_HOS
   </presence>}
 end
 
-def recording_result_iq(call_id="a0565638-90f8-416e-b26f-636f1aa684d0", id="f3c1b8c4-bb4f-4f7c-a063-87ee9bac0980")
-  %{<iq type="result" id="blather000a" from="#{call_id}@#{PRISM_HOST}" to="#{PRISM_JID}/voxeo">
-    <ref xmlns="#{rayo('1')}" id="#{id}"/>
+def recording_result_iq(call_jid="a0565638-90f8-416e-b26f-636f1aa684d0@#{PRISM_HOST}", component_id="f3c1b8c4-bb4f-4f7c-a063-87ee9bac0980")
+  %{<iq type="result" id="blather000a" from="#{call_jid}" to="#{PRISM_JID}/voxeo">
+    <ref xmlns="#{rayo('1')}" id="#{component_id}"/>
   </iq>}
 end
 
-def recording_stop_presence(call_id="abc123", id="def456", path="file:///tmp/recording.mp3")
-  %{<presence from="#{call_id}@#{PRISM_HOST}/#{id}" to="#{PRISM_JID}/voxeo">
+def recording_stop_presence(call_jid="abc123@#{PRISM_HOST}/def456", path="file:///tmp/recording.mp3")
+  %{<presence from="#{call_jid}" to="#{PRISM_JID}/voxeo">
     <complete xmlns="#{rayo('ext:1')}">
       <stop xmlns="#{rayo('ext:complete:1')}"/>
       <recording xmlns="#{rayo('record:complete:1')}" uri="#{path}"/>

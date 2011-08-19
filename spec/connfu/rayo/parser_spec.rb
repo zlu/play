@@ -49,7 +49,7 @@ describe Connfu::Rayo::Parser do
 
     context 'a recording result iq' do
       before do
-        @node = create_iq(recording_result_iq('call-id', 'ref-id'))
+        @node = create_iq(recording_result_iq("call-id@#{PRISM_HOST}", 'ref-id'))
         @event = Connfu::Rayo::Parser.parse_event_from(@node)
       end
 
@@ -65,7 +65,7 @@ describe Connfu::Rayo::Parser do
 
     context "a recording stop complete presence" do
       before do
-        @node = create_presence(recording_stop_presence('call-id', 'ref-id', 'file:///tmp/recording.mp3'))
+        @node = create_presence(recording_stop_presence("call-id@#{PRISM_HOST}/ref-id", 'file:///tmp/recording.mp3'))
         @event = Connfu::Rayo::Parser.parse_event_from(@node)
       end
 
