@@ -201,13 +201,13 @@ end
 
 def joined_presence(call_jid="9d27a2d3-9134-48ef-957e-5f5e72686d79@#{PRISM_HOST}", new_call_id="1034a58a-4ffd-479c-843e-92b84ab8826a")
   %{<presence from="#{call_jid}" to="#{PRISM_JID}/voxeo">
-    <joined xmlns="urn:xmpp:rayo:1" call-id="#{new_call_id}"/>
+    <joined xmlns="#{rayo('1')}" call-id="#{new_call_id}"/>
   </presence>}
 end
 
 def unjoined_presence(call_jid="8c27e8c6-76c1-4cc6-a818-18075f07a511@#{PRISM_HOST}", other_call_id='56258fa4-db93-46a6-a507-0a22313e709a')
   %{<presence from="#{call_jid}" to="#{PRISM_JID}/voxeo">
-    <unjoined xmlns="urn:xmpp:rayo:1" call-id="#{other_call_id}"/>
+    <unjoined xmlns="#{rayo('1')}" call-id="#{other_call_id}"/>
   </presence>}
 end
 
@@ -244,7 +244,7 @@ end
 
 def dial_result_iq(call_id="abc123", xmpp_id="blather_001")
   %{<iq type="result" id="#{xmpp_id}" from="#{PRISM_HOST}" to="#{PRISM_JID}/voxeo">
-    <ref xmlns="urn:xmpp:rayo:1" id="#{call_id}"/>
+    <ref xmlns="#{rayo('1')}" id="#{call_id}"/>
   </iq>}
 end
 
@@ -270,7 +270,7 @@ end
 
 def reject_presence(call_jid="abc@#{PRISM_HOST}")
   %{<presence from="#{call_jid}" to="#{PRISM_JID}/voxeo">
-    <end xmlns="urn:xmpp:rayo:1">
+    <end xmlns="#{rayo('1')}">
       <reject/>
     </end>
   </presence>}
@@ -278,7 +278,7 @@ end
 
 def timeout_presence(call_jid="abc@#{PRISM_HOST}")
   %{<presence from="#{call_jid}" to="#{PRISM_JID}/voxeo">
-    <end xmlns="urn:xmpp:rayo:1">
+    <end xmlns="#{rayo('1')}">
       <timeout/>
     </end>
   </presence>}

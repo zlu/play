@@ -266,8 +266,8 @@ describe Connfu::Rayo::Parser do
     context "an unknown stanza" do
       before do
         @node = create_presence(%{<presence from="abc@127.0.0.1/123" to="userb@127.0.0.1/voxeo">
-          <garbage xmlns="urn:xmpp:rayo:ext:1">
-            <trash xmlns="urn:xmpp:rayo:ext:rubbish:1"/>
+          <garbage xmlns="#{rayo('ext:1')}">
+            <trash xmlns="#{rayo('ext:rubbish:1')}"/>
           </garbage>
         </presence>})
       end
