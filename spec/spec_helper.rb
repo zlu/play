@@ -48,6 +48,7 @@ def setup_connfu(handler_class, domain='openvoice.org')
 end
 
 def incoming(type, *args)
+  puts "incoming: %p, %p" % [type, args]
   stanza = if type.to_s =~ /_iq$/
     create_iq(send(type, *args))
   else
@@ -107,6 +108,58 @@ end
 
 def last_command
   Connfu.connection.commands.last
+end
+
+
+class Sequence
+
+  include RSpec::Matchers
+
+  def initialize
+    @sequence = []
+  end
+
+  def event(*args)
+    @sequence << [:incoming, *args]
+  end
+
+  def command(*args)
+    @sequence << [:command, *args]
+  end
+
+  def finished
+    @sequence << [:finished]
+  end
+
+  def check
+    while @sequence.any?
+      command_index = @sequence.index { |e| e.first == :command } || @sequence.length
+      events = @sequence.shift(command_index)
+      command = @sequence.shift
+      events.each_with_index do |e, index|
+        if command && (index == 0)
+          puts "* checking last command is not %p" % command.last
+          last_command.should_not == command.last
+        end
+        if e.first == :incoming
+          send(*e)
+        elsif e.first == :finished
+          puts "* checking script is finished"
+          Connfu.should be_finished
+        end
+        if command && (index == events.length - 1)
+          puts "* checking last command is %p" % command.last
+          last_command.should == command.last
+        end
+      end
+    end
+  end
+end
+
+def check_sequence(&block)
+  sequence = Sequence.new
+  sequence.instance_eval(&block)
+  sequence.check
 end
 
 def result_iq(call_jid="call-id@#{PRISM_HOST}", id='blather0008')
