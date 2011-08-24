@@ -195,7 +195,7 @@ module Connfu
         end
       end
       result = wait
-      EM.cancel_timer(timer) if result && timer
+      EM.cancel_timer(timer) if timer
       result
     end
   end
