@@ -97,7 +97,7 @@ describe "receiving hangup from a caller" do
   it "should not send an implicit hangup command" do
     incoming :offer_presence, @call_jid, @client_jid
     incoming :result_iq, @call_jid # from the answer command
-    incoming :result_iq, @call_jid # from the say command
+    incoming :say_result_iq, @call_jid # from the say command
     incoming :hangup_presence, @call_jid # via the user hanging up
     incoming :say_success_presence, @call_jid
 
