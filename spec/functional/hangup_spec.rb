@@ -42,7 +42,7 @@ describe "defining behaviour after a hangup" do
   it "should not send any commands after the hangup" do
     incoming :offer_presence, @call_jid, @client_jid
     incoming :answer_result_iq, @call_jid
-    incoming :result_iq, @call_jid # from the hangup command
+    incoming :hangup_result_iq, @call_jid
     incoming :hangup_presence, @call_jid
 
     last_command.should == Connfu::Commands::Hangup.new(:call_jid => @call_jid, :client_jid => @client_jid)
@@ -74,7 +74,7 @@ describe "hanging up an observed call" do
     incoming :dial_result_iq, @other_call_id, last_command.id # from the dial command
     incoming :ringing_presence, @other_call_jid
     incoming :answered_presence, @other_call_jid
-    incoming :result_iq, @other_call_jid # from the hangup command
+    incoming :hangup_result_iq, @other_call_jid
     incoming :hangup_presence, @other_call_jid
 
     last_command.should == Connfu::Commands::Say.new(:text => "Phew, glad he's gone", :call_jid => @call_jid, :client_jid => @client_jid)
