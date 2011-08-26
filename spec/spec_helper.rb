@@ -48,6 +48,7 @@ def setup_connfu(handler_class, domain='openvoice.org')
 end
 
 def incoming(type, *args)
+  raise "Invalid args. You almost certainly don't want to be passing 'nil' into #incoming" if args.any? { |arg| arg.nil? }
   stanza = if type.to_s =~ /_iq$/
     create_iq(send(type, *args))
   else

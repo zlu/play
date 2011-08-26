@@ -9,6 +9,11 @@ describe "handling a call offer" do
       )
     end
   end
+  
+  before :each do
+    @call_jid = "call-id@server.whatever"
+    @client_jid = "usera@127.0.0.whatever/voxeo"
+  end
 
   it "exposes who the call is from" do
     dsl_instance.should_receive(:do_something_with).with(
