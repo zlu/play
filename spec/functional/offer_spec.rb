@@ -70,13 +70,14 @@ describe "offer which is hungup by the DSL" do
     @client_jid = "usera@127.0.0.whatever/voxeo"
   end
 
-  it "should not issue another hangup after it has been called in the DSL" do
-    handler_instance = Connfu.event_processor.handler_class.new({})
-    Connfu.event_processor.stub(:build_handler).and_return(handler_instance)
+  it "should not issue the automatic hangup after it's been explicitly called in the DSL" do
     incoming :offer_presence, @call_jid, @client_jid
     incoming :answer_result_iq, @call_jid
-    handler_instance.should_receive(:hangup).never
-    incoming :result_iq, @call_jid # from the hangup within DSL
+    incoming :hangup_result_iq, @call_jid
     incoming :hangup_presence, @call_jid
+
+    Connfu.connection.commands.length.should == 2
+    hangup_commands = Connfu.connection.commands.select { |command| command.is_a?(Connfu::Commands::Hangup) }
+    hangup_commands.length.should == 1
   end
 end
