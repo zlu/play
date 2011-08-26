@@ -74,7 +74,7 @@ describe "offer which is hungup by the DSL" do
     handler_instance = Connfu.event_processor.handler_class.new({})
     Connfu.event_processor.stub(:build_handler).and_return(handler_instance)
     incoming :offer_presence, @call_jid, @client_jid
-    incoming :result_iq, @call_jid # from the answer command
+    incoming :answer_result_iq, @call_jid
     handler_instance.should_receive(:hangup).never
     incoming :result_iq, @call_jid # from the hangup within DSL
     incoming :hangup_presence, @call_jid

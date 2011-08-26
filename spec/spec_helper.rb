@@ -116,6 +116,7 @@ end
 def result_iq(call_jid="call-id@#{PRISM_HOST}", id='blather0008')
   "<iq type='result' id='#{id}' from='#{call_jid}' to='#{PRISM_JID}/voxeo'/>"
 end
+alias :answer_result_iq :result_iq
 
 def error_iq(call_jid="call-id@#{PRISM_HOST}", id='blather000c')
   %{<iq type='error' id='#{id}' from='#{call_jid}' to='#{PRISM_JID}/voxeo'>

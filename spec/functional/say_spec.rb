@@ -52,7 +52,7 @@ describe "stopping a say command" do
 
   it 'should send the stop command to an active say component' do
     incoming :offer_presence, call_jid
-    incoming :result_iq, call_jid, last_command.id
+    incoming :answer_result_iq, call_jid, last_command.id
     incoming :say_result_iq, call_jid
     incoming :dial_result_iq, "dummy-call-so-we-can-wait-id", last_command.id
 
@@ -61,7 +61,7 @@ describe "stopping a say command" do
 
   it 'should not send the stop command if the say component has already finished' do
     incoming :offer_presence, call_jid
-    incoming :result_iq, call_jid, last_command.id
+    incoming :answer_result_iq, call_jid, last_command.id
     incoming :say_result_iq, call_jid, 'component-id'
     incoming :say_success_presence, "#{call_jid}/component-id"
     incoming :dial_result_iq, "dummy-call-so-we-can-wait-id", last_command.id
