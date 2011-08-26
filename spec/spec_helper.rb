@@ -163,6 +163,7 @@ end
 alias :say_result_iq :component_result_iq
 alias :ask_result_iq :component_result_iq
 alias :recording_result_iq :component_result_iq
+alias :transfer_result_iq :component_result_iq
 
 def say_success_presence(call_jid="call-id@#{PRISM_HOST}/component-id")
   "<presence from='#{call_jid}' to='#{PRISM_JID}/voxeo'>
