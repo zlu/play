@@ -153,11 +153,13 @@ def offer_presence(call_jid="call-id@#{PRISM_HOST}", client_jid="#{PRISM_JID}/vo
   </presence>"
 end
 
-def say_result_iq(call_jid="call-id@#{PRISM_HOST}", component_id="component-id")
+def component_result_iq(call_jid="call-id@#{PRISM_HOST}", component_id="component-id")
   %{<iq type="result" id="blather000a" from="#{call_jid}" to="#{PRISM_JID}/voxeo">
     <ref xmlns="#{rayo('1')}" id="#{component_id}"/>
   </iq>}
 end
+alias :say_result_iq :component_result_iq
+alias :ask_result_iq :component_result_iq
 
 def say_success_presence(call_jid="call-id@#{PRISM_HOST}/component-id")
   "<presence from='#{call_jid}' to='#{PRISM_JID}/voxeo'>
