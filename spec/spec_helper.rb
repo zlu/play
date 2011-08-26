@@ -76,6 +76,23 @@ RSpec::Matchers.define :be_stanzas do |expected_stanzas|
   end
 end
 
+class Actor
+  attr_reader :call_jid, :client_jid
+
+  def initialize(address)
+    @address = address
+  end
+
+  def call(recipient="<sip:usera@server.whatever>")
+    @call_jid="call-id@#{PRISM_HOST}"
+    @client_jid="#{PRISM_JID}/voxeo"
+    Connfu.connection.send_stanza :offer_presence, @call_jid, @client_jid, :from => @address, :to => recipient
+    while Connfu.connection.can_tick?
+      Connfu.connection.tick
+    end
+  end
+end
+
 class TestConnection
   attr_accessor :commands
 
@@ -83,10 +100,12 @@ class TestConnection
     @commands = []
     @handlers = {}
     @domain = domain
+    @dont_send = []
   end
 
   def send_command(command)
     @commands << command
+    @last_command = command
     command.id
   end
 
@@ -106,6 +125,46 @@ class TestConnection
 
   def wait_because_of_tropo_bug_133
     # no-op when testing
+  end
+
+  def can_tick?
+    @last_command != nil
+  end
+
+  def tick
+    command = @last_command
+    @last_command = nil
+    case command
+    when Connfu::Commands::Answer
+      send_stanza :result_iq, command.call_jid, command.id
+    when Connfu::Commands::Hangup
+      send_stanza :result_iq, command.call_jid, command.id
+    when Connfu::Commands::Say
+      component_id = "say-component-id"
+      send_stanza :say_result_iq, command.call_jid, component_id
+      send_stanza :say_success_presence, command.call_jid + "/#{component_id}"
+    when Connfu::Commands::Dial
+      call_id = "new-call-id"
+      send_stanza :dial_result_iq, call_id, command.id
+    else
+      Connfu.logger.debug "no corresponding event required"
+    end
+  end
+
+  def pause_after(stanza)
+    @pause_after = stanza
+  end
+
+  def dont_send(stanza)
+    @dont_send << stanza
+  end
+
+  def send_stanza(*args)
+    if @paused || @dont_send.include?(args.first)
+    else
+      incoming(*args)
+      @paused = (args.first == @pause_after)
+    end
   end
 end
 
