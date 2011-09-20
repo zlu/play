@@ -17,7 +17,7 @@ describe Connfu::Dsl::CallBehaviour do
       it 'should be in started state' do
         TestClass.dial :to => 'to', :from => 'from' do |call_behaviour|
           call_behaviour.on_start do
-            call_behaviour.state.should == :started
+            call_behaviour.state.should == CallBehaviour::STARTED
           end
         end
 
@@ -29,7 +29,7 @@ describe Connfu::Dsl::CallBehaviour do
       it 'should be in ringing state' do
         TestClass.dial :to => 'to', :from => 'from' do |call_behaviour|
           call_behaviour.on_ringing do
-            call_behaviour.state.should == :ringing
+            call_behaviour.state.should == CallBehaviour::RINGING
           end
         end
 
@@ -42,7 +42,7 @@ describe Connfu::Dsl::CallBehaviour do
       it 'should be in answered state' do
         TestClass.dial :to => 'to', :from => 'from' do |call_behaviour|
           call_behaviour.on_answer do
-            call_behaviour.state.should == :answered
+            call_behaviour.state.should == CallBehaviour::ANSWERED
           end
         end
 
@@ -56,7 +56,7 @@ describe Connfu::Dsl::CallBehaviour do
       it 'should be in hangup state' do
         TestClass.dial :to => 'to', :from => 'from' do |call_behaviour|
           call_behaviour.on_hangup do
-            call_behaviour.state.should == :hangup
+            call_behaviour.state.should == CallBehaviour::HANGUP
           end
         end
 
@@ -71,7 +71,7 @@ describe Connfu::Dsl::CallBehaviour do
       it 'should be in reject state' do
         TestClass.dial :to => 'to', :from => 'from' do |call_behaviour|
           call_behaviour.on_reject do
-            call_behaviour.state.should == :rejected
+            call_behaviour.state.should == CallBehaviour::REJECTED
           end
         end
 
@@ -85,7 +85,7 @@ describe Connfu::Dsl::CallBehaviour do
       it 'should be in timeout state' do
         TestClass.dial :to => 'to', :from => 'from' do |call_behaviour|
           call_behaviour.on_timeout do
-            call_behaviour.state.should == :timeout
+            call_behaviour.state.should == CallBehaviour::TIMEOUT
           end
         end
 
@@ -99,7 +99,7 @@ describe Connfu::Dsl::CallBehaviour do
       it 'should be in busy state' do
         TestClass.dial :to => 'to', :from => 'from' do |call_behaviour|
           call_behaviour.on_busy do
-            call_behaviour.state.should == :busy
+            call_behaviour.state.should == CallBehaviour::BUSY
           end
         end
 
@@ -108,6 +108,5 @@ describe Connfu::Dsl::CallBehaviour do
         incoming :busy_presence, @call_jid
       end
     end
-
   end
 end
