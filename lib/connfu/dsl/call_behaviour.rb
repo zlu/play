@@ -3,44 +3,57 @@ module Connfu
     class CallBehaviour
       attr_reader :state
 
+      STATES = [
+        :started,
+        :ringing,
+        :answered,
+        :hangup,
+        :timeout,
+        :rejected,
+        :busy
+      ]
+      STATES.each do |state|
+        const_set state.to_s.upcase, state
+      end
+
       def on_start(&block)
-        @state = :started
+        @state = STARTED
         @on_start = block if block_given?
         @on_start
       end
 
       def on_ringing(&block)
-        @state = :ringing
+        @state = RINGING
         @on_ringing = block if block_given?
         @on_ringing
       end
 
       def on_answer(&block)
-        @state = :answered
+        @state = ANSWERED
         @on_answer = block if block_given?
         @on_answer
       end
 
       def on_hangup(&block)
-        @state = :hangup
+        @state = HANGUP
         @on_hangup = block if block_given?
         @on_hangup
       end
 
       def on_reject(&block)
-        @state = :rejected
+        @state = REJECTED
         @on_reject = block if block_given?
         @on_reject
       end
 
       def on_timeout(&block)
-        @state = :timeout
+        @state = TIMEOUT
         @on_timeout = block if block_given?
         @on_timeout
       end
 
       def on_busy(&block)
-        @state = :busy
+        @state = BUSY
         @on_busy = block if block_given?
         @on_busy
       end
