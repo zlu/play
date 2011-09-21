@@ -6,12 +6,12 @@ Gem::Specification.new do |s|
   s.name        = "connfu"
   s.version     = Connfu::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["Zhao Lu, James Mead, James Adam, Tom Wards, Kalvir Sandhu"]
+  s.authors     = ["Zhao Lu, James Mead, James Adam, Tom Wards, Kalvir Sandhu, Chris Roos, Jason Cale"]
   s.email       = %q{zlu@me.com}
   s.date        = %q{2011-05-06}
-  s.homepage    = "http://github.com/zlu/play"
-  s.summary     = %q{Ruby DSL for creating telephony applications}
-  s.description = %q{Ruby DSL for creating telephony applications}
+  s.homepage    = "https://github.com/o2Labs/play"
+  s.summary     = %q{Ruby DSL for creating non-traditional telephony applications}
+  s.description = %q{Ruby DSL for creating non-traditional telephony applications}
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {spec}/*`.split("\n")
